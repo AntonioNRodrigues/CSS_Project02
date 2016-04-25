@@ -1,0 +1,37 @@
+This version is very similar to version one, except:
+
+1. it uses JDBC instead of Java Maps;
+
+2. I use the Derby database (https://db.apache.org/derby/), a database 
+developed entirely in java that can run embedded with your application.
+This means that the database engine will run in the same JVM as your program,
+which facilitates the installation (Derby is distributed as a jar file), 
+configuration, etc. It is perfectly acceptable for application that do not
+demand too much from a database engine;
+ 
+3. there is a new package dbutils that makes available three classes:
+- CreateDatabase that creates the SaleSys database in Derby. You need to 
+run it before running the SimpleClient;
+- ResetTables that clears the Customer, Sale and SaleProduct tables so you
+can run SimpleClient multiple times without changing SimpleClient code.
+Note that the SimpleClient inserts a new customer and that only one customer
+with the same VAT number can exists in the system. So, if you run the SimpleClient
+twice without changing its code, it will fail with a duplicate key exception
+thrown from the database;
+- RunSQLScript is a class to execute SQL commands in a text file. The scripts
+we use are in the data/scripts folder.
+
+4. there is a new package startup. I want to illustrate a more "real" 
+application scenario, where there is a class SaleSys that starts the application,
+making available its services to clients (implements the startup use case). 
+In a "real" scenario this application will run inside an application server, 
+but for now clients create and use the application. So, now, the SimpleClient 
+creates an SaleSys object, indicates that it want to start running the application, 
+interacts with it, and in the end stops the application. When the application starts 
+it initialises both the presentation and the business layers,
+and establishes a connection with the cssdb Derby database (see the run method). 
+
+5. the derby database is stored in the data/derby folder. You can remove it
+whenever you want. Running the CreateDatabase class brings it back brand new. 
+
+Enjoy!
