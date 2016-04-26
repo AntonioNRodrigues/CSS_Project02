@@ -185,7 +185,43 @@ public class SaleTransactionScripts {
 		}
 	}
 
+	
+	public void closeSale(int saleId) throws ApplicationException{
 		
+		try{
+			// obtem sale
+			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
+			
+			// obtem sale customer
+			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerById(sale.getClientId());
+			
+			// obtem sale products
+			Iterable<SaleProductRowDataGateway> saleProducts = SaleProductRowDataGateway.getSaleProducts(saleId);
+			
+			// calcula o valor do desconto total, com base no tipo de desconto e valor
+			// dos saleProducts
+			double totalDiscount = computeDiscount(customer, saleProducts);
+			
+			// begin transaction
+			DataSource.INSTANCE.beginTransaction();
+			
+			// actualiza a venda com valor de total_discount
+			sale.setDiscount(totalDiscount);
+			sale.setStatus(SaleStatus.CLOSED);
+			sale.update();
+			
+			// gera nota de debito em conta corrente de customer
+			// TODO
+			
+			// actualiza base de dados
+			DataSource.INSTANCE.commit();
+			
+		}catch(PersistenceException e){
+			throw new ApplicationException("Erro ao fechar venda", e);
+		}
+		
+	}
+	
 	/**
 	 * Computes the discount amount for a sale (based on the discount type of the customer).
 	 * 
@@ -198,8 +234,10 @@ public class SaleTransactionScripts {
 		try {
 			SaleRowDataGateway sale = getSale(saleId);
 			// If the sale is closed, the discount is already computed
-			if (sale.getStatus() == SaleStatus.CLOSED) 
+			if (sale.getStatus() == SaleStatus.CLOSED){
+				System.out.println("IS CLOSED!!!");
 				return sale.getDiscount();
+			}
 			
 			// Get customer associated with the sale. 
 			// The customer always exists due to the referential integrity enforced by the database

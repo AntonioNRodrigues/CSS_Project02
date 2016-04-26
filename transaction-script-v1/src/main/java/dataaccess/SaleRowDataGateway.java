@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import business.ApplicationException;
 import business.SaleStatus;
 
 /**
@@ -183,7 +184,8 @@ public class SaleRowDataGateway {
 			statement.setDate(1, date);
 			statement.setInt(2, customerId);
 			// execute SQL
-			statement.executeUpdate();
+			int created = statement.executeUpdate();
+			System.out.print("Created: "+created);
 			// Gets sale Id generated automatically by the database engine
 			try (ResultSet rs = statement.getGeneratedKeys()) {
 				rs.next(); 
@@ -244,5 +246,37 @@ public class SaleRowDataGateway {
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Sale does not exist	", e);
 		}
+	}
+	
+	/**
+	 * The update sale query
+	 */
+	private final static String UPDATE_SQL = "update sale set "
+			+ "total = ?, discount_total = ?, status = '"+CLOSED+"', customer_id = ?, closed_at = ? "
+			+ "where id = ?";
+	
+	/**
+	 * Updates a sale's details based on its current values
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void update() throws ApplicationException{
+		String errorMsg = "Erro ao actualizar venda";
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(UPDATE_SQL)){
+			
+			statement.setDouble(1, this.total);
+			statement.setDouble(2, this.discount);
+			statement.setInt(3, this.customerId);
+			statement.setDate(4, new java.sql.Date(new Date().getTime()));
+			statement.setInt(5, this.id);
+			
+			statement.executeUpdate();
+			
+		}catch(SQLException e){
+			throw new ApplicationException(errorMsg, e);
+		}catch(PersistenceException e){
+			throw new ApplicationException(errorMsg, e);
+		}
+		
 	}
 }

@@ -2,11 +2,12 @@ package client;
 
 import java.sql.SQLException;
 
-import presentation.CustomerService;
-import presentation.SaleService;
 import SaleSys.SaleSys;
 import business.ApplicationException;
 import business.DiscountType;
+import presentation.AccountService;
+import presentation.CustomerService;
+import presentation.SaleService;
 
 /**
  * A simple application client that uses both services.
@@ -40,12 +41,17 @@ public class SimpleClient {
 		// Access both available services
 		CustomerService cs = app.getCustomerService();
 		SaleService ss = app.getSaleService();		
-		
+		AccountService as = app.getAccountService();
 		// the interaction
 		try {
 			// adds a customer.
 			cs.addCustomer(168027852, "Customer 1", 217500255, DiscountType.SALE_AMOUNT);
 
+			// adds a customer account by default
+			as.addAccount(168027852, "Default account");
+			
+			System.out.println(as.getAccountByCustomerId(168027852));
+			
 			// creates a new sale
 			int sale = ss.newSale(168027852);
 
@@ -53,8 +59,12 @@ public class SimpleClient {
 			ss.addProductToSale(sale, 123, 10);
 			ss.addProductToSale(sale, 124, 5);
 			
+			// close sale
+			ss.closeSale(sale);
+			
 			// gets the discount amounts
 			double discount = ss.getSaleDiscount(sale);
+			
 			System.out.println(discount);
 		} catch (ApplicationException e) {
 			System.out.println("Error: " + e.getMessage());

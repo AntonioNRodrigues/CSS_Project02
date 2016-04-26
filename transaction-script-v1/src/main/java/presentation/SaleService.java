@@ -24,4 +24,8 @@ public class SaleService {
 	public double getSaleDiscount(int saleId) throws ApplicationException {
 		return saleTS.getSaleDiscount(saleId);
 	}
+	
+	public void closeSale(int sale) throws ApplicationException{
+		this.saleTS.closeSale(sale);
+	}
 }
