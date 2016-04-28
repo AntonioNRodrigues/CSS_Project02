@@ -1,5 +1,8 @@
 package business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dataaccess.CustomerRowDataGateway;
 import dataaccess.PersistenceException;
 
@@ -66,6 +69,23 @@ public class CustomerTransactionScripts {
 		}
 	}
 
+	
+	public List<String> getAllCustomers() throws ApplicationException{
+		
+		try{			
+			List<CustomerRowDataGateway> customersRow = CustomerRowDataGateway.getAllCustomers();
+			List<String> customers = new ArrayList<>();
+			
+			for(CustomerRowDataGateway cur : customersRow)
+				customers.add(cur.toString() + "\n");
+			
+			return customers;
+		}catch(ApplicationException e){
+			throw new ApplicationException("Error when getting all customers", e);
+		}
+	}
+	
+	
 	
 	/**
 	 * Checks if a VAT number is valid.

@@ -1,6 +1,9 @@
 package business;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 import dataaccess.ConfigurationRowDataGateway;
@@ -252,6 +255,36 @@ public class SaleTransactionScripts {
 			throw new ApplicationException("Internal referential integrity error when computing "
 					+ "the discount for sale " + saleId, e);			
 		}
+	}
+	
+	/**
+	 * Get all sale products
+	 * 
+	 * @param saleId, sale's id to be considered when searching for sale
+	 * @return a string representation of sale products
+	 * @throws ApplicationException
+	 */
+	public List<String> getSaleProducts(int saleId) throws ApplicationException{
+		
+		List<String> products = new ArrayList<>();
+		
+		try {
+			// obtain sale products
+			Iterator<SaleProductRowDataGateway> sp = SaleProductRowDataGateway.getSaleProducts(saleId).iterator();
+			
+			// prepare response
+			while(sp.hasNext())
+			{
+				SaleProductRowDataGateway p = sp.next();
+				products.add("ID: " + p.getProductId() + " | QTY: " + p.getQty());
+			}
+			
+			return products;
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error getting sale products", e);
+		}
+		
+		
 	}
 
 	/**

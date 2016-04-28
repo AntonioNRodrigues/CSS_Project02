@@ -1,5 +1,7 @@
 package presentation;
 
+import java.util.List;
+
 import business.ApplicationException;
 import business.SaleTransactionScripts;
 
@@ -23,6 +25,10 @@ public class SaleService {
 
 	public double getSaleDiscount(int saleId) throws ApplicationException {
 		return saleTS.getSaleDiscount(saleId);
+	}
+	
+	public List<String> getSaleProducts(int saleId) throws ApplicationException{
+		return saleTS.getSaleProducts(saleId);
 	}
 	
 	public void closeSale(int sale) throws ApplicationException{
