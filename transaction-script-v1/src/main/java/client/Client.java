@@ -185,9 +185,6 @@ public class Client {
 				try{
 					ss.addProductToSale(saleId, prodCode, qty);					
 				} catch (ApplicationException e){
-					
-					
-					
 					System.out.println("Please, do not try to cheat me again :P");
 				}
 				
