@@ -55,7 +55,7 @@ public class Sale {
 	
 	// 1. constructor
 
-	/**
+	/**nNti
 	 * Constructor needed by JPA.
 	 */
 	Sale () {
