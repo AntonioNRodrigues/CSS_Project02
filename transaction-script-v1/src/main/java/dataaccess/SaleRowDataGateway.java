@@ -3,7 +3,9 @@ package dataaccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import business.ApplicationException;
 import business.SaleStatus;
@@ -276,7 +278,45 @@ public class SaleRowDataGateway {
 			throw new ApplicationException(errorMsg, e);
 		}catch(PersistenceException e){
 			throw new ApplicationException(errorMsg, e);
-		}
+		}	
+	}
+	
+	/**
+	 * select to retrieve all customers by id
+	 */
+	private static final String GET_ALL_FROM_CUSTOMER_SQL = ""
+			+ "select id, date, total, discount_total, status, customer_id " +
+			"from sale " +
+			"where customer_id = ?";
+	
+	/**
+	 * Get list of sales by customer id
+	 * 
+	 * @param customerId, customer id to be considered
+	 * @return list of sales
+	 * @throws PersistenceException
+	 */
+	public static List<SaleRowDataGateway> getSalesByCustomerId(int customerId)
+	throws PersistenceException{
+		
+		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_ALL_FROM_CUSTOMER_SQL)) {
+			
+			statement.setInt(1, customerId);
+			ResultSet rs = statement.executeQuery();
+			List<SaleRowDataGateway> list = new ArrayList<>();
+			while(rs.next()){
+				SaleRowDataGateway newSale = new SaleRowDataGateway(rs.getInt("customer_id"), 
+						rs.getDate("date"));
+				newSale.id = rs.getInt("id");
+				newSale.total = rs.getDouble("total");
+				newSale.discount = rs.getDouble("discount_total");
+				newSale.status = rs.getString("status"); 
+				list.add(newSale);
+			}
+			return list;
+		} catch (PersistenceException | SQLException e) {
+			throw new PersistenceException("Error when getting customer sales by id", e);
+		} 
 		
 	}
 }

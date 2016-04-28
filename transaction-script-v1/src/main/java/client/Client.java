@@ -20,6 +20,7 @@ public class Client {
 	private static final int CHECK_CUSTOMERS = 4;
 	private static final int CHECK_ACCOUNT = 5;
 	private static final int GO_HOME = 6;
+	private static final int MAKE_PAYMENT = 7;
 	private static final int QUIT = -1;
 	
 	// disount type convertion map
@@ -57,17 +58,27 @@ public class Client {
 			printMainMenu();
 			option = sc.nextInt();
 			
-			// parse option
-			switch(option){
-			case ADD_CUSTOMER:
-				addCustomer(cs);
-				break;
-			case OPEN_SALE:
-				addSale(ss, ps, cs);
-				break;
-			case CHECK_CUSTOMERS:
-				checkCustomers(cs);
-				break;
+			try{				
+				// parse option
+				switch(option){
+				case ADD_CUSTOMER:
+					addCustomer(cs);
+					break;
+				case OPEN_SALE:
+					addSale(ss, ps, cs);
+					break;
+				case CHECK_CUSTOMERS:
+					checkCustomers(cs);
+					break;
+				case CHECK_ACCOUNT:
+					checkAccount(ss, cs);
+					break;
+				case MAKE_PAYMENT:
+					makePayment(cs, ss);
+					break;
+				}
+			} catch (ApplicationException e) {
+				System.out.println("Something went wrong...");
 			}
 			
 		}while(option != QUIT);
@@ -82,11 +93,12 @@ public class Client {
 		System.out.println("=================================");
 		System.out.println("MENU");
 		System.out.println("Press the corresponding number");
-		System.out.println(ADD_CUSTOMER+" - Add new customer");
-		System.out.println(OPEN_SALE+" - Open a new sale");
-		System.out.println(CLOSE_SALE+" - Close an existing sale");
-		System.out.println(CHECK_CUSTOMERS+" - Check existing customers");
-		System.out.println(CHECK_ACCOUNT+" - Check user account");
+		System.out.println(ADD_CUSTOMER+"  - Add new customer");
+		System.out.println(OPEN_SALE+"  - Open a new sale");
+		System.out.println(CLOSE_SALE+"  - Close an existing sale");
+		System.out.println(CHECK_CUSTOMERS+"  - Check existing customers");
+		System.out.println(CHECK_ACCOUNT+"  - Check user account");
+		System.out.println(MAKE_PAYMENT+"  - Make payment");
 		System.out.println(QUIT+" - Quit");
 		System.out.println("=================================");
 	}
@@ -94,6 +106,67 @@ public class Client {
 	
 	
 	// functionalities
+	private static void makePayment(CustomerService cs, SaleService ss){
+		Scanner sc = new Scanner(System.in);
+
+		try{
+			System.out.println(LINE_SEPARATOR);
+			// print all sales
+			printAll(ss.getAllSales());
+			System.out.println(SMOOTH_LINE_SEPARATOR);
+			System.out.print("Insert sale id: ");
+			int saleId = sc.nextInt();
+			System.out.print("Insert payment amount: ");
+			int amount = sc.nextInt();
+			
+			// persist payment
+			cs.makePayment(saleId, amount);
+			
+			
+		} catch (ApplicationException e) {}
+		
+		
+		
+	}
+	
+	private static void checkAccount(SaleService ss, CustomerService cs)
+	throws ApplicationException{
+		
+		Scanner sc = new Scanner(System.in);
+		try{
+			do{
+				int option = 0;
+				System.out.println(LINE_SEPARATOR);
+				System.out.println("Customers list");
+				System.out.println(SMOOTH_LINE_SEPARATOR);
+				List<String> list = cs.getAllCustomers();
+				printAll(list);
+				System.out.println(SMOOTH_LINE_SEPARATOR);
+				System.out.print("Insert customer VAT ou -1 to leave: ");
+				if((option = sc.nextInt())== QUIT)
+					break;
+				
+				// show transactions
+				System.out.println(SMOOTH_LINE_SEPARATOR);
+				list = cs.getSaleTransactions(option);
+				printAll(list);
+				System.out.println(SMOOTH_LINE_SEPARATOR);
+				System.out.print("Insert transaction ID -1 to leave: ");
+				if((option = sc.nextInt())== QUIT)
+					break;
+				
+				// get transaction details
+				List<String> details = ss.getTransactionDetails(option);
+				printAll(details);
+				
+			}while(true);
+			
+		} catch (ApplicationException e) {
+			throw new ApplicationException("Error when getting all customer transactions", e);
+		}
+		
+	}
+	
 	private static void addCustomer(CustomerService cs){
 		
 		Scanner sc = new Scanner(System.in);
@@ -192,9 +265,7 @@ public class Client {
 			
 			System.out.println("Would you like to close this sale? Y/n");
 			if(sc.next().equals("Y"))
-				System.out.println("CLOSED");
-			else
-				System.out.println("REMAIN OPEN");
+				ss.closeSale(saleId);
 			
 			// print all
 			System.out.println(LINE_SEPARATOR);

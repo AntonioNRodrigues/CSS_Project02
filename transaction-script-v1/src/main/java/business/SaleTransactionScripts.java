@@ -1,5 +1,8 @@
 package business;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -14,6 +17,7 @@ import dataaccess.ProductRowDataGateway;
 import dataaccess.RecordNotFoundException;
 import dataaccess.SaleProductRowDataGateway;
 import dataaccess.SaleRowDataGateway;
+import dataaccess.SaleTransactionRowDataGateway;
 
 /**
  * Handles sales' transactions. 
@@ -60,6 +64,29 @@ public class SaleTransactionScripts {
 		}
 	}
 
+	private static final String GET_ALL_SALES_SQL = "select "
+			+ "id, date, total, discount_total, status, closed_at "
+			+ "from sale";
+	public List<String> getAllSales() throws ApplicationException{
+		
+		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_ALL_SALES_SQL)){
+			
+			ResultSet rs = statement.executeQuery();
+			List<String> list = new ArrayList<>();
+			while(rs.next()){
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("ID: " + rs.getInt("id") + " | ");
+				sb.append("DATE: " + rs.getDate("date"));
+				list.add(sb.toString());
+			}
+			return list;
+			
+		} catch (PersistenceException | SQLException e) {
+			throw new ApplicationException("Error getting all sales",e);
+		}
+		
+	}
 	
 	/**
 	 * Add a product to an open sale.
@@ -233,7 +260,18 @@ public class SaleTransactionScripts {
 			sale.update();
 			
 			// gera nota de debito em conta corrente de customer
-			// TODO
+			double saleTotal = 0;
+			for(SaleProductRowDataGateway saleProduct : saleProducts){
+				
+				ProductRowDataGateway prod = new ProductRowDataGateway().getProductById(saleProduct.getProductId());
+				saleTotal += prod.getFaceValue() * saleProduct.getQty();
+				
+			}
+			
+			SaleTransactionRowDataGateway st = 
+					new SaleTransactionRowDataGateway(sale.getId(), saleTotal - totalDiscount, 
+							TransactionType.DEBIT);
+			st.insert();
 			
 			// actualiza base de dados
 			DataSource.INSTANCE.commit();
@@ -389,4 +427,53 @@ public class SaleTransactionScripts {
 		}
 		return saleEligibleTotal;
 	}
+	
+	public List<String> getTransactionDetails(int transactionId)
+		throws ApplicationException{
+		
+		// check if is debit or credit type transaction
+		try{
+			SaleTransactionRowDataGateway transaction = 
+					SaleTransactionRowDataGateway.getTransactionById(transactionId);
+			
+			List<String> list = new ArrayList<>();
+			
+			// if is payment type
+			if(transaction.isCredit())
+			{
+				list.add("pagaento");
+			}
+			// if is a debit type
+			else
+			{
+				// obtain all sale products
+				Iterator<SaleProductRowDataGateway> prods = 
+						SaleProductRowDataGateway.getSaleProducts(transaction.getSaleId()).iterator();
+				
+				// foreach sale product obtain it's details so add more details
+				// about it
+				while(prods.hasNext())
+				{
+					SaleProductRowDataGateway cur = prods.next();
+					StringBuilder sb = new StringBuilder();
+					ProductRowDataGateway product = 
+							new ProductRowDataGateway().getProductById(cur.getSaleId());
+					sb.append("ID: " + product.getProdCod() + " | ");
+					sb.append("Description: " + product.getDescription() + " | ");
+					sb.append("QTY: " + cur.getQty() + " | ");
+					sb.append("Unit Price: " + product.getFaceValue() + " | ");
+					sb.append("SUB-TOTAL: " + cur.getQty() * product.getFaceValue());
+					list.add(sb.toString());
+					
+				}
+			}
+			return list;
+			
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error getting transaction details", e);
+		}
+		
+		
+	}
+	
 }

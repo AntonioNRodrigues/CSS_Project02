@@ -35,4 +35,15 @@ public class SaleService {
 		this.saleTS.closeSale(sale);
 	}
 	
+	//TODO -> CHANGE THIS TO A PROPOER SERVICE
+	public List<String> getTransactionDetails(int transactionId)
+		throws ApplicationException
+	{
+		return saleTS.getTransactionDetails(transactionId);
+	}
+	
+	public List<String> getAllSales() throws ApplicationException{
+		return saleTS.getAllSales();
+	}
+	
 }

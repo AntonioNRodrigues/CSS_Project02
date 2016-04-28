@@ -5,6 +5,8 @@ import java.util.List;
 
 import dataaccess.CustomerRowDataGateway;
 import dataaccess.PersistenceException;
+import dataaccess.SaleRowDataGateway;
+import dataaccess.SaleTransactionRowDataGateway;
 
 /**
  * Handles customer transactions. 
@@ -69,6 +71,24 @@ public class CustomerTransactionScripts {
 		}
 	}
 
+	/**
+	 * Make user payment
+	 * 
+	 * @param saleId, sale id to be considered
+	 * @param amount, amount of payment
+	 * @throws ApplicationException
+	 */
+	public void makePayment(int saleId, double amount) throws ApplicationException{
+		
+		try{
+			SaleTransactionRowDataGateway st = 
+					new SaleTransactionRowDataGateway(saleId, amount, TransactionType.CREDIT);
+			st.insert();
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error adding user credit", e);
+		}
+		
+	}
 	
 	public List<String> getAllCustomers() throws ApplicationException{
 		
@@ -82,6 +102,44 @@ public class CustomerTransactionScripts {
 			return customers;
 		}catch(ApplicationException e){
 			throw new ApplicationException("Error when getting all customers", e);
+		}
+	}
+	
+	/**
+	 * Gets all customer sale transactions
+	 * 
+	 * @param vat, customer vat to be considered
+	 * @return a list of textual represented transactions
+	 */
+	public List<String> getAllTransactions(int vat) throws ApplicationException{
+		
+		try{			
+			// obter o user pelo vat
+			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerByVATNumber(vat);
+			
+			// obter todas as sales do user
+			List<SaleRowDataGateway> sales = SaleRowDataGateway.getSalesByCustomerId(customer.getCustomerId());
+			
+			// prepara transactions list
+			List<String> transactions = new ArrayList<>();
+			
+			// obter todas as transactions de todas as sales
+			for(SaleRowDataGateway sale : sales)
+			{
+				// obtem transactions de current sale
+				try {
+					List<String> innerTransactions = 
+							SaleTransactionRowDataGateway.getSaleTransactions(sale.getId());
+					// add all to transactions list
+					transactions.addAll(innerTransactions);
+				} catch (ApplicationException e) {
+					continue;
+				}	
+			}
+			//return :P
+			return transactions;
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error when getting customer transactions", e);
 		}
 	}
 	

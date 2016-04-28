@@ -24,4 +24,12 @@ public class CustomerService {
 	public List<String> getAllCustomers() throws ApplicationException{
 		return customerTS.getAllCustomers();
 	}
+	
+	public List<String> getSaleTransactions(int vat) throws ApplicationException{
+		return customerTS.getAllTransactions(vat);
+	}
+	
+	public void makePayment(int saleId, double amount) throws ApplicationException{
+		this.customerTS.makePayment(saleId, amount);
+	}
 }
