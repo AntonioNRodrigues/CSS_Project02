@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 
 /**
  * Entity implementation class for Entity: Transation
+ * 
  * @author Antonio Rodrigues
  * @author Simão Neves
  * @author Joao Rodrigues
