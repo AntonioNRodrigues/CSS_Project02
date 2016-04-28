@@ -147,11 +147,30 @@ public class SaleTransactionScripts {
 	 * @param sale The sale to associate the product sale with
 	 * @throws PersistenceException When there is an error inserting the sale product into the database
 	 */
-	private void addProductToSale(ProductRowDataGateway product, SaleRowDataGateway sale, double qty) throws PersistenceException {
+	private void addProductToSale(ProductRowDataGateway product, SaleRowDataGateway sale, double qty) throws ApplicationException{
+		
+		// check if product already exists in current sale
+		SaleProductRowDataGateway saleProduct = null;
+		try{			
+			saleProduct = SaleProductRowDataGateway.getSaleProductById(sale.getId(), product.getProductId());
+			saleProduct.increaseQty(qty);
+			saleProduct.update();
+		} catch (PersistenceException e) {
+			System.out.println("EH NOVO");
+			saleProduct = new SaleProductRowDataGateway(sale.getId(), 
+					product.getProductId(), qty);
+			try {
+				saleProduct.insert();
+			} catch (PersistenceException e2) {
+				throw new ApplicationException("Error adding a new sale product line", e2);
+			}
+		}
+		
 		// adds product to sale 
-		SaleProductRowDataGateway saleProduct = new SaleProductRowDataGateway(sale.getId(), 
+		/*SaleProductRowDataGateway saleProduct = new SaleProductRowDataGateway(sale.getId(), 
 						product.getProductId(), qty);
 		saleProduct.insert();
+		*/
 	}
 
 	
@@ -276,7 +295,7 @@ public class SaleTransactionScripts {
 			while(sp.hasNext())
 			{
 				SaleProductRowDataGateway p = sp.next();
-				products.add("ID: " + p.getProductId() + " | QTY: " + p.getQty());
+				products.add("PRODUCT: " + p.getProductId() + " | QTY: " + p.getQty());
 			}
 			
 			return products;

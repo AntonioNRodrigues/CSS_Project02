@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import business.ApplicationException;
+
 /**
  * An in-memory representation of a row gateway for the products composing a sale.	
  * 
@@ -82,6 +84,16 @@ public class SaleProductRowDataGateway {
 		return qty;
 	}
 
+	/**
+	 * Increases quantity n times
+	 * 
+	 * @param n amount to add
+	 */
+	public void increaseQty(double n)
+	{
+		this.qty += n;
+	}
+	
 	
 	// 3. interaction with the repository (a relational database in this simple example)
 
@@ -113,6 +125,34 @@ public class SaleProductRowDataGateway {
 		}
 	}
 	
+	/**
+	 * Update sale product query
+	 */
+	private final static String UPDATE_PRODUCT_SALE_SQL = "update saleproduct "
+			+ "set qty = ? "
+			+ "where sale_id = ? and product_id = ?";
+	
+	/**
+	 * Updates a sale product based on object details
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void update () throws ApplicationException{
+		
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(UPDATE_PRODUCT_SALE_SQL)){
+			
+			statement.setDouble(1, this.qty);
+			statement.setInt(2, this.saleId);
+			statement.setInt(3, this.productId);
+			if(statement.executeUpdate() == 1)
+				System.out.println("SALE PRODUCT UPDATE!");
+			
+		} catch (SQLException | PersistenceException e) {
+			throw new ApplicationException("Error when updating sale product row", e);
+		} 
+		
+	} 
+	
 	
 	/**
 	 * The select the products of a sale by sale Id SQL statement
@@ -143,7 +183,40 @@ public class SaleProductRowDataGateway {
 			throw new PersistenceException("Internal error getting the products of a sale", e);
 		}
 	}
+	
+	/**
+	 * select to fetch a single sale product from database based of given info
+	 */
+	private static final String GET_SALE_PRODUCT_SQL = "select id, sale_id, product_id, qty "
+			+ "from saleproduct "
+			+ "where sale_id = ? and product_id = ?";
+	
+	/**
+	 * Get a sale product from database based both on sale and product id
+	 * 
+	 * @param saleId, sale id to be considered
+	 * @param productId, product id to be considered
+	 * @return null if sale product doesnt exist, otherwise false
+	 * @throws ApplicationException
+	 */
+	public static SaleProductRowDataGateway getSaleProductById(int saleId, int productId)
+	throws RecordNotFoundException, ApplicationException{
 		
+		// obtain a sale product based both on sale and product id
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(GET_SALE_PRODUCT_SQL)){
+			
+			statement.setInt(1, saleId);
+			statement.setInt(2, productId);
+			ResultSet rs = statement.executeQuery();
+			
+			// loads database info into a convenient object
+			return loadSaleProduct(rs);
+
+		} catch (PersistenceException | SQLException e) {
+			throw new RecordNotFoundException("Sale Product does not exist", e);
+		}
+	}
+	
 	/**
 	 * Creates the set of products of a sale from a result set retrieved from the database.
 	 * 
@@ -160,5 +233,20 @@ public class SaleProductRowDataGateway {
 			result.add(newSaleProduct);
 		}
 		return result;		
+	}
+	
+	/**
+	 * Creates a sale product of sale from a result set retrieved from database
+	 * 
+	 * @param rs, The result set with the information to create the set of products from a sale.
+	 * @return a Sale Product retrieved from the database
+	 * @throws SQLException
+	 */
+	private static SaleProductRowDataGateway loadSaleProduct(ResultSet rs) throws SQLException {
+		rs.next();
+		SaleProductRowDataGateway newSaleProduct = new SaleProductRowDataGateway(rs.getInt("sale_id"), 
+				rs.getInt("product_id"), rs.getDouble("qty"));
+		newSaleProduct.id = rs.getInt("id");
+		return newSaleProduct;		
 	}
 }

@@ -34,4 +34,5 @@ public class SaleService {
 	public void closeSale(int sale) throws ApplicationException{
 		this.saleTS.closeSale(sale);
 	}
+	
 }

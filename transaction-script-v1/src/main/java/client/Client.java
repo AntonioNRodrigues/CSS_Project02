@@ -8,6 +8,7 @@ import SaleSys.SaleSys;
 import business.ApplicationException;
 import business.DiscountType;
 import presentation.CustomerService;
+import presentation.ProductService;
 import presentation.SaleService;
 
 public class Client {
@@ -28,6 +29,7 @@ public class Client {
 	
 	// utils
 	private final static String LINE_SEPARATOR = "=============================";
+	private final static String SMOOTH_LINE_SEPARATOR = ".............................";
 	
 	public static void main(String[] args){
 		
@@ -47,6 +49,7 @@ public class Client {
 		// initialize available services
 		CustomerService cs = app.getCustomerService();
 		SaleService ss = app.getSaleService();
+		ProductService ps = app.getProductService();
 		
 		Scanner sc = new Scanner(System.in);
 		int option;
@@ -60,7 +63,7 @@ public class Client {
 				addCustomer(cs);
 				break;
 			case OPEN_SALE:
-				addSale(ss, cs);
+				addSale(ss, ps, cs);
 				break;
 			case CHECK_CUSTOMERS:
 				checkCustomers(cs);
@@ -147,7 +150,7 @@ public class Client {
 			
 	}
 	
-	private static void addSale(SaleService ss, CustomerService cs){
+	private static void addSale(SaleService ss, ProductService ps, CustomerService cs){
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -160,12 +163,43 @@ public class Client {
 		try{
 			int saleId = ss.newSale(vat);
 			
-			// adds two products to the database
-			ss.addProductToSale(saleId, 123, 10);
-			ss.addProductToSale(saleId, 124, 5);
+			// ask for products
+			boolean done = false;
+			do{
+				// ask for more products
+				System.out.println(LINE_SEPARATOR);
+				System.out.println("Add more products or enter "+QUIT+" to finish");
+				// print all available products
+				printAll(ps.getAvailableProducts());
+				System.out.println(LINE_SEPARATOR);
+				
+				int prodCode = sc.nextInt();  
+				if(prodCode == QUIT)
+					break;
+				
+				// ask for quantity
+				System.out.print("Quantity: ");
+				int qty = sc.nextInt();
+				
+				// add product to sale
+				try{
+					ss.addProductToSale(saleId, prodCode, qty);					
+				} catch (ApplicationException e){
+					System.out.println("Please, do not try to cheat me again :P");
+				}
+				
+			}while(!done);
 			
+			System.out.println("Would you like to close this sale? Y/n");
+			if(sc.next().equals("Y"))
+				System.out.println("CLOSED");
+			else
+				System.out.println("REMAIN OPEN");
 			
 			// print all
+			System.out.println(LINE_SEPARATOR);
+			System.out.println("YOUR BASKET HAS");
+			System.out.println(SMOOTH_LINE_SEPARATOR);
 			List<String> saleProducts = ss.getSaleProducts(saleId);
 			for(String prod : saleProducts)
 				System.out.println(prod);
@@ -175,6 +209,11 @@ public class Client {
 		}
 		
 		
+	}
+	
+	private static void printAll(List<String> list){
+		for(String cur : list)
+			System.out.println(cur);
 	}
 	
 	// verifiers
