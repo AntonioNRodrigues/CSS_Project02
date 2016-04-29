@@ -10,6 +10,10 @@
 		<class>business.Product</class>
 		<class>business.SaleProduct</class>
 		<class>business.Sale</class>
+		<class>business.entities.Credit</class>
+		<class>business.entities.Debit</class>
+		<class>business.entities.Account</class>
+		<class>business.entities.Transation</class>
 		<shared-cache-mode>NONE</shared-cache-mode> <!-- para permitir fazer testes de integração usando o DBSetup -->
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby:data/derby/css000"/>

@@ -71,7 +71,6 @@ public class Customer {
 	 * 
 	 */
 	@OneToOne
-	@JoinColumn
 	private Account currentAccount;
 
 	// 1. constructor

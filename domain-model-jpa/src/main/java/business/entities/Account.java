@@ -20,17 +20,14 @@ import javax.persistence.OneToMany;
  * @Date 2016/04/28
  *
  */
-@Entity
+@Entity 
 public class Account {
 
-	@Id
-	@GeneratedValue
-	private int id;
-	@Column
-	private double balance;
-	@OneToMany
-	@JoinColumn
-	private List<Transation> listTransactions;
+	@Id @GeneratedValue private int id;
+	
+	@Column private double balance;
+	
+	@OneToMany @JoinColumn private List<Transation> listTransactions;
 
 	public Account() {
 	}

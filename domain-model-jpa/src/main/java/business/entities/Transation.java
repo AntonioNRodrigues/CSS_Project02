@@ -1,11 +1,15 @@
 package business.entities;
 
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
+
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,21 +24,24 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
+@Inheritance(strategy = SINGLE_TABLE)
 public abstract class Transation {
-	@Id
-	@GeneratedValue
-	private int id;
-	@Column
-	private double value;
-	@Temporal(TemporalType.DATE)
-	private Date date;
+	
+	@Id @GeneratedValue private int id;
+	
+	@Column private double value;
+	
+	@Temporal(TemporalType.DATE) private Date date;
 
+	@OneToOne @Column(name="ID_SALE") private int idSale;
+	
 	public Transation() {
 	}
 
 	public Transation(double value, Date d, int idSale) {
 		this.date = d;
 		this.value = value;
+		this.idSale= idSale;
 	}
 
 	public double getValor() {
@@ -52,5 +59,22 @@ public abstract class Transation {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public int getIdSale() {
+		return idSale;
+	}
+
+	public void setIdSale(int idSale) {
+		this.idSale = idSale;
+	}
+	
 	
 }
