@@ -49,7 +49,7 @@ public class Sale {
 	/**
 	 * The products of the sale
 	 */
-	@OneToMany(cascade = ALL) @JoinColumn
+	@OneToMany(cascade =ALL) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
 	

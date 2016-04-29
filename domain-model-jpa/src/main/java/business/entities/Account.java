@@ -1,5 +1,7 @@
 package business.entities;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.ArrayList;
 import java.util.List;
 import business.entities.Transation;
@@ -27,7 +29,8 @@ public class Account {
 	
 	@Column private double balance;
 	
-	@OneToMany @JoinColumn private List<Transation> listTransactions;
+	// Cascade = ALL ==> it means that if you delete an account it 
+	@OneToMany(cascade =ALL) @JoinColumn private List<Transation> listTransactions;
 
 	public Account() {
 	}
