@@ -36,6 +36,8 @@ public abstract class Transation {
 	
 	@Temporal(TemporalType.DATE) private Date date;
 	
+	@OneToOne(mappedBy="trans") private Sale sale;
+	
 	public Transation() {
 	}
 

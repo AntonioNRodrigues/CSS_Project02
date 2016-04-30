@@ -59,6 +59,8 @@ public class Sale {
 	@OneToMany(cascade =ALL) @JoinColumn
 	private List<SaleProduct> saleProducts;
 	
+	@OneToOne private Transation trans;
+	
 	// 1. constructor
 
 	/**

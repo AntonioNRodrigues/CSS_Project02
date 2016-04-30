@@ -31,7 +31,7 @@ public class Account {
 	@Column private double balance;
 	
 	// Cascade = ALL ==> it means that if you delete an account it 
-	@OneToMany(cascade =ALL) @JoinColumn private List<Transation> listTransactions;
+	@OneToMany private List<Transation> listTransactions;
 
 	public Account() {
 		
