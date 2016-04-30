@@ -1,9 +1,11 @@
 package business.entities;
 
+import business.Sale;
 import business.entities.Transation;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: Credit
@@ -17,13 +19,14 @@ import javax.persistence.Entity;
 @Entity
 
 public class Credit extends Transation {
-
+	
 	public Credit() {
 		super();
 	}
 
-	public Credit(double v, Date d, int idSale) {
-		super(v, d, idSale);
+	public Credit(double v, Date d) {
+		super(v, d);
 	}
+	
 
 }

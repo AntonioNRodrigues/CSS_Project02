@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity 
+
 public class Account {
 
 	@Id @GeneratedValue private int id;
@@ -33,6 +34,7 @@ public class Account {
 	@OneToMany(cascade =ALL) @JoinColumn private List<Transation> listTransactions;
 
 	public Account() {
+		
 	}
 
 	public Account(double balance) {
@@ -54,6 +56,18 @@ public class Account {
 	 */
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	private double calcBalance(){
+		/*
+		 * iterate over the list
+		 * check the state and + ou - has acording
+		 */
+		
+		return balance;
 	}
 
 }

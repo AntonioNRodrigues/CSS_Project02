@@ -37,41 +37,32 @@ public class Customer {
 	 * Customer primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
 	 */
-	@Id
-	@GeneratedValue
-	private int id;
-
+	@Id	@GeneratedValue	private int id;
 	/**
 	 * Customer's VAT number
 	 */
-	@Column(nullable = false, unique = true)
-	private int vatNumber;
+	@Column(nullable = false, unique = true) private int vatNumber;
 
 	/**
 	 * Customer's name. In case of a company, the represents its commercial
 	 * denomination
 	 */
-	@Column(nullable = false)
-	private String designation;
+	@Column(nullable = false) private String designation;
 
 	/**
 	 * Customer's contact number
 	 */
-	@SuppressWarnings("unused")
-	private int phoneNumber;
+	@SuppressWarnings("unused") private int phoneNumber;
 
 	/**
 	 * Customer's discount.
 	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private Discount discount;
+	@OneToOne @JoinColumn(nullable = false) private Discount discount;
 
 	/**
 	 * 
 	 */
-	@OneToOne
-	private Account currentAccount;
+	@OneToOne @JoinColumn private Account currentAccount;
 
 	// 1. constructor
 

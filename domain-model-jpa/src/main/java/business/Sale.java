@@ -14,8 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.apache.derby.iapi.store.raw.Transaction;
+
+import business.entities.Transation;
 
 /**
  * A sale
@@ -43,19 +48,20 @@ public class Sale {
 	 */
 	@Enumerated(STRING) private SaleStatus status;
 	
-	@ManyToOne
-	private Customer customer;
+	/**
+	 * 
+	 */
+	@ManyToOne private Customer customer;
 	
 	/**
 	 * The products of the sale
 	 */
 	@OneToMany(cascade =ALL) @JoinColumn
 	private List<SaleProduct> saleProducts;
-		
 	
 	// 1. constructor
 
-	/**nNti
+	/**
 	 * Constructor needed by JPA.
 	 */
 	Sale () {

@@ -9,9 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import business.Sale;
 
 /**
  * Entity implementation class for Entity: Transation
@@ -32,18 +35,15 @@ public abstract class Transation {
 	@Column private double value;
 	
 	@Temporal(TemporalType.DATE) private Date date;
-
-	@OneToOne @Column(name="ID_SALE") private int idSale;
 	
 	public Transation() {
 	}
 
-	public Transation(double value, Date d, int idSale) {
+	public Transation(double value, Date d) {
 		this.date = d;
 		this.value = value;
-		this.idSale= idSale;
 	}
-
+	
 	public double getValor() {
 		return value;
 	}
@@ -66,14 +66,6 @@ public abstract class Transation {
 
 	public void setValue(double value) {
 		this.value = value;
-	}
-
-	public int getIdSale() {
-		return idSale;
-	}
-
-	public void setIdSale(int idSale) {
-		this.idSale = idSale;
 	}
 	
 	
