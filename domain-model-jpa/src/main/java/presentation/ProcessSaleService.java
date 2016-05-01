@@ -15,15 +15,16 @@ public class ProcessSaleService {
 		saleHandler.newSale(vat);
 	}
 
-	public void addProductToSale(int productCode, int qty) 
-			throws ApplicationException {
+	public void addProductToSale(int productCode, int qty) throws ApplicationException {
 		saleHandler.addProductToSale(productCode, qty);
 	}
 
 	public double getSaleDiscount() throws ApplicationException {
 		return saleHandler.getSaleDiscount();
 	}
-	public boolean closeSale()throws ApplicationException{
-		return saleHandler.closeSale();
+
+	public boolean closeSale(int vat) throws ApplicationException {
+		return saleHandler.closeSale(vat);
+
 	}
 }

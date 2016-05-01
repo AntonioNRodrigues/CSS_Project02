@@ -167,6 +167,8 @@ public class Sale {
 
 	public void setTransation(Transation trans) {
 		this.trans = trans;
+	}
+	public void closeSale(Sale s){
 		
 	}
 }

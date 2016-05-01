@@ -6,7 +6,7 @@ import business.ApplicationException;
 
 /**
  * A simple application client that uses both application handlers.
- *	
+ * 
  * @author fmartins
  * @version 1.1 (17/04/2015)
  */
@@ -14,18 +14,17 @@ public class SimpleClient {
 
 	private AddCustomerService addCustomerService;
 	private ProcessSaleService processSaleService;
-	
-	public SimpleClient(AddCustomerService addCustomerService, 
-			ProcessSaleService processSaleService) {
+
+	public SimpleClient(AddCustomerService addCustomerService, ProcessSaleService processSaleService) {
 		this.addCustomerService = addCustomerService;
 		this.processSaleService = processSaleService;
 	}
-	
+
 	/**
 	 * A simple interaction with the application services
 	 */
 	public void createASale() {
-		
+
 		// the interaction
 		try {
 			// adds a customer.
@@ -41,12 +40,16 @@ public class SimpleClient {
 
 			// gets the discount amount
 			System.out.println(processSaleService.getSaleDiscount());
+
+			// close's the sale
+			System.out.println("The Sale has been closed: " + processSaleService.closeSale(168027852));
+
 		} catch (ApplicationException e) {
 			System.out.println("Error: " + e.getMessage());
 			// for debugging purposes only. Typically, in the application
 			// this information can be associated with a "details" button when
 			// the error message is displayed.
-			if (e.getCause() != null) 
+			if (e.getCause() != null)
 				System.out.println("Cause: ");
 			e.printStackTrace();
 		}

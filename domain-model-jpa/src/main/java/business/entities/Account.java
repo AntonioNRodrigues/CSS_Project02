@@ -69,5 +69,8 @@ public class Account {
 		
 		return balance;
 	}
+	public boolean addTransation(Transation transation){
+		return this.listTransactions.add(transation);
+	}
 
 }

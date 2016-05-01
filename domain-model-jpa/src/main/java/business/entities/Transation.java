@@ -59,17 +59,17 @@ public abstract class Transation {
 	}
 
 	/**
-	 * Method to build Transations of diferent types
+	 * Method to build Transations of different types
 	 * 
 	 * @param control
 	 * @param value
-	 * @param d
+	 * @param date
 	 * @return
 	 * @required String control as
 	 */
-	public static Transation factory(String control, double value, Date d) {
-		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, d)
-				: (control.equalsIgnoreCase(DEBIT)) ? new Credit(value, d) : null;
+	public static Transation factory(String control, double value, Date date) {
+		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, date)
+				: (control.equalsIgnoreCase(CREDIT)) ? new Credit(value, date) : null;
 	}
 
 	public double getValor() {

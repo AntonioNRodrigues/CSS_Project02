@@ -118,6 +118,10 @@ public class Customer {
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
 	}
+	
+	public Account getAccount(){
+		return currentAccount;
+	}
 
 	/**
 	 * Checks if a VAT number is valid.
@@ -152,4 +156,5 @@ public class Customer {
 			checkDigitCalc = 0;
 		return checkDigit == checkDigitCalc;
 	}
+	
 }
