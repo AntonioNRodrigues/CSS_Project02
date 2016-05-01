@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import business.ApplicationException;
 import business.Sale;
 
 /**
@@ -29,23 +30,48 @@ import business.Sale;
 @Entity
 @Inheritance(strategy = SINGLE_TABLE)
 public abstract class Transation {
-	
-	@Id @GeneratedValue private int id;
-	
-	@Column private double value;
-	
-	@Temporal(TemporalType.DATE) private Date date;
-	
-	@OneToOne(mappedBy="trans") private Sale sale;
-	
+
+	private static final String DEBIT = "debit";
+	private static final String CREDIT = "credit";
+	@Id
+	@GeneratedValue
+	private int id;
+
+	@Column
+	private double value;
+
+	@Temporal(TemporalType.DATE)
+	private Date date;
+
+	@OneToOne(mappedBy = "trans")
+	private Sale sale;
+
 	public Transation() {
 	}
 
-	public Transation(double value, Date d) {
+	Transation(double value, Date d) {
 		this.date = d;
 		this.value = value;
 	}
-	
+
+	public Transation(double value, Date d, String control) {
+		factory(control, value, d);
+	}
+
+	/**
+	 * Method to build Transations of diferent types
+	 * 
+	 * @param control
+	 * @param value
+	 * @param d
+	 * @return
+	 * @required String control as
+	 */
+	public static Transation factory(String control, double value, Date d) {
+		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, d)
+				: (control.equalsIgnoreCase(DEBIT)) ? new Credit(value, d) : null;
+	}
+
 	public double getValor() {
 		return value;
 	}
@@ -69,6 +95,5 @@ public abstract class Transation {
 	public void setValue(double value) {
 		this.value = value;
 	}
-	
-	
+
 }

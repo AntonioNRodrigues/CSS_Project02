@@ -1,11 +1,10 @@
 package business.entities;
 
-import business.Sale;
 import business.entities.Transation;
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: Credit

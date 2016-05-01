@@ -73,5 +73,21 @@ public class SaleCatalog {
 		}
 		return sale;
 	}
+	
+	public boolean closeSale(Sale sale){
+
+		EntityManager em = emf.createEntityManager(); 
+		try {
+			
+		} catch (Exception e) {
+			
+			
+		}finally {
+			
+		}
+		
+		return true;
+		
+	}
 
 }

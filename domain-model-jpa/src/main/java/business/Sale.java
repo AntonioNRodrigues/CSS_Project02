@@ -24,57 +24,66 @@ import business.entities.Transation;
 
 /**
  * A sale
- *	
+ * 
  * @author fmartins
  * @version 1.1 (17/04/2015)
  * 
  */
-@Entity 
+@Entity
 public class Sale {
 
 	/**
 	 * Sale primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
 	 */
-	@Id	@GeneratedValue private int id;
-	
-	/**
-	 * The date the sale was made 
-	 */
-	@Temporal(TemporalType.DATE) private Date date;
+	@Id
+	@GeneratedValue
+	private int id;
 
 	/**
-	 * Whether the sale is open or closed. 
+	 * The date the sale was made
 	 */
-	@Enumerated(STRING) private SaleStatus status;
-	
+	@Temporal(TemporalType.DATE)
+	private Date date;
+
+	/**
+	 * Whether the sale is open or closed.
+	 */
+	@Enumerated(STRING)
+	private SaleStatus status;
+
 	/**
 	 * 
 	 */
-	@ManyToOne private Customer customer;
-	
+	@ManyToOne
+	private Customer customer;
+
 	/**
 	 * The products of the sale
 	 */
-	@OneToMany(cascade =ALL) @JoinColumn
+	@OneToMany(cascade = ALL)
+	@JoinColumn
 	private List<SaleProduct> saleProducts;
-	
-	@OneToOne private Transation trans;
-	
+
+	@OneToOne
+	private Transation trans;
+
 	// 1. constructor
 
 	/**
 	 * Constructor needed by JPA.
 	 */
-	Sale () {
+	Sale() {
 	}
-	
+
 	/**
-	 * Creates a new sale given the date it occurred and the customer that
-	 * made the purchase.
+	 * Creates a new sale given the date it occurred and the customer that made
+	 * the purchase.
 	 * 
-	 * @param date The date that the sale occurred
-	 * @param customer The customer that made the purchase
+	 * @param date
+	 *            The date that the sale occurred
+	 * @param customer
+	 *            The customer that made the purchase
 	 */
 	public Sale(Date date, Customer customer) {
 		this.date = date;
@@ -83,11 +92,10 @@ public class Sale {
 		this.saleProducts = new LinkedList<SaleProduct>();
 	}
 
-	
 	// 2. getters and setters
 
 	/**
-	 * @return The sale's total 
+	 * @return The sale's total
 	 */
 	public double total() {
 		double total = 0;
@@ -99,17 +107,18 @@ public class Sale {
 	/**
 	 * @return The sale's amount eligible for discount
 	 */
-	public double eligibleDiscountTotal () {
+	public double eligibleDiscountTotal() {
 		double total = 0;
 		for (SaleProduct sp : saleProducts)
 			total += sp.getEligibleSubtotal();
 		return total;
 	}
-	
+
 	/**
-	 * @return Computes the sale's discount amount based on the discount type of the customer.
+	 * @return Computes the sale's discount amount based on the discount type of
+	 *         the customer.
 	 */
-	public double discount () {
+	public double discount() {
 		Discount discount = customer.getDiscountType();
 		return discount.computeDiscount(this);
 	}
@@ -124,12 +133,13 @@ public class Sale {
 	/**
 	 * Adds a product to the sale
 	 * 
-	 * @param product The product to sale
-	 * @param qty The amount of the product being sold
-	 * @throws ApplicationException 
+	 * @param product
+	 *            The product to sale
+	 * @param qty
+	 *            The amount of the product being sold
+	 * @throws ApplicationException
 	 */
-	public void addProductToSale(Product product, double qty) 
-			throws ApplicationException {
+	public void addProductToSale(Product product, double qty) throws ApplicationException {
 		if (!isOpen())
 			throw new ApplicationException("Cannot add products to a closed sale.");
 
@@ -139,15 +149,24 @@ public class Sale {
 			product.setQty(product.getQty() - qty);
 			saleProducts.add(new SaleProduct(product, qty));
 		} else
-			throw new ApplicationException("Product " + product.getProdCod() + " has stock ("  + 
-							product.getQty() + ") which is insuficient for the current sale");
+			throw new ApplicationException("Product " + product.getProdCod() + " has stock (" + product.getQty()
+					+ ") which is insuficient for the current sale");
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (SaleProduct sp : saleProducts)
-			sb.append(" ["+sp.getProduct().getProdCod() +":"+sp.getQty()+"]");
+			sb.append(" [" + sp.getProduct().getProdCod() + ":" + sp.getQty() + "]");
 		return sb.toString();
+	}
+
+	public void setSatus(SaleStatus state) {
+		this.status = state;
+	}
+
+	public void setTransation(Transation trans) {
+		this.trans = trans;
+		
 	}
 }

@@ -1,6 +1,8 @@
 package business;
 
+import java.util.Date;
 
+import business.entities.Transation;
 
 /**
  * Handles use case process sale (version with two operations: 
@@ -85,5 +87,12 @@ public class ProcessSaleHandler {
 	 */
 	public double getSaleTotal() {
 		return currentSale.total();
+	}
+
+	public void closeSale() {
+		double value = getSaleTotal();
+		currentSale.setSatus(SaleStatus.CLOSED);
+		currentSale.setTransation(Transation.factory("debit", value, new Date()));
+		
 	}
 }

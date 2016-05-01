@@ -23,4 +23,7 @@ public class ProcessSaleService {
 	public double getSaleDiscount() throws ApplicationException {
 		return saleHandler.getSaleDiscount();
 	}
+	public boolean closeSale()throws ApplicationException{
+		return saleHandler.closeSale();
+	}
 }
