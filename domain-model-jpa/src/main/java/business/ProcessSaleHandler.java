@@ -106,6 +106,7 @@ public class ProcessSaleHandler {
 	public boolean closeSale(int vat) throws ApplicationException {
 		double value = getSaleTotal();
 		double discount = getSaleDiscount();
+		
 		currentSale.setSatus(SaleStatus.CLOSED);
 		Customer customer = customerCatalog.getCustomer(vat);
 		
