@@ -15,48 +15,56 @@ import javax.persistence.TypedQuery;
 public class CustomerCatalog {
 
 	/**
-	 * Entity manager factory for accessing the persistence service 
+	 * Entity manager factory for accessing the persistence service
 	 */
 	private EntityManagerFactory emf;
-	
+
 	/**
 	 * Constructs a discount's catalog giving a entity manager factory
 	 */
 	public CustomerCatalog(EntityManagerFactory emf) {
 		this.emf = emf;
 	}
-	
+
 	/**
 	 * Finds a customer given its VAT number.
 	 * 
-	 * @param vat The VAT number of the customer to fetch from the repository
-	 * @return The Customer object corresponding to the customer with the vat number.
-	 * @throws ApplicationException When the customer with the vat number is not found.
+	 * @param vat
+	 *            The VAT number of the customer to fetch from the repository
+	 * @return The Customer object corresponding to the customer with the vat
+	 *         number.
+	 * @throws ApplicationException
+	 *             When the customer with the vat number is not found.
 	 */
-	public Customer getCustomer (int vat) throws ApplicationException {
+	public Customer getCustomer(int vat) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		TypedQuery<Customer> query = em.createNamedQuery(Customer.FIND_BY_VAT_NUMBER, Customer.class);
 		query.setParameter(Customer.NUMBER_VAT_NUMBER, vat);
 		try {
 			return query.getSingleResult();
 		} catch (PersistenceException e) {
-			throw new ApplicationException ("Customer not found.");
+			throw new ApplicationException("Customer not found.");
 		} finally {
 			em.close();
 		}
 	}
-	
+
 	/**
 	 * Adds a new customer
 	 * 
-	 * @param vat The customer's VAT number
-	 * @param designation The customer's designation
-	 * @param phoneNumber The customer's phone number
-	 * @param discountType The customer's discount type
-	 * @throws ApplicationException When the customer is already in the repository or the 
-	 * vat number is invalid.
+	 * @param vat
+	 *            The customer's VAT number
+	 * @param designation
+	 *            The customer's designation
+	 * @param phoneNumber
+	 *            The customer's phone number
+	 * @param discountType
+	 *            The customer's discount type
+	 * @throws ApplicationException
+	 *             When the customer is already in the repository or the vat
+	 *             number is invalid.
 	 */
-	public void addCustomer (int vat, String designation, int phoneNumber, Discount discountType) 
+	public void addCustomer(int vat, String designation, int phoneNumber, Discount discountType)
 			throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -71,5 +79,23 @@ public class CustomerCatalog {
 		} finally {
 			em.close();
 		}
+	}
+	/**
+	 * 
+	 * @param customer
+	 * @throws ApplicationException
+	 */
+	public void updateCustomer(Customer customer) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(customer);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			throw new ApplicationException("Error Updating the client", e);
+		} finally {
+			em.close();
+		}
+
 	}
 }
