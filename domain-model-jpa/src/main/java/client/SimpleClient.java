@@ -24,7 +24,9 @@ public class SimpleClient {
 	 * A simple interaction with the application services
 	 */
 	public void createASale() {
+		System.out.println("ADD_CUSTOMER_SERVICE: "+addCustomerService);
 
+		System.out.println("PROCES_SSALE_SERVICE: "+ processSaleService);
 		// the interaction
 		try {
 			// adds a customer.
@@ -39,7 +41,7 @@ public class SimpleClient {
 			processSaleService.addProductToSale(123, 4);
 
 			// gets the discount amount
-			System.out.println(processSaleService.getSaleDiscount());
+			//System.out.println(processSaleService.getSaleDiscount());
 
 			// close's the sale
 			System.out.println("The Sale has been closed: " + processSaleService.closeSale(168027852));
