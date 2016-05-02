@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -19,19 +21,30 @@ import javax.persistence.OneToMany;
  * @Date 2016/04/28
  *
  */
-@Entity 
+@Entity
+@NamedQueries({
+		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID)
+	//@NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM Account a WHERE a.id = :" + Account.FIND_BY_ID)
+})
 
 public class Account {
 
-	@Id @GeneratedValue private int id;
-	
-	@Column private double balance;
-	
-	// Cascade = ALL ==> it means that if you delete an account it 
-	@OneToMany private List<Transation> listTransactions;
+	public static final String FIND_BY_ID = "id";
+	public static final String FIND_ALL = "Account.getTransations";
+
+	@Id
+	@GeneratedValue
+	private int id;
+
+	@Column
+	private double balance;
+
+	// Cascade = ALL ==> it means that if you delete an account it
+	@OneToMany
+	private List<Transation> listTransactions;
 
 	public Account() {
-		
+
 	}
 
 	public Account(double balance) {
@@ -54,19 +67,23 @@ public class Account {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
+
 	/**
 	 * 
 	 * @return
 	 */
-	private double calcBalance(){
-		/*
-		 * iterate over the list
-		 * check the state and + ou - has acording
-		 */
-		
-		return balance;
+	private void calcBalance(Transation transation) {
+		if (transation instanceof Debit) {
+			this.balance += transation.getValue();
+		}if(transation instanceof Credit){
+			this.balance -= transation.getValue();
+		}else{
+			throw new UnsupportedOperationException();
+		}
 	}
-	public boolean addTransation(Transation transation){
+
+	public boolean addTransation(Transation transation) {
+		calcBalance(transation);
 		return this.listTransactions.add(transation);
 	}
 
