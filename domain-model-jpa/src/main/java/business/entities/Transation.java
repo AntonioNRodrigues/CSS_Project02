@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,8 +28,14 @@ import business.Sale;
  */
 @Entity
 @Inheritance(strategy = SINGLE_TABLE)
+@NamedQueries({
+		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id = :" + Transation.FIND_ID)
+		// @NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM
+		// Account a WHERE a.id = :" + Account.FIND_BY_ID)
+})
 public abstract class Transation {
 
+	public static final String FIND_ID = "id_trans";
 	private static final String DEBIT = "debit";
 	private static final String CREDIT = "credit";
 	@Id
@@ -67,14 +75,6 @@ public abstract class Transation {
 	public static Transation factory(String control, double value, Date date) {
 		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, date)
 				: (control.equalsIgnoreCase(CREDIT)) ? new Credit(value, date) : null;
-	}
-
-	public double getValor() {
-		return value;
-	}
-
-	public void setValor(double value) {
-		this.value = value;
 	}
 
 	public Date getDate() {
