@@ -4,6 +4,7 @@ import java.util.Date;
 
 import business.entities.Account;
 import business.entities.Transation;
+import business.entities.TransationCatalog;
 
 /**
  * Handles use case process sale (version with two operations: newSale followed
@@ -28,7 +29,10 @@ public class ProcessSaleHandler {
 	 * The product's catalog
 	 */
 	private ProductCatalog productCatalog;
-
+	/**
+	 * the transtion catalog
+	 */
+	private TransationCatalog tc;
 	/**
 	 * The current sale
 	 */
@@ -45,10 +49,11 @@ public class ProcessSaleHandler {
 	 * @param productCatalog
 	 *            A product's catalog
 	 */
-	public ProcessSaleHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog, ProductCatalog productCatalog) {
+	public ProcessSaleHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog, ProductCatalog productCatalog, TransationCatalog tc) {
 		this.saleCatalog = saleCatalog;
 		this.customerCatalog = customerCatalog;
 		this.productCatalog = productCatalog;
+		this.tc = tc;
 	}
 
 	/**
@@ -110,6 +115,7 @@ public class ProcessSaleHandler {
 		currentSale.setSatus(SaleStatus.CLOSED);
 		Customer customer = customerCatalog.getCustomer(vat);
 		
+		
 		Transation transation = null;
 		try {
 			//new Transation
@@ -119,13 +125,16 @@ public class ProcessSaleHandler {
 			//get the account of the current user
 			Account account = customer.getAccount();
 			//associate the transation to the account
+			
 			account.addTransation(transation);
+			
+			tc.addTransation(transation);
+			customerCatalog.updateCustomer(customer);
 			
 			return true;
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		}
-		
 		return false;
 
 	}
