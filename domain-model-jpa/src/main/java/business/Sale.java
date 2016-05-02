@@ -171,4 +171,9 @@ public class Sale {
 	public void closeSale(Sale s){
 		
 	}
+
+	public void setCostumer(Customer customer) {
+		this.customer = customer;
+		
+	}
 }
