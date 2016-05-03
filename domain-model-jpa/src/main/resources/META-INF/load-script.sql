@@ -1,3 +1,5 @@
+SELECT *
+  FROM 
 -- warning: it does not reset sequence table, since its existence depends on the database engine and 
 -- the chosen strategy by the JPA implementation
 delete from SALEPRODUCT;

@@ -30,10 +30,11 @@ public class SimpleClient {
 		// the interaction
 		try {
 			// adds a customer.
-			addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 2);
-
+		
+			addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1);
+		
 			// starts a new sale
-			processSaleService.newSale(168027852);
+			processSaleService.newSale(224531700);
 
 			// adds two products to the sale
 			processSaleService.addProductToSale(123, 6);
@@ -41,7 +42,7 @@ public class SimpleClient {
 			processSaleService.addProductToSale(123, 4);
 
 			// gets the discount amount
-			System.out.println(processSaleService.getSaleDiscount());
+			//System.out.println(processSaleService.getSaleDiscount());
 
 			// close's the sale
 			System.out.println("The Sale has been closed: " + processSaleService.closeSale(168027852));

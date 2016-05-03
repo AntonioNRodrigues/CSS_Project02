@@ -29,7 +29,7 @@ import business.Sale;
 @Entity
 @Inheritance(strategy = SINGLE_TABLE)
 @NamedQueries({
-		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id = :" + Transation.FIND_ID)
+		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id_trans = :" + Transation.FIND_ID)
 		// @NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM
 		// Account a WHERE a.id = :" + Account.FIND_BY_ID)
 })
@@ -40,7 +40,8 @@ public abstract class Transation {
 	private static final String CREDIT = "credit";
 	@Id
 	@GeneratedValue
-	private int id;
+	@Column(name="id_trans")
+	private int id_trans;
 
 	@Column
 	private double value;
@@ -57,10 +58,6 @@ public abstract class Transation {
 	Transation(double value, Date d) {
 		this.date = d;
 		this.value = value;
-	}
-
-	public Transation(double value, Date d, String control) {
-		factory(control, value, d);
 	}
 
 	/**

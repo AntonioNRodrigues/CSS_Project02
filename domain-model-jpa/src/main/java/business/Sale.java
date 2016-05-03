@@ -7,12 +7,16 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -30,15 +34,19 @@ import business.entities.Transation;
  * 
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name = Sale.FIND_NAME , query = "SELECT s FROM Sale s WHERE s.id_Sale=:"+ Sale.FIND_NAME)
+})
 public class Sale {
-
+	public static final String FIND_NAME = "id_Sale";
 	/**
 	 * Sale primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
 	 */
 	@Id
 	@GeneratedValue
-	private int id;
+	@Column(name="id_Sale")
+	private int id_Sale;
 
 	/**
 	 * The date the sale was made
@@ -68,6 +76,8 @@ public class Sale {
 	@OneToOne
 	private Transation trans;
 
+	@Enumerated(EnumType.ORDINAL)  
+	private PaymentStatus statusPayment;
 	// 1. constructor
 
 	/**
@@ -174,6 +184,15 @@ public class Sale {
 
 	public void setCostumer(Customer customer) {
 		this.customer = customer;
-		
 	}
+
+	public PaymentStatus getStatusPayment() {
+		return statusPayment;
+	}
+
+	public void setStatusPayment(PaymentStatus statusPayment) {
+		this.statusPayment = statusPayment;
+	}
+	
+	
 }
