@@ -14,7 +14,7 @@ import javax.persistence.NamedQuery;
  * @author fmartins
  * @version 1.1 (17/04/2015)
  */
-@Entity
+@Entity   
 @NamedQueries({
 	@NamedQuery(name=Discount.FIND_BY_TYPE, query="SELECT d FROM Discount d WHERE d.id = :" + Discount.FIND_BY_TYPE_ID),
 	@NamedQuery(name=Discount.FIND_ALL, query="SELECT d FROM Discount d")

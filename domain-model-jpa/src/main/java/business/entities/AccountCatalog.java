@@ -36,6 +36,7 @@ public class AccountCatalog {
 			em.close();
 		}
 	}
+
 	/**
 	 * 
 	 * @throws ApplicationException
@@ -62,9 +63,10 @@ public class AccountCatalog {
 			em.close();
 		}
 	}
+
 	public void updateAccount(Account account) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
-		
+
 		try {
 			em.getTransaction().begin();
 			em.merge(account);

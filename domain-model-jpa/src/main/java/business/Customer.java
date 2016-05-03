@@ -1,12 +1,17 @@
 package business;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+import org.eclipse.persistence.jpa.config.Cascade;
 
 import business.entities.Account;
 
@@ -22,12 +27,15 @@ import business.entities.Account;
  * @version 1.1 (17/04/2015)
  * 
  */
-@Entity
-@NamedQuery(name = Customer.FIND_BY_VAT_NUMBER, query = "SELECT c FROM Customer c WHERE c.vatNumber = :"
-		+ Customer.NUMBER_VAT_NUMBER)
+@Entity   
+@NamedQueries({
+		@NamedQuery(name = Customer.FIND_BY_VAT_NUMBER, query = "SELECT c FROM Customer c WHERE c.vatNumber = :"
+				+ Customer.NUMBER_VAT_NUMBER) })
+
 public class Customer {
 
 	// Named query name constants
+	public static final String FIND_BY_ID = "Customer.id";
 	public static final String FIND_BY_VAT_NUMBER = "Customer.findByVATNumber";
 	public static final String NUMBER_VAT_NUMBER = "vatNumber";
 
@@ -37,32 +45,41 @@ public class Customer {
 	 * Customer primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
 	 */
-	@Id	@GeneratedValue	private int id;
+	@Id
+	@GeneratedValue
+	private int id;
 	/**
 	 * Customer's VAT number
 	 */
-	@Column(nullable = false, unique = true) private int vatNumber;
+	@Column(nullable = false, unique = true)
+	private int vatNumber;
 
 	/**
 	 * Customer's name. In case of a company, the represents its commercial
 	 * denomination
 	 */
-	@Column(nullable = false) private String designation;
+	@Column(nullable = false)
+	private String designation;
 
 	/**
 	 * Customer's contact number
 	 */
-	@SuppressWarnings("unused") private int phoneNumber;
+	@SuppressWarnings("unused")
+	private int phoneNumber;
 
 	/**
 	 * Customer's discount.
 	 */
-	@OneToOne @JoinColumn(nullable = false) private Discount discount;
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private Discount discount;
 
 	/**
 	 * 
 	 */
-	@OneToOne @JoinColumn private Account currentAccount;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn
+	private Account currentAccount;
 
 	// 1. constructor
 
@@ -86,11 +103,12 @@ public class Customer {
 	 *            The customer's discount type
 	 * @pre isValidVAT(vat)
 	 */
-	public Customer(int vatNumber, String designation, int phoneNumber, Discount discountType) {
+	public Customer(int vatNumber, String designation, int phoneNumber, Discount discountType, Account account) {
 		this.vatNumber = vatNumber;
 		this.designation = designation;
 		this.phoneNumber = phoneNumber;
 		this.discount = discountType;
+		this.currentAccount = account;
 	}
 
 	// 2. getters and setters
@@ -118,8 +136,8 @@ public class Customer {
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
 	}
-	
-	public Account getAccount(){
+
+	public Account getAccount() {
 		return currentAccount;
 	}
 
@@ -156,5 +174,11 @@ public class Customer {
 			checkDigitCalc = 0;
 		return checkDigit == checkDigitCalc;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", vatNumber=" + vatNumber + ", designation=" + designation + ", phoneNumber="
+				+ phoneNumber + ", discount=" + discount + ", currentAccount=" + currentAccount + "]";
+	}
+
 }

@@ -4,6 +4,7 @@ import static javax.persistence.InheritanceType.SINGLE_TABLE;
 
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,12 +30,11 @@ import business.Sale;
 @Entity
 @Inheritance(strategy = SINGLE_TABLE)
 @NamedQueries({
-		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id_trans = :" + Transation.FIND_ID)
-		// @NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM
-		// Account a WHERE a.id = :" + Account.FIND_BY_ID)
+		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id_trans = :" + Transation.FIND_ID),
+		@NamedQuery(name = Transation.FIND_ALL, query = "SELECT t FROM Transation t")
 })
 public abstract class Transation {
-
+	public static final String FIND_ALL = "Transation.findAll";  
 	public static final String FIND_ID = "id_trans";
 	private static final String DEBIT = "debit";
 	private static final String CREDIT = "credit";
@@ -54,7 +54,6 @@ public abstract class Transation {
 
 	public Transation() {
 	}
-
 	Transation(double value, Date d) {
 		this.date = d;
 		this.value = value;

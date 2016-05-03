@@ -1,5 +1,6 @@
 package business;
 
+import business.entities.Account;
 
 /**
  * Handles the add customer use case. This represents a very 
@@ -45,9 +46,9 @@ public class AddCustomerHandler {
 	 * to the Portuguese legislation).
 	 */
 	public void addCustomer (int vat, String denomination, 
-			int phoneNumber, int discountType) 
+			int phoneNumber, int discountType, Account account) 
 			throws ApplicationException {
 		Discount discount = discountCatalog.getDiscount(discountType);
-		customerCatalog.addCustomer(vat, denomination, phoneNumber, discount);
+		customerCatalog.addCustomer(vat, denomination, phoneNumber, discount, account);
 	}	
 }

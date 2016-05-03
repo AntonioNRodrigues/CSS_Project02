@@ -2,6 +2,7 @@ package business;
 
 import javax.persistence.EntityManagerFactory;
 
+import business.entities.AccountCatalog;
 import business.entities.TransationCatalog;
 
 /**
@@ -23,6 +24,8 @@ public class SaleSys {
 	 */
 	private ProcessSaleHandler processSaleHandler;
 
+	private CurrentAccountHandler currentAccountHandler;
+
 	/**
 	 * Performs the start up use case
 	 */
@@ -31,6 +34,8 @@ public class SaleSys {
 		this.addCustomerHandler = new AddCustomerHandler(customerCatalog, new DiscountCatalog(emf));
 		this.processSaleHandler = new ProcessSaleHandler(new SaleCatalog(emf), customerCatalog, new ProductCatalog(emf),
 				new TransationCatalog(emf));
+		this.currentAccountHandler = new CurrentAccountHandler(new SaleCatalog(emf), customerCatalog,
+				new ProductCatalog(emf), new TransationCatalog(emf), new AccountCatalog(emf));
 	}
 
 	/**
@@ -45,5 +50,9 @@ public class SaleSys {
 	 */
 	public ProcessSaleHandler getProcessSaleHandler() {
 		return processSaleHandler;
+	}
+
+	public CurrentAccountHandler getCurrentAccountHandler() {
+		return currentAccountHandler;
 	}
 }

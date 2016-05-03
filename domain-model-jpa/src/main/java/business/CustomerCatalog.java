@@ -5,6 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
+import business.entities.Account;
+
 /**
  * A catalog of customers
  * 
@@ -64,12 +66,12 @@ public class CustomerCatalog {
 	 *             When the customer is already in the repository or the vat
 	 *             number is invalid.
 	 */
-	public void addCustomer(int vat, String designation, int phoneNumber, Discount discountType)
+	public void addCustomer(int vat, String designation, int phoneNumber, Discount discountType, Account account)
 			throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Customer c = new Customer(vat, designation, phoneNumber, discountType);
+			Customer c = new Customer(vat, designation, phoneNumber, discountType, account);
 			em.persist(c);
 			em.getTransaction().commit();
 		} catch (Exception e) {

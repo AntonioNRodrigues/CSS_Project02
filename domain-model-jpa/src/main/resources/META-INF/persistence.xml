@@ -16,10 +16,10 @@
 		<class>business.entities.Transation</class>
 		<shared-cache-mode>NONE</shared-cache-mode> <!-- para permitir fazer testes de integração usando o DBSetup -->
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:data/derby/css000"/>
-			<property name="javax.persistence.jdbc.user" value="css000"/>
-			<property name="javax.persistence.jdbc.password" value="css000"/>
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CSSWork"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value="root"/>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
 		</properties>
 	</persistence-unit>
 </persistence>

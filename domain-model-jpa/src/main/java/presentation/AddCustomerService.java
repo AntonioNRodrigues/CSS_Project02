@@ -2,6 +2,7 @@ package presentation;
 
 import business.AddCustomerHandler;
 import business.ApplicationException;
+import business.entities.Account;
 
 
 public class AddCustomerService {
@@ -13,7 +14,7 @@ public class AddCustomerService {
 	}
 	
 	public void addCustomer(int vat, String denomination, int phoneNumber, 
-			int discountType) throws ApplicationException {
-		customerHandler.addCustomer(vat, denomination, phoneNumber, discountType);
+			int discountType, Account account) throws ApplicationException {
+		customerHandler.addCustomer(vat, denomination, phoneNumber, discountType, account);
 	}
 }

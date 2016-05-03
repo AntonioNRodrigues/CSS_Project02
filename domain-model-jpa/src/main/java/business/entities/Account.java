@@ -3,6 +3,8 @@ package business.entities;
 import java.util.ArrayList;
 import java.util.List;
 import business.entities.Transation;
+
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,15 +25,12 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @NamedQueries({
-		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID)
-		// @NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM
-		// Account a WHERE a.id = :" + Account.FIND_BY_ID)
-})
+		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID) })
 
 public class Account {
 
 	public static final String FIND_BY_ID = "id";
-	public static final String FIND_ALL = "Account.getTransations";
+	// public static final String FIND_ALL = "Account.getTransations";
 
 	@Id
 	@GeneratedValue
@@ -44,11 +43,16 @@ public class Account {
 	private List<Transation> listTransactions;
 
 	public Account() {
-
+		this.balance = 0.0;
 	}
 
 	public Account(double balance) {
 		this.balance = balance;
+		listTransactions = new ArrayList<>();
+	}
+
+	@PostConstruct
+	private void postInit() {
 		listTransactions = new ArrayList<>();
 	}
 

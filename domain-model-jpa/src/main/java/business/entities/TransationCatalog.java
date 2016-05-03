@@ -1,11 +1,14 @@
 package business.entities;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+
+import org.omg.CORBA.TRANSACTION_MODE;
 
 import business.ApplicationException;
 import business.Customer;
@@ -69,6 +72,30 @@ public class TransationCatalog {
 		} catch (PersistenceException e) {
 			throw new ApplicationException("Error adding the transation", e);
 		} finally {
+			em.close();
+		}
+	}
+	
+	public Collection<Transation> getTransations() throws ApplicationException{
+		EntityManager em = emf.createEntityManager();
+		try{
+			TypedQuery<Transation> query = em.createQuery(Transation.FIND_ALL, Transation.class);
+			return query.getResultList();
+		}catch(Exception e){
+			throw new ApplicationException ("Error obtaining the Transation list", e);
+		}finally {
+			em.close();
+		}
+	}
+	
+	public Collection<Transation> getTransations(int id_Account) throws ApplicationException{
+		EntityManager em = emf.createEntityManager();
+		try{
+			TypedQuery<Transation> query = (TypedQuery<Transation>) em.createQuery("SELECT * FROM Transations t WHERE t.account = :"+ id_Account);
+			return query.getResultList();
+		}catch(Exception e){
+			throw new ApplicationException ("Error obtaining the Transation list", e);
+		}finally {
 			em.close();
 		}
 	}
