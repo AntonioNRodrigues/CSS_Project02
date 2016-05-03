@@ -1,0 +1,11 @@
+/target/
+.classpath
+.project
+.settings
+data/derby
+/bin/
+.idea/
+derby.log
+table-module-v1.iml
+.DS_Store
+*/.DS_Store
