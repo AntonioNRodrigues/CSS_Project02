@@ -24,7 +24,8 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID)
-	//@NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM Account a WHERE a.id = :" + Account.FIND_BY_ID)
+		// @NamedQuery(name = Account.FIND_ALL, query = "SELECT listaTrans FROM
+		// Account a WHERE a.id = :" + Account.FIND_BY_ID)
 })
 
 public class Account {
@@ -39,7 +40,6 @@ public class Account {
 	@Column
 	private double balance;
 
-	// Cascade = ALL ==> it means that if you delete an account it
 	@OneToMany
 	private List<Transation> listTransactions;
 
@@ -73,11 +73,13 @@ public class Account {
 	 * @return
 	 */
 	private void calcBalance(Transation transation) {
+		// TESTAR------------------------------------------->
 		if (transation instanceof Debit) {
 			this.balance += transation.getValue();
-		}if(transation instanceof Credit){
+		}
+		if (transation instanceof Credit) {
 			this.balance -= transation.getValue();
-		}else{
+		} else {
 			throw new UnsupportedOperationException();
 		}
 	}
@@ -85,6 +87,10 @@ public class Account {
 	public boolean addTransation(Transation transation) {
 		calcBalance(transation);
 		return this.listTransactions.add(transation);
+	}
+
+	public List<Transation> getTransation() {
+		return this.listTransactions;
 	}
 
 }
