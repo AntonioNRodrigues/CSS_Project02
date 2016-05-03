@@ -41,7 +41,7 @@ public class SimpleClient {
 			processSaleService.addProductToSale(123, 4);
 
 			// gets the discount amount
-			//System.out.println(processSaleService.getSaleDiscount());
+			System.out.println(processSaleService.getSaleDiscount());
 
 			// close's the sale
 			System.out.println("The Sale has been closed: " + processSaleService.closeSale(168027852));
