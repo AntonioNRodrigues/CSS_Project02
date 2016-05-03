@@ -3,6 +3,7 @@ package business;
 import java.util.Date;
 
 import business.entities.Account;
+import business.entities.AccountCatalog;
 import business.entities.Transation;
 import business.entities.TransationCatalog;
 
@@ -32,7 +33,7 @@ public class ProcessSaleHandler {
 	/**
 	 * the transtion catalog
 	 */
-	private TransationCatalog tc;
+	private TransationCatalog transationCatalog;
 	/**
 	 * The current sale
 	 */
@@ -49,11 +50,12 @@ public class ProcessSaleHandler {
 	 * @param productCatalog
 	 *            A product's catalog
 	 */
-	public ProcessSaleHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog, ProductCatalog productCatalog, TransationCatalog tc) {
+	public ProcessSaleHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog, ProductCatalog productCatalog,
+			TransationCatalog tc) {
 		this.saleCatalog = saleCatalog;
 		this.customerCatalog = customerCatalog;
 		this.productCatalog = productCatalog;
-		this.tc = tc;
+		this.transationCatalog = tc;
 	}
 
 	/**
@@ -103,39 +105,54 @@ public class ProcessSaleHandler {
 	public double getSaleTotal() {
 		return currentSale.total();
 	}
+
 	/**
 	 * 
 	 * @return
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public boolean closeSale(int vat) throws ApplicationException {
 		double value = getSaleTotal();
 		double discount = getSaleDiscount();
-		
+
 		currentSale.setSatus(SaleStatus.CLOSED);
 		Customer customer = customerCatalog.getCustomer(vat);
-		
-		
+
 		Transation transation = null;
 		try {
-			//new Transation
+			// new Transation
 			transation = Transation.factory("debit", value, new Date());
-			//associate the tansation to the current sale
+			// associate the tansation to the current sale
 			currentSale.setTransation(transation);
-			//get the account of the current user
+			// get the account of the current user
 			Account account = customer.getAccount();
-			//associate the transation to the account
-			
+			// associate the transation to the account
+
 			account.addTransation(transation);
 			
-			tc.addTransation(transation);
+			transationCatalog.addTransation(transation);
 			customerCatalog.updateCustomer(customer);
-			
+
 			return true;
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		}
 		return false;
 
+	}
+
+	/**
+	 * 
+	 * @param idSale
+	 * @return true is is payed and false if is not
+	 * @throws ApplicationException
+	 */
+	public boolean paymentSale(int vat) throws ApplicationException {
+		if (currentSale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
+			currentSale.setStatusPayment(PaymentStatus.PAYED);
+		}
+		
+		
+		return true;
 	}
 }
