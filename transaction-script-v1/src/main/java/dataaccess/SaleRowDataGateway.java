@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import business.ApplicationException;
 import business.SaleStatus;
 
 /**
@@ -36,8 +35,9 @@ import business.SaleStatus;
  */
 public class SaleRowDataGateway {
 	
-	// Sale attributes 
-
+	
+	// Sale attributes
+	
 	/**
 	 * The sale's id (unique, primary key)
 	 */
@@ -67,6 +67,7 @@ public class SaleRowDataGateway {
 	 * The customer Id the sales refers to
 	 */
 	private int customerId;
+	
 		
 	/**
 	 * A pair of constants to map the status of a sale to a string
@@ -186,8 +187,7 @@ public class SaleRowDataGateway {
 			statement.setDate(1, date);
 			statement.setInt(2, customerId);
 			// execute SQL
-			int created = statement.executeUpdate();
-			System.out.print("Created: "+created);
+			statement.executeUpdate();
 			// Gets sale Id generated automatically by the database engine
 			try (ResultSet rs = statement.getGeneratedKeys()) {
 				rs.next(); 
@@ -227,7 +227,39 @@ public class SaleRowDataGateway {
 			throw new PersistenceException("Internal error getting a sale", e);
 		} 
 	}
+	
+	/**
+	 * update sql query
+	 */
+	private static final String UPDATE_SALE_SQL = "update sale "
+			+ "set total = ?, discount_total = ?, status = 'C' "
+			+ "where id = ?";
+	
+	/**
+	 * Updates a sale row on database
+	 * based on it's current attributes values
+	 * 
+	 * @throws PersistenceException
+	 */
+	public void update() throws PersistenceException{
 		
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(UPDATE_SALE_SQL)){
+			
+			// populated sql parameters
+			statement.setDouble(1, this.total);
+			statement.setDouble(2, this.discount);
+			statement.setInt(3, this.id);
+			
+			// execute database update
+			if(statement.executeUpdate() != 1)
+				throw new PersistenceException("Error updating sale. No modified rows.");
+			
+		} catch (SQLException | PersistenceException e) {
+			throw new PersistenceException("Error updating sale", e);
+		}
+		
+	}
+	
 	/**
 	 * Creates a sale from a result set retrieved from the database.
 	 * 
@@ -246,77 +278,65 @@ public class SaleRowDataGateway {
 			newSale.status = rs.getString("status"); 
 			return newSale;
 		} catch (SQLException e) {
+			System.out.println("Oops...");
+			e.printStackTrace();
+			System.out.println("Oops...");
 			throw new RecordNotFoundException ("Sale does not exist	", e);
 		}
 	}
 	
-	/**
-	 * The update sale query
-	 */
-	private final static String UPDATE_SQL = "update sale set "
-			+ "total = ?, discount_total = ?, status = '"+CLOSED+"', customer_id = ?, closed_at = ? "
-			+ "where id = ?";
-	
-	/**
-	 * Updates a sale's details based on its current values
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void update() throws ApplicationException{
-		String errorMsg = "Erro ao actualizar venda";
-		try(PreparedStatement statement = DataSource.INSTANCE.prepare(UPDATE_SQL)){
+	private static List<SaleRowDataGateway> loadSales(ResultSet rs) throws SQLException{
+		List<SaleRowDataGateway> list = new ArrayList<>();
+		
+		while(rs.next())
+		{
+			SaleRowDataGateway newSale = new SaleRowDataGateway(rs.getInt("customer_id"), 
+					rs.getDate("date"));
+			newSale.id = rs.getInt("id");
+			newSale.total = rs.getDouble("total");
+			newSale.discount = rs.getDouble("discount_total");
+			newSale.status = rs.getString("status");
 			
-			statement.setDouble(1, this.total);
-			statement.setDouble(2, this.discount);
-			statement.setInt(3, this.customerId);
-			statement.setDate(4, new java.sql.Date(new Date().getTime()));
-			statement.setInt(5, this.id);
-			
-			statement.executeUpdate();
-			
-		}catch(SQLException e){
-			throw new ApplicationException(errorMsg, e);
-		}catch(PersistenceException e){
-			throw new ApplicationException(errorMsg, e);
-		}	
+			// add to list
+			list.add(newSale);
+		}
+		
+		return list;
 	}
-	
+
 	/**
-	 * select to retrieve all customers by id
+	 * select sales by customer id sql
 	 */
-	private static final String GET_ALL_FROM_CUSTOMER_SQL = ""
-			+ "select id, date, total, discount_total, status, customer_id " +
-			"from sale " +
-			"where customer_id = ?";
+	private static final String GET_SALES_BY_CUSTOMER_ID_SQL = 
+			"select * "
+			+ "from sale s "
+			+ "where customer_id = ?";
 	
 	/**
-	 * Get list of sales by customer id
+	 * Gets a list of sales based on given customer id
 	 * 
 	 * @param customerId, customer id to be considered
-	 * @return list of sales
-	 * @throws PersistenceException
+	 * @return a list of sales
 	 */
-	public static List<SaleRowDataGateway> getSalesByCustomerId(int customerId)
-	throws PersistenceException{
+	public static List<SaleRowDataGateway> getSalesByCustomerId(int customerId) 
+			throws PersistenceException{
 		
-		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_ALL_FROM_CUSTOMER_SQL)) {
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(GET_SALES_BY_CUSTOMER_ID_SQL)){
 			
+			// set customer id
 			statement.setInt(1, customerId);
+			
+			// fetch sales
 			ResultSet rs = statement.executeQuery();
-			List<SaleRowDataGateway> list = new ArrayList<>();
-			while(rs.next()){
-				SaleRowDataGateway newSale = new SaleRowDataGateway(rs.getInt("customer_id"), 
-						rs.getDate("date"));
-				newSale.id = rs.getInt("id");
-				newSale.total = rs.getDouble("total");
-				newSale.discount = rs.getDouble("discount_total");
-				newSale.status = rs.getString("status"); 
-				list.add(newSale);
-			}
-			return list;
-		} catch (PersistenceException | SQLException e) {
-			throw new PersistenceException("Error when getting customer sales by id", e);
-		} 
+			
+			// loading all sales and return
+			return loadSales(rs);
+			
+			
+		} catch (SQLException | PersistenceException e) {
+			e.printStackTrace();
+			throw new PersistenceException("Error getting sales by customer id.", e);
+		}
 		
 	}
 }

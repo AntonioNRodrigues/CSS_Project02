@@ -11,18 +11,12 @@ import business.ApplicationException;
 import business.TransactionType;
 
 public class SaleTransactionRowDataGateway {
-
-	/**
-	 * represents the database expected value for a credit transaction
-	 */
-	private static final int CREDIT = 1;
-	private static final String CREDIT_STRING = "CREDIT";
 	
 	/**
-	 * represents the database expected value for a debit transaction
+	 * constants to be used when converting from and to database value
 	 */
-	private static final int DEBIT = 2;
-	private static final String DEBIT_STRING = "DEBIT";
+	public static final int CREDIT_TRANSACTION = 1;
+	public static final int DEBIT_TRANSACTION = -1;
 	
 	/**
 	 * transaction id
@@ -30,14 +24,9 @@ public class SaleTransactionRowDataGateway {
 	private int id;
 	
 	/**
-	 * sale id
+	 * transaction sale id
 	 */
 	private int saleId;
-	
-	/**
-	 * transaction value
-	 */
-	private double value;
 	
 	/**
 	 * transaction type
@@ -45,223 +34,202 @@ public class SaleTransactionRowDataGateway {
 	private TransactionType type;
 	
 	/**
-	 * created at
+	 * transaction value
+	 */
+	private double value;
+	
+	/**
+	 * the date when transaction was made
 	 */
 	private Date createdAt;
 	
 	/**
-	 * Constructor
+	 * Constructor 
 	 * 
-	 * @param saleId, sale id
-	 * @param value, transaction value
+	 * @param saleId, transaction sale id
 	 * @param type, transaction type
+	 * @param value, transaction value
 	 */
-	public SaleTransactionRowDataGateway(int saleId, double value, TransactionType type){
+	public SaleTransactionRowDataGateway(int saleId, TransactionType type, double value){
 		this.saleId = saleId;
-		this.value = value;
 		this.type = type;
+		this.value = value;
 	}
 	
-	/**
-	 * Set sale transaction id to given value
-	 * 
-	 * @param id, the value to be set to id field
-	 */
-	private void setId(int id){
-		this.id = id;
-	}
 	
-	private void setCreatedAt(Date date){
-		this.createdAt = date;
-	}	
-	
-	/**
-	 * insert sql
-	 */
-	private static final String INSERT_SQL = "insert into sale_transaction "
-			+ "(sale_id, transaction_type, transaction_value, created_at) "
-			+ "values (?, ?, ?, ?)";
-	
-	/**
-	 * Insert a new transaction insert database
-	 * 
-	 * @throws PersistenceException
-	 */
-	public void insert() throws PersistenceException{
-		
-		try(PreparedStatement statement = DataSource.INSTANCE.prepare(INSERT_SQL)){
-			
-			statement.setInt(1, this.saleId);
-			statement.setInt(2, convertTransactionType(this.type));
-			statement.setDouble(3, this.value);
-			statement.setDate(4, new java.sql.Date(new Date().getTime()));
-			statement.executeUpdate();
-			
-		} catch (SQLException e) {
-			throw new PersistenceException("Error when inserting a new transaction", e);
-		} catch (PersistenceException e) {
-			throw new PersistenceException("Error when inserting a new transaction", e);
-		}
-		
-	}
-	
-	/**
-	 * select to get all sale transactions
-	 */
-	private static final String GET_SALE_TRANSACTIONS_SQL = "select "
-			+ "id, sale_id, transaction_type, transaction_value, created_at "
-			+ "from sale_transaction "
-			+ "where sale_id = ?";
-	
-	
-	// GETTERS
+	// GETTERS and SETTERS
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getSaleId() {
 		return saleId;
 	}
 
-	public double getValue() {
-		return value;
+	public void setSaleId(int saleId) {
+		this.saleId = saleId;
 	}
 
 	public TransactionType getType() {
 		return type;
 	}
 
+	public void setType(TransactionType type) {
+		this.type = type;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
+
 	/**
-	 * Gets all sale transactions
+	 * SQL insert command
+	 */
+	private static final String INSERT_SQL = "insert into sale_transaction (sale_id, "
+			+ "transaction_type, transaction_value, created_at) "
+			+ "values (?, ?, ?, ?)";
+	
+	/**
+	 * Persists this object on database with it's own attribute values
 	 * 
-	 * @param saleId, sale id to be considered
-	 * @return a list with string represented sale transactions
 	 * @throws ApplicationException
 	 */
-	public static List<String> getSaleTransactions(int saleId) throws ApplicationException{
+	public void insert() throws ApplicationException{
 		
-		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_SALE_TRANSACTIONS_SQL)) {
+		/**
+		 * Insert new sale transaction row
+		 */
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(INSERT_SQL)){
 			
-			statement.setInt(1, saleId);
-			ResultSet rs = statement.executeQuery();
+			// set it's parameters
+			statement.setInt(1, this.saleId);
+			statement.setInt(2, this.convertTransactionTypeToDB(this.type));
+			statement.setDouble(3, this.value);
+			statement.setDate(4, new java.sql.Date(new Date().getTime()));
 			
-			// list of sale transactions
-			List<SaleTransactionRowDataGateway> prods = loadAll(rs);
+			// execute sql insert
+			statement.executeUpdate();
 			
-			// convert to string
-			List<String> list = new ArrayList<>();
-			for(SaleTransactionRowDataGateway sale : prods)
-				list.add(sale.toString());
+			// obtain the inserted id
+			try(ResultSet rs = statement.getGeneratedKeys();)
+			{
+				rs.next();
+				this.id = rs.getInt(1);
+			} catch (SQLException e) {
+				throw new ApplicationException("Error when getting new sale transaction inserted id.");
+			}
 			
-			return list;
-			
-		} catch (PersistenceException | SQLException e) {
-			throw new ApplicationException("Error when obtaining sale transactions", e);
-		}
-		
-	}
-	
-	private static final String GET_TRANSACTION_BY_ID_SQL = "select "
-			+ "id, sale_id, transaction_type, transaction_value, created_at "
-			+ "from sale_transaction "
-			+ "where id = ?";
-	
-	public static SaleTransactionRowDataGateway getTransactionById(int transactionId)
-	throws PersistenceException{
-		
-		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_TRANSACTION_BY_ID_SQL)) {
-			
-			statement.setInt(1, transactionId);
-			ResultSet rs = statement.executeQuery();
-			return loadAll(rs).get(0);
-			
-		} catch (PersistenceException | SQLException e) {
-			throw new PersistenceException("Error getting sale transaction by id", e);
+		} catch (SQLException | PersistenceException e) {
+			throw new ApplicationException("Error: SQL Exception when inserting sale transaction.", e);
 		}
 		
 	}
 	
 	/**
-	 * Parses the given list and returns a list of SaleTransaction
-	 * 
-	 * @param rs, result set to be considered when parsing
-	 * @return the SaleTransaction corresponding list
-	 * @throws PersistenceException
+	 * select sale transactions by sale id
 	 */
-	private static List<SaleTransactionRowDataGateway> loadAll(ResultSet rs) throws PersistenceException{
+	private static final String GET_SALE_TRANSACTIONS_BY_SALE_ID_SQL = 
+			"select * from sale_transaction st "
+			+ "where sale_id = ?";
+	
+	/**
+	 * Gets all sale transactions of a given sale
+	 * 
+	 * @param saleId, sale id to be considered
+	 * @return a list with sale transaction from the corresponding sale
+	 * 
+	 * @throws ApplicationException
+	 */
+	public static List<SaleTransactionRowDataGateway> getSaleTransactionsBySaleId(int saleId)
+			throws ApplicationException{
 		
+		try(PreparedStatement statement = 
+				DataSource.INSTANCE.prepare(GET_SALE_TRANSACTIONS_BY_SALE_ID_SQL)){
+			
+			// set transaction sale id
+			statement.setInt(1, saleId);
+			
+			// fetch results
+			ResultSet rs = statement.executeQuery();
+			return loadAll(rs);
+			
+		} catch (SQLException | PersistenceException e) {
+			throw new ApplicationException("", e);
+		}
+		
+	}
+	
+	/**
+	 * Loads a result set into a list of sale transactions
+	 * 
+	 * @param rs, result set to be used
+	 * @return the generated list
+	 * 
+	 * @throws ApplicationException
+	 */
+	private static List<SaleTransactionRowDataGateway> loadAll(ResultSet rs)
+		throws ApplicationException{
+		
+		// objects list
 		List<SaleTransactionRowDataGateway> list = new ArrayList<>();
-		try {
+		
+		try{
+			// load all result rows into objects
 			while(rs.next())
 			{
-				SaleTransactionRowDataGateway st = new SaleTransactionRowDataGateway(
-						rs.getInt("sale_id"), rs.getDouble("transaction_value"), 
-						convertTransactionType(rs.getInt("transaction_type")));
-				st.setId(rs.getInt("id"));
-				st.setCreatedAt(rs.getDate("created_at"));
-				list.add(st);
-				
+				SaleTransactionRowDataGateway t =
+						new SaleTransactionRowDataGateway(
+								rs.getInt("sale_id"),
+								convertTransactionTypeFromDB(rs.getInt("transaction_type")),
+								rs.getDouble("transaction_value")
+								);
+				t.setId(rs.getInt("id"));
+				list.add(t);
 			}
+			
 			return list;
+			
 		} catch (SQLException e) {
-			throw new PersistenceException("", e);
-		}
+			throw new ApplicationException("Error loading sale transactions", e);
+		} 
 		
 	}
 	
 	/**
-	 * Converts an integer into a transaction type
-	 * 
-	 * @param type, integer to be considered
-	 * @return the corresponding transaction type
-	 */
-	private static TransactionType convertTransactionType(int type){
-		return type == CREDIT ? TransactionType.CREDIT : TransactionType.DEBIT;
-	}
-	
-	/**
-	 * Converts a TransactionType into the corresponding integer
+	 * Converts a transaction type into the corresponding integer value
 	 * 
 	 * @param type, TransactionType to be considered
-	 * @return the corresponding integer to the given TransactionType
+	 * @return the corresponding integer value
 	 */
-	private int convertTransactionType(TransactionType type){
-		return type == TransactionType.CREDIT ? CREDIT : DEBIT;
+	private int convertTransactionTypeToDB(TransactionType type){
+		return type == TransactionType.CREDIT ? CREDIT_TRANSACTION : DEBIT_TRANSACTION; 
 	}
 	
 	/**
-	 * Converts a TransactionType into the corresponding string
+	 * Converts an integer into the corresponding TransactionType value
 	 * 
-	 * @param t, TransactionType to be converted
-	 * @return string representation of t
+	 * @param type, integer to be considered
+	 * @return the corresponding TransactionType enum
 	 */
-	private String transactionTypeToString(TransactionType t){
-		return t == TransactionType.CREDIT ? CREDIT_STRING : DEBIT_STRING;
-	}
-	
-	/**
-	 * Checks if is credit type transaction or not
-	 * 
-	 * @return true if so, otherwise false
-	 */
-	public boolean isCredit(){
-		return this.type == TransactionType.CREDIT;
-	}
-	
-	@Override
-	public String toString(){
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("ID: " + this.id + " | ");
-		sb.append("TYPE " + transactionTypeToString(this.type) + " | ");
-		sb.append("AMOUNT: " + this.value + " | ");
-		sb.append("CREATED AT: " + this.createdAt.getDay()+ "/");
-		sb.append(this.createdAt.getMonth() + "/" + this.createdAt.getYear());
-		
-		return sb.toString();
+	private static TransactionType convertTransactionTypeFromDB(int type){
+		return type == CREDIT_TRANSACTION ? TransactionType.CREDIT : TransactionType.DEBIT;
 	}
 }

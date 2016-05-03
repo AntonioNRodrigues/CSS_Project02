@@ -11,11 +11,11 @@ import business.DiscountType;
 /**
  * A simple application client that uses both services.
  *	
- * @author fmartins
- * @version 1.2 (11/02/2015)
+ * @author Joao Rodrigues & Simao Neves & Antonio Rodrigues
+ * @version 2.1 (03/05/2016)
  * 
  */
-public class SimpleClient {
+public class Version2Client {
 
 	/**
 	 * A simple interaction with the application services
@@ -52,6 +52,17 @@ public class SimpleClient {
 			// adds two products to the database
 			ss.addProductToSale(sale, 123, 10);
 			ss.addProductToSale(sale, 124, 5);
+			
+			// close sale
+			ss.closeSale(sale);
+			
+			// make payment
+			ss.makePayment(sale, 300);
+			
+			// check customer's balance
+			double balance = cs.getBalance(168027852);
+			System.out.println("Current balance is: " + balance);
+			
 			
 			// gets the discount amounts
 			double discount = ss.getSaleDiscount(sale);

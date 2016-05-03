@@ -1,7 +1,5 @@
 package presentation;
 
-import java.util.List;
-
 import business.ApplicationException;
 import business.SaleTransactionScripts;
 
@@ -27,23 +25,12 @@ public class SaleService {
 		return saleTS.getSaleDiscount(saleId);
 	}
 	
-	public List<String> getSaleProducts(int saleId) throws ApplicationException{
-		return saleTS.getSaleProducts(saleId);
+	public void closeSale(int saleId) throws ApplicationException{
+		this.saleTS.closeSale(saleId);
 	}
 	
-	public void closeSale(int sale) throws ApplicationException{
-		this.saleTS.closeSale(sale);
-	}
-	
-	//TODO -> CHANGE THIS TO A PROPOER SERVICE
-	public List<String> getTransactionDetails(int transactionId)
-		throws ApplicationException
-	{
-		return saleTS.getTransactionDetails(transactionId);
-	}
-	
-	public List<String> getAllSales() throws ApplicationException{
-		return saleTS.getAllSales();
+	public void makePayment(int saleId, double amount) throws ApplicationException{
+		this.saleTS.makePayment(saleId, amount);
 	}
 	
 }

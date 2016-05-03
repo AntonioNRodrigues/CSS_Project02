@@ -71,79 +71,6 @@ public class CustomerTransactionScripts {
 		}
 	}
 
-	/**
-	 * Make user payment
-	 * 
-	 * @param saleId, sale id to be considered
-	 * @param amount, amount of payment
-	 * @throws ApplicationException
-	 */
-	public void makePayment(int saleId, double amount) throws ApplicationException{
-		
-		try{
-			SaleTransactionRowDataGateway st = 
-					new SaleTransactionRowDataGateway(saleId, amount, TransactionType.CREDIT);
-			st.insert();
-		} catch (PersistenceException e) {
-			throw new ApplicationException("Error adding user credit", e);
-		}
-		
-	}
-	
-	public List<String> getAllCustomers() throws ApplicationException{
-		
-		try{			
-			List<CustomerRowDataGateway> customersRow = CustomerRowDataGateway.getAllCustomers();
-			List<String> customers = new ArrayList<>();
-			
-			for(CustomerRowDataGateway cur : customersRow)
-				customers.add(cur.toString() + "\n");
-			
-			return customers;
-		}catch(ApplicationException e){
-			throw new ApplicationException("Error when getting all customers", e);
-		}
-	}
-	
-	/**
-	 * Gets all customer sale transactions
-	 * 
-	 * @param vat, customer vat to be considered
-	 * @return a list of textual represented transactions
-	 */
-	public List<String> getAllTransactions(int vat) throws ApplicationException{
-		
-		try{			
-			// obter o user pelo vat
-			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerByVATNumber(vat);
-			
-			// obter todas as sales do user
-			List<SaleRowDataGateway> sales = SaleRowDataGateway.getSalesByCustomerId(customer.getCustomerId());
-			
-			// prepara transactions list
-			List<String> transactions = new ArrayList<>();
-			
-			// obter todas as transactions de todas as sales
-			for(SaleRowDataGateway sale : sales)
-			{
-				// obtem transactions de current sale
-				try {
-					List<String> innerTransactions = 
-							SaleTransactionRowDataGateway.getSaleTransactions(sale.getId());
-					// add all to transactions list
-					transactions.addAll(innerTransactions);
-				} catch (ApplicationException e) {
-					continue;
-				}	
-			}
-			//return :P
-			return transactions;
-		} catch (PersistenceException e) {
-			throw new ApplicationException("Error when getting customer transactions", e);
-		}
-	}
-	
-	
 	
 	/**
 	 * Checks if a VAT number is valid.
@@ -189,4 +116,50 @@ public class CustomerTransactionScripts {
 		return value != null && !value.isEmpty();
 	}
 
+
+	public double getCustomerBalance(int vat) throws ApplicationException{
+		
+		try {
+			// get customer by id
+			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerByVATNumber(vat);
+			
+			// get customer sales
+			List<SaleRowDataGateway> customerSales = 
+					SaleRowDataGateway.getSalesByCustomerId(customer.getCustomerId());
+			
+			// get customer sales transactions
+			List<SaleTransactionRowDataGateway> customerSalesTransactions =
+					new ArrayList<>();
+			for(SaleRowDataGateway s : customerSales)
+			{
+				customerSalesTransactions.addAll(
+						SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(s.getId()));
+			}
+			
+			// compute customer balance based on transactions
+			return computeCustomerBalance(customerSalesTransactions);
+			
+			
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ApplicationException("Error getting customer balance");
+		}
+	}
+	
+	private static double computeCustomerBalance(
+			List<SaleTransactionRowDataGateway> transactions){
+		
+		double res = 0;
+		
+		for(SaleTransactionRowDataGateway st : transactions)
+			if(st.getType() == TransactionType.CREDIT)
+				res += st.getValue();
+			else
+				res -= st.getValue();
+		
+		
+		return res;
+		
+	}
+	
 }
