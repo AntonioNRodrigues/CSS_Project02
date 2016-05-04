@@ -9,6 +9,7 @@ import presentation.CustomerService;
 import presentation.SaleService;
 import business.ApplicationException;
 import business.DiscountType;
+import presentation.TransactionService;
 
 /**
  * The big bang class.
@@ -29,17 +30,18 @@ public class SimpleClient {
 		// Reset tables
 		ResetTables resetTables = new ResetTables();
 		try	{
-			resetTables.resetCSSDerbyDB();			
+			resetTables.resetCSSDerbyDB();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// Create the persistence layer
 		try (Persistence persistence = new dataaccess.Persistence("jdbc:derby:data/derby/cssdb", "SaleSys", "")) {
 
 			// Creates the two available services
 			CustomerService cs = new CustomerService(persistence);
 			SaleService vs = new SaleService(persistence);
+			TransactionService ts = new TransactionService(persistence);
 
 
 			// runs a small test
@@ -54,9 +56,21 @@ public class SimpleClient {
 				vs.addProductToSale(sale, 123, 10);
 				vs.addProductToSale(sale, 124, 5);
 
-				// gets the discount amounts
+
+				int transactionDebitId = vs.closeSale(sale);
+				System.out.println("ID de transaction debit: " + transactionDebitId);
+
+				int transactionId = vs.makePayment(sale);
+				System.out.println("ID de transaction: " + transactionId);
+
+				// Test stuff
 				double discount = vs.getSaleDiscount(sale);
-				System.out.println(discount);
+				System.out.println("DISCOUNT: " + discount);
+
+				double total = vs.getSaleTotal(sale);
+				System.out.println("TOTAL: " + total);
+
+
 			} catch (ApplicationException e) {
 				System.out.println("Error: " + e.getMessage());
 				// for debugging purposes only. Typically, in the application

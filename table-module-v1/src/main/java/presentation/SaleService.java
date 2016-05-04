@@ -78,8 +78,14 @@ public class SaleService extends Service {
 		return sale.getSaleDiscount(saleId);
 	}
 
-	public boolean closeSale(int saleId) {
-		return true;
+	public double getSaleTotal(int saleId) throws ApplicationException {
+		Sale sale = new Sale(persistence);
+		return sale.getSaleTotal(saleId);
+	}
+
+	public int closeSale(int saleId) throws ApplicationException {
+		Sale sale = new Sale(persistence);
+		return sale.closeSale(saleId);
 	}
 
 	public int makePayment(int saleId) throws ApplicationException, PersistenceException {

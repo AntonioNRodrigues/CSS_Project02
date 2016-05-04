@@ -131,14 +131,14 @@ public class Sale extends TableModule {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * @param saleId The sale to get the customer id from
 	 * @return The customer id of the sale
 	 * @throws ApplicationException In case an error occurs when retrieving the
 	 * information from the database.
 	 */
-	public int getCustomerId (int saleId) throws ApplicationException {
+	public int getCustomerId(int saleId) throws ApplicationException {
 		try {
 			TableData td = getSale(saleId);
 			return persistence.saleTableGateway.readCustomerId(td.iterator().next());
@@ -147,14 +147,45 @@ public class Sale extends TableModule {
 		}
 	}
 
-	public double getTotal (int saleId) throws ApplicationException {
+	public double getSaleTotal(int saleId) throws ApplicationException {
+		// If the sale is closed, the total is already computed
+		if (isClosed (saleId))
+			return getTotal(saleId);
+
+		try {
+			TableData td = persistence.saleProductTableGateway.getSaleProducts(saleId);
+			// compute the sale total
+			double totalSum = 0;
+			Product product = new Product(persistence);
+			for (Row r : td) {
+				int productId = persistence.saleProductTableGateway.readProductId(r);
+				double quantity = persistence.saleProductTableGateway.readQuantity(r);
+				totalSum += product.getFaceValue(productId) * quantity;
+			}
+			return totalSum;
+
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Internal referential integrity error when computing "
+					+ " the total of the sale with id " + saleId, e);
+		}
+	}
+
+	/**
+	 * @param saleId The sale id to obtain the total amount. When the sale is closed
+	 * the total is computed and stored in an attribute so it need not to be computed
+	 * every time.
+	 * @return The discount of the sale (when closed)
+	 * @throws ApplicationException When some persistence error occurs.
+	 */
+	private double getTotal(int saleId) throws ApplicationException {
 		try {
 			TableData td = getSale(saleId);
 			return persistence.saleTableGateway.readTotal(td.iterator().next());
 		} catch (PersistenceException e) {
-			throw new ApplicationException("Internal error when trying to get the customer id of sale id " + saleId, e);
+			throw new ApplicationException("Internal error when trying to get the total of a sale with id " + saleId, e);
 		}
 	}
+
 
 	/**
 	 * @throws PersistenceException 
@@ -241,26 +272,61 @@ public class Sale extends TableModule {
 	}
 
 	public int makePayment(int saleId) throws ApplicationException {
-		// Verifica que a venda não foi paga e marca-a como paga
+		// Verifica que a venda não foi paga
 		PaymentTransaction paymentTransaction = new PaymentTransaction(persistence);
-		int transactionId = -1;
+		if (!isClosed(saleId))
+			throw new ApplicationException("Sale not yet closed!");
+		if (isPayed(saleId))
+			throw new ApplicationException("Sale already payed!");
+
+		// Marca a sale como paga
+
 		try {
-//			 && !isPayed(saleId)
-			if (isClosed(saleId)) {
-				// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
-				transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId), new Date(), saleId + "");
-			}
+			// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
+			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId), new Date(), saleId + "");
 			return transactionId;
 		} catch (PersistenceException e) {
 			throw new ApplicationException("There was an error making a payment", e);
 		}
 	}
 
-	public boolean closeSale(int saleId) throws ApplicationException {
+	private boolean isPayed(int saleId) {
+		return false;
+	}
+
+
+
+	
+	public boolean updateSaleStatus(int saleId, SaleStatus status) throws ApplicationException {
 		try {
-			return persistence.saleTableGateway.updateStatusSale(saleId, SaleStatus.CLOSED);
+			return persistence.saleTableGateway.updateStatusSale(saleId, status);
 		} catch (PersistenceException e) {
-			throw new ApplicationException("There was an internal error adding the sale", e);
+			throw new ApplicationException("There was an internal error updating the sale status", e);
+		}
+	}
+
+	public boolean updateSale(int saleId, SaleStatus status, double total, double discount) throws ApplicationException {
+		try {
+			return persistence.saleTableGateway.updateSale(saleId, status, total, discount);
+		} catch (PersistenceException e) {
+			throw new ApplicationException("There was an internal error updating the sale with id " + saleId, e);
+		}
+	}
+
+	public int closeSale(int saleId) throws ApplicationException {
+		// Calcular valor final atraves da soma dos produtos da venda e aplicar desconto
+		double finalTotal = getSaleTotal(saleId);
+		double finalDiscount = getSaleDiscount(saleId);
+
+		// Marcar sale como closed e actualizar valores
+		updateSale(saleId, SaleStatus.CLOSED, finalTotal, finalDiscount);
+
+		// Gerar transaction de debito, que o cliente tem a pagar
+		DebitTransaction debitTransaction = new DebitTransaction(persistence);
+		try {
+			return debitTransaction.newTransaction(saleId, finalTotal - finalDiscount, saleId + "");
+		} catch (PersistenceException e) {
+			throw new ApplicationException("There was an error creating a DebitTransaction in closing a sale", e);
 		}
 	}
 }

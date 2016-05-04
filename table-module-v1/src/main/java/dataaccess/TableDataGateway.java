@@ -1,5 +1,7 @@
 package dataaccess;
 
+import business.SaleStatus;
+
 /**
  * Layer super type that stores information shared by all data gateway classes.
  * 
@@ -16,6 +18,5 @@ public abstract class TableDataGateway {
 
 	TableDataGateway(DataSource dataSource) {
 		this.dataSource = dataSource;
-
 	}
 }

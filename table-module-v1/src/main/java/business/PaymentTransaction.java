@@ -14,6 +14,6 @@ public class PaymentTransaction extends Transaction {
     }
 
     public int newTransaction(int saleId, double value, Date date, String description) throws ApplicationException, PersistenceException {
-        return super.newTransaction(saleId, value, date, description, this.type);
+        return super.newTransaction(saleId, value, description, this.type);
     }
 }

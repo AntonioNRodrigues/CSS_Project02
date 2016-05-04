@@ -32,27 +32,28 @@ public class TransactionTableDataGateway extends TableDataGateway {
      * The insert sale SQL statement
      */
     private static final String INSERT_TRANSACTION_SQL =
-            "insert into sale (id, " + SALE_ID + ", " + TYPE + ", " + VALUE + ", " +
+            "insert into sale_transaction (" + ID + ", " + SALE_ID + ", " + TYPE + ", " + VALUE + ", " +
                     CREATED_AT + ") " +
                     "values (DEFAULT, ?, ?, ?, ?)";
 
-    public int newTransaction(int saleId, double value, Date date, String description, TransactionType type) throws PersistenceException {
+    public int newTransaction(int saleId, double value, String description, TransactionType type) throws PersistenceException {
         try (PreparedStatement statement = dataSource.prepareGetGenKey(INSERT_TRANSACTION_SQL)) {
             // set statement arguments
             statement.setInt(1, saleId);
             statement.setInt(2, type == TransactionType.CREDIT ? CREDIT : DEBIT);
             statement.setDouble(3, value);
-            statement.setDate(4, date);
+            statement.setDate(4, new Date(new java.util.Date().getTime()));
 
             // execute SQL
             statement.executeUpdate();
+
             // Gets sale Id generated automatically by the database engine
             try (ResultSet rs = statement.getGeneratedKeys()) {
                 rs.next();
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new PersistenceException ("Internal error inserting a new sale", e);
+            throw new PersistenceException ("Internal error inserting a new Transaction", e);
         }
     }
 }

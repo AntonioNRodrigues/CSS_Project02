@@ -145,21 +145,40 @@ public class SaleTableDataGateway extends TableDataGateway {
 	 * The update a sale by Id SQL statement
 	 */
 	private static final String UPDATE_COLUMN_SQL =
-			"update sale set ? = ? " +
+			"update sale set " + STATUS + " = ? " +
 					"where " + ID + " = ?";
 
 	public boolean updateStatusSale(int saleId, SaleStatus status) throws PersistenceException {
 		try (PreparedStatement statement = dataSource.prepare(UPDATE_COLUMN_SQL)) {
 			// set statement arguments
-			statement.setString(1, STATUS);
-			statement.setString(2, status == SaleStatus.CLOSED ? CLOSED : OPEN);
-			statement.setInt(3, saleId);
+			statement.setString(1, status == SaleStatus.CLOSED ? CLOSED : OPEN);
+			statement.setInt(2, saleId);
 
 			// execute SQL
-			try (ResultSet rs = statement.executeQuery()) {
-				rs.next();
-				return rs.getInt(1) != 0;
-			}
+			statement.executeUpdate();
+			return true;
+		} catch (SQLException | PersistenceException e) {
+			throw new PersistenceException("Internal error while updating a sale", e);
+		}
+	}
+
+	/**
+	 * The update a sale by Id SQL statement
+	 */
+	private static final String UPDATE_SALE_SQL =
+			"update sale set " + STATUS + " = ?, " + TOTAL + " = ?, " + DISCOUNT + " = ? where " + ID + " = ?";
+
+	public boolean updateSale(int saleId, SaleStatus status, double total, double discount) throws PersistenceException {
+		try (PreparedStatement statement = dataSource.prepare(UPDATE_SALE_SQL)) {
+			// set statement arguments
+			statement.setString(1, status == SaleStatus.CLOSED ? CLOSED : OPEN);
+			statement.setDouble(2, total);
+			statement.setDouble(3, discount);
+			statement.setInt(4, saleId);
+
+			// execute SQL
+			statement.executeUpdate();
+			return true;
 		} catch (SQLException | PersistenceException e) {
 			throw new PersistenceException("Internal error while updating a sale", e);
 		}
