@@ -2,6 +2,7 @@ package business;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -267,14 +268,25 @@ public class SaleTransactionScripts {
 		
 	}
 	
+	/**
+	 * Makes a payment to a previously created sale
+	 * 
+	 * @param saleId, sale's id to be considered
+	 * @param amount, amount beeing payed
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void makePayment(int saleId, double amount) throws ApplicationException{
 		
 		try{
-			// verify if sale is created and closed
+			// verify if sale exists, its closed and not payed yet
 			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
 			if(sale.getStatus() != SaleStatus.CLOSED)
 				throw new ApplicationException("A sale must be closed before "
 						+ "it can be payed. Please close it.");
+			
+			if(alreadyPayed(sale))
+				throw new ApplicationException("This sale is already payed!");
 			
 			// generates a credit transaction to that sale
 			SaleTransactionRowDataGateway st = 
@@ -286,6 +298,39 @@ public class SaleTransactionScripts {
 		}
 		
 	}
+	
+	/**
+	 * Checks if a sale is already paued based on it's transactions
+	 * 
+	 * @param sale, sale to be considered
+	 * @return true if sale is already payed, false otherwise
+	 * 
+	 * @throws ApplicationException
+	 */
+	private boolean alreadyPayed(SaleRowDataGateway sale) throws ApplicationException{
+		
+		try{			
+			
+			// get sale transactions
+			List<SaleTransactionRowDataGateway> transactions = SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(sale.getId());
+			
+			// do the math
+			double res = 0;
+			for(SaleTransactionRowDataGateway st : transactions)
+			{
+				if(st.getType() == TransactionType.CREDIT)
+					res += st.getValue();
+				else
+					res -= st.getValue();
+			}
+			return res >= 0;
+			
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error verifying if sale is already payed", e);
+		}
+		
+	}
+	
 	
 	/**
 	 * Computes the discount for the products of a sale to a customer

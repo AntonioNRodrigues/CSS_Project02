@@ -196,7 +196,7 @@ public class SaleTransactionRowDataGateway {
 	 * @throws ApplicationException
 	 */
 	public static List<SaleTransactionRowDataGateway> getSaleTransactionsBySaleId(int saleId)
-			throws ApplicationException{
+			throws PersistenceException{
 		
 		try(PreparedStatement statement = 
 				DataSource.INSTANCE.prepare(GET_SALE_TRANSACTIONS_BY_SALE_ID_SQL)){
@@ -206,10 +206,15 @@ public class SaleTransactionRowDataGateway {
 			
 			// fetch results
 			ResultSet rs = statement.executeQuery();
-			return loadAll(rs);
+			try{				
+				return loadAll(rs);
+			} catch (ApplicationException e)
+			{
+				throw new PersistenceException("Error loading sale transaction", e);
+			}
 			
 		} catch (SQLException | PersistenceException e) {
-			throw new ApplicationException("", e);
+			throw new PersistenceException("", e);
 		}
 		
 	}
