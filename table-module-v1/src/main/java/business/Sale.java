@@ -1,6 +1,7 @@
 package business;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import dataaccess.Persistence;
 import dataaccess.PersistenceException;
@@ -146,10 +147,19 @@ public class Sale extends TableModule {
 		}
 	}
 
+	public double getTotal (int saleId) throws ApplicationException {
+		try {
+			TableData td = getSale(saleId);
+			return persistence.saleTableGateway.readTotal(td.iterator().next());
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Internal error when trying to get the customer id of sale id " + saleId, e);
+		}
+	}
+
 	/**
 	 * @throws PersistenceException 
 	 * Computes the type 1 discount
-	 * @param rs The result set with the sold products 
+	 * @param td The result set with the sold products
 	 * @return The discount value
 	 * @throws SQLException When some unexpected error occurs.
 	 * @throws ApplicationException 
@@ -228,5 +238,29 @@ public class Sale extends TableModule {
 		} catch (PersistenceException e) {
 			throw new ApplicationException("Internal error when retrieving sale with internal id " + saleId, e);
 		} 
+	}
+
+	public int makePayment(int saleId) throws ApplicationException {
+		// Verifica que a venda não foi paga e marca-a como paga
+		PaymentTransaction paymentTransaction = new PaymentTransaction(persistence);
+		int transactionId = -1;
+		try {
+//			 && !isPayed(saleId)
+			if (isClosed(saleId)) {
+				// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
+				transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId), new Date(), saleId + "");
+			}
+			return transactionId;
+		} catch (PersistenceException e) {
+			throw new ApplicationException("There was an error making a payment", e);
+		}
+	}
+
+	public boolean closeSale(int saleId) throws ApplicationException {
+		try {
+			return persistence.saleTableGateway.updateStatusSale(saleId, SaleStatus.CLOSED);
+		} catch (PersistenceException e) {
+			throw new ApplicationException("There was an internal error adding the sale", e);
+		}
 	}
 }

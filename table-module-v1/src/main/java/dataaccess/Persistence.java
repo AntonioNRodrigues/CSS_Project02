@@ -15,7 +15,8 @@ public class Persistence implements AutoCloseable {
 	public final ProductTableDataGateway productTableGateway;
 	public final SaleTableDataGateway saleTableGateway;
 	public final SaleProductTableDataGateway saleProductTableGateway;
-	
+	public final TransactionTableDataGateway transactionTableGateway;
+
 	public Persistence(String url, String username, String password) throws PersistenceException {
 		dataSource = new DataSource();
 		dataSource.connect(url, username, password);
@@ -24,6 +25,7 @@ public class Persistence implements AutoCloseable {
 		productTableGateway = new ProductTableDataGateway(dataSource);
 		saleTableGateway = new SaleTableDataGateway(dataSource);
 		saleProductTableGateway = new SaleProductTableDataGateway(dataSource);
+		transactionTableGateway = new TransactionTableDataGateway(dataSource);
 	}
 
 	@Override

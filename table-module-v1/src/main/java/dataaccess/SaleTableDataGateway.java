@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import business.Sale;
 import business.SaleStatus;
 import dataaccess.TableData.Row;
 
@@ -141,8 +142,32 @@ public class SaleTableDataGateway extends TableDataGateway {
 	}
 
 	/**
+	 * The update a sale by Id SQL statement
+	 */
+	private static final String UPDATE_COLUMN_SQL =
+			"update sale set ? = ? " +
+					"where " + ID + " = ?";
+
+	public boolean updateStatusSale(int saleId, SaleStatus status) throws PersistenceException {
+		try (PreparedStatement statement = dataSource.prepare(UPDATE_COLUMN_SQL)) {
+			// set statement arguments
+			statement.setString(1, STATUS);
+			statement.setString(2, status == SaleStatus.CLOSED ? CLOSED : OPEN);
+			statement.setInt(3, saleId);
+
+			// execute SQL
+			try (ResultSet rs = statement.executeQuery()) {
+				rs.next();
+				return rs.getInt(1) != 0;
+			}
+		} catch (SQLException | PersistenceException e) {
+			throw new PersistenceException("Internal error while updating a sale", e);
+		}
+	}
+
+	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -152,7 +177,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -162,7 +187,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -172,7 +197,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -182,7 +207,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -198,7 +223,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 	
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws SQLException When there is an error in the reading or conversion
 	 */

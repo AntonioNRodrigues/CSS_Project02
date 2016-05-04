@@ -1,8 +1,15 @@
 package presentation;
 
+import business.PaymentTransaction;
+import business.Transaction;
 import dataaccess.Persistence;
 import business.ApplicationException;
 import business.Sale;
+import dataaccess.PersistenceException;
+import dataaccess.TableData;
+
+import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Handles sales' transactions. 
@@ -69,5 +76,14 @@ public class SaleService extends Service {
 	public double getSaleDiscount (int saleId) throws ApplicationException {
 		Sale sale = new Sale(persistence);
 		return sale.getSaleDiscount(saleId);
+	}
+
+	public boolean closeSale(int saleId) {
+		return true;
+	}
+
+	public int makePayment(int saleId) throws ApplicationException, PersistenceException {
+		Sale sale = new Sale(persistence);
+		return sale.makePayment(saleId);
 	}
 }
