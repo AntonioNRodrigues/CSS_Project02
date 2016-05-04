@@ -227,11 +227,13 @@ public class SaleTransactionScripts {
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void closeSale(int saleId) throws ApplicationException{
+	public double closeSale(int saleId) throws ApplicationException{
 		
 		try{
 			// verify if sale is created
 			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
+			if(sale.getStatus() == SaleStatus.CLOSED)
+				throw new ApplicationException("Sale already closed.");
 			
 			// obtain customer associated to sale
 			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerById(sale.getClientId());
@@ -257,6 +259,7 @@ public class SaleTransactionScripts {
 							sale.getTotal() - sale.getDiscount());
 			st.insert();
 			
+			return total - discount;
 			
 		} catch (PersistenceException e) {
 			throw new ApplicationException("Error closing sale", e);

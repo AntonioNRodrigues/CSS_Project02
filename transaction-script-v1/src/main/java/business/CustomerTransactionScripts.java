@@ -7,6 +7,10 @@ import dataaccess.CustomerRowDataGateway;
 import dataaccess.PersistenceException;
 import dataaccess.SaleRowDataGateway;
 import dataaccess.SaleTransactionRowDataGateway;
+import domain.Account;
+import domain.CreditTransaction;
+import domain.DebitTransaction;
+import domain.Transaction;
 
 /**
  * Handles customer transactions. 
@@ -116,8 +120,16 @@ public class CustomerTransactionScripts {
 		return value != null && !value.isEmpty();
 	}
 
-
-	public double getCustomerBalance(int vat) throws ApplicationException{
+	/**
+	 * Gets customer account transactions
+	 * by customer's vat
+	 * 
+	 * @param vat, customer's vat
+	 * @return a list with customer transactions
+	 * 
+	 * @throws ApplicationException
+	 */
+	public Account getAccountInfo(int vat) throws ApplicationException{
 		
 		try {
 			// get customer by id
@@ -128,23 +140,37 @@ public class CustomerTransactionScripts {
 					SaleRowDataGateway.getSalesByCustomerId(customer.getCustomerId());
 			
 			// get customer sales transactions
-			List<SaleTransactionRowDataGateway> customerSalesTransactions =
-					new ArrayList<>();
+			List<Transaction> transactions = new ArrayList<>();
 			for(SaleRowDataGateway s : customerSales)
 			{
-				customerSalesTransactions.addAll(
-						SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(s.getId()));
+				// for each sale get it's transactions
+				List<SaleTransactionRowDataGateway> l = 
+						SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(s.getId());
+				for(SaleTransactionRowDataGateway t : l)					
+					if(t.getType() == TransactionType.CREDIT)
+					transactions.add(
+							new CreditTransaction(
+									t.getId(), t.getSaleId(), 
+									t.getValue(), 
+									t.getCreatedAt()));
+					else
+						transactions.add(
+								new DebitTransaction(
+										t.getId(), t.getSaleId(), 
+										t.getValue(), 
+										t.getCreatedAt()));
+				
 			}
 			
-			// compute customer balance based on transactions
-			return computeCustomerBalance(customerSalesTransactions);
-			
+			// transactions
+			return new Account(customer.getCustomerId(), transactions);
 			
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ApplicationException("Error getting customer balance");
 		}
 	}
+	
 	
 	private static double computeCustomerBalance(
 			List<SaleTransactionRowDataGateway> transactions){

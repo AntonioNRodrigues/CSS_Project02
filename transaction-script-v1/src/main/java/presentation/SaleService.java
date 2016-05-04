@@ -25,8 +25,8 @@ public class SaleService {
 		return saleTS.getSaleDiscount(saleId);
 	}
 	
-	public void closeSale(int saleId) throws ApplicationException{
-		this.saleTS.closeSale(saleId);
+	public double closeSale(int saleId) throws ApplicationException{
+		return this.saleTS.closeSale(saleId);
 	}
 	
 	public void makePayment(int saleId, double amount) throws ApplicationException{

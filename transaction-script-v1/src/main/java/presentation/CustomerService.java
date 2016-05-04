@@ -3,6 +3,7 @@ package presentation;
 import business.ApplicationException;
 import business.CustomerTransactionScripts;
 import business.DiscountType;
+import domain.Account;
 
 
 public class CustomerService {
@@ -18,7 +19,7 @@ public class CustomerService {
 		customerTS.addCustomer(vat, denomination, phoneNumber, discountType);
 	}
 	
-	public double getBalance(int vat) throws ApplicationException{
-		return this.customerTS.getCustomerBalance(vat);
+	public Account getAccount(int vat) throws ApplicationException{
+		return this.customerTS.getAccountInfo(vat);
 	}
 }

@@ -9,6 +9,8 @@ import java.util.List;
 
 import business.ApplicationException;
 import business.TransactionType;
+import domain.CreditTransaction;
+import domain.SaleProduct;
 
 public class SaleTransactionRowDataGateway {
 	
@@ -54,6 +56,14 @@ public class SaleTransactionRowDataGateway {
 		this.saleId = saleId;
 		this.type = type;
 		this.value = value;
+	}
+	
+	public SaleTransactionRowDataGateway(int id, int saleId, TransactionType type, double value, Date createdAt){
+		this.id = id;
+		this.saleId = saleId;
+		this.type = type;
+		this.value = value;
+		this.createdAt = createdAt;
 	}
 	
 	
@@ -143,6 +153,33 @@ public class SaleTransactionRowDataGateway {
 		
 	}
 	
+	
+	private static final String GET_TRANSACTION_BY_ID = "select * from sale_transaction "
+			+ "where id = ?";
+	public static final SaleTransactionRowDataGateway  getTransactionById(int transactionId)
+		throws PersistenceException{
+		
+		try(PreparedStatement statement = DataSource.INSTANCE.prepare(GET_TRANSACTION_BY_ID)){
+			
+			// set transaction id
+			statement.setInt(1, transactionId);
+			
+			// execute query
+			try(ResultSet rs = statement.executeQuery()){
+				return load(rs);
+				
+			} catch (SQLException e) {
+				throw new PersistenceException("Error getting transaction details", e);
+			}
+			
+			
+		} catch (SQLException | PersistenceException e) {
+			throw new PersistenceException("", e);
+		}
+		
+	}
+	
+	
 	/**
 	 * select sale transactions by sale id
 	 */
@@ -202,6 +239,7 @@ public class SaleTransactionRowDataGateway {
 								rs.getDouble("transaction_value")
 								);
 				t.setId(rs.getInt("id"));
+				t.setCreatedAt(rs.getDate("created_at"));
 				list.add(t);
 			}
 			
@@ -212,6 +250,29 @@ public class SaleTransactionRowDataGateway {
 		} 
 		
 	}
+	
+	/**
+	 * Loads a result set row into a SaleTransactionRowDataGateway object
+	 * 
+	 * @param rs, ResultSet to use
+	 * @return the corresponding generated object
+	 */
+	private static SaleTransactionRowDataGateway load(ResultSet rs) throws PersistenceException{
+		try{			
+			rs.next();
+			return new SaleTransactionRowDataGateway(
+					rs.getInt("id"),
+					rs.getInt("sale_id"),
+					convertTransactionTypeFromDB(rs.getInt("transaction_type")),
+					rs.getDouble("transaction_value"),
+					rs.getDate("created_at")
+					);
+		} catch (SQLException e) {
+			throw new PersistenceException("Error loading sale transction object", e);
+		}
+		
+	}
+	
 	
 	/**
 	 * Converts a transaction type into the corresponding integer value
