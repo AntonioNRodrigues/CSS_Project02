@@ -3,8 +3,6 @@ package dataaccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An in-memory representation of a product table record. 
@@ -262,37 +260,6 @@ public class ProductRowDataGateway {
 		}
 	}
 	
-	private static final String GET_AVAILABLE_PRODUCTS_SQL = "select id, "
-			+ "prodcod, description, facevalue, qty, discounteligibility, unit_id " +
-			"from product " +
-			"where qty > 0";
-	
-	public static List<ProductRowDataGateway> getAllAvailableProducts() throws PersistenceException{
-		
-		try(PreparedStatement statement = DataSource.INSTANCE.prepare(GET_AVAILABLE_PRODUCTS_SQL)){
-		
-			ResultSet rs = statement.executeQuery();
-			
-			// prepare response list
-			List<ProductRowDataGateway> list = new ArrayList<>();
-			while(true)
-			{
-				try{					
-					list.add(loadProduct(rs));
-				} catch ( RecordNotFoundException e) {
-					break;
-				}
-			}
-			
-			// return it
-			return list;
-			
-		} catch (SQLException e) {
-			throw new PersistenceException("Error when getting available products", e);
-		}
-		
-	}
-	
 	/**
 	 * Creates a product from a result set retrieved from the database.
 	 * 
@@ -315,15 +282,5 @@ public class ProductRowDataGateway {
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Product not found", e);
 		}
-	}
-	
-	
-	@Override
-	public String toString(){
-		StringBuilder sb = new StringBuilder();
-		sb.append("CODE: "+this.prodCod + " | ");
-		sb.append("Designation: " + this.description + " | ");
-		sb.append("Quantity: " + this.qty);
-		return sb.toString();
 	}
 }

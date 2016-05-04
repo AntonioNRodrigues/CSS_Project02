@@ -1,23 +1,20 @@
 package SaleSys;
 
-import business.AccountTransactionScripts;
 import business.ApplicationException;
 import business.CustomerTransactionScripts;
-import business.ProductTransactionScripts;
 import business.SaleTransactionScripts;
+import business.SaleTransactionTransactionScripts;
 import dataaccess.DataSource;
 import dataaccess.PersistenceException;
-import presentation.AccountService;
 import presentation.CustomerService;
-import presentation.ProductService;
 import presentation.SaleService;
+import presentation.TransactionService;
 
 public class SaleSys {
 
 	private CustomerService customerService;
 	private SaleService saleService;
-	private AccountService accountService;
-	private ProductService productService;
+	private TransactionService transactionService;
 
 	public void run() throws ApplicationException {
 		// Connects to the database
@@ -25,8 +22,7 @@ public class SaleSys {
 			DataSource.INSTANCE.connect("jdbc:derby:data/derby/cssdb;create=false", "SaleSys", "");
 			customerService = new CustomerService(new CustomerTransactionScripts());
 			saleService = new SaleService(new SaleTransactionScripts());
-			accountService = new AccountService(new AccountTransactionScripts());
-			productService = new ProductService(new ProductTransactionScripts());
+			transactionService = new TransactionService(new SaleTransactionTransactionScripts());
 		} catch (PersistenceException e) {
 			throw new ApplicationException("Error connecting database", e);
 		}
@@ -36,9 +32,7 @@ public class SaleSys {
 		// Closes the database connection
 		DataSource.INSTANCE.close();
 	}
-	public ProductService getProductService(){
-		return productService;
-	}
+
 	public CustomerService getCustomerService() {
 		return customerService;
 	}
@@ -46,8 +40,8 @@ public class SaleSys {
 	public SaleService getSaleService() {
 		return saleService;
 	}
-
-	public AccountService getAccountService() {
-		return this.accountService;
+	
+	public TransactionService getTransactionService(){
+		return transactionService;
 	}
 }

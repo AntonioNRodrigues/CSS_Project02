@@ -2,20 +2,26 @@ package client;
 
 import java.sql.SQLException;
 
-import presentation.CustomerService;
-import presentation.SaleService;
 import SaleSys.SaleSys;
 import business.ApplicationException;
 import business.DiscountType;
+import domain.Account;
+import domain.CreditTransaction;
+import domain.DebitTransaction;
+import domain.SaleProduct;
+import domain.Transaction;
+import presentation.CustomerService;
+import presentation.SaleService;
+import presentation.TransactionService;
 
 /**
  * A simple application client that uses both services.
  *	
- * @author fmartins
- * @version 1.2 (11/02/2015)
+ * @author Joao Rodrigues & Simao Neves & Antonio Rodrigues
+ * @version 2.1 (03/05/2016)
  * 
  */
-public class SimpleClient {
+public class Version2Client {
 
 	/**
 	 * A simple interaction with the application services
@@ -39,7 +45,8 @@ public class SimpleClient {
 			
 		// Access both available services
 		CustomerService cs = app.getCustomerService();
-		SaleService ss = app.getSaleService();		
+		SaleService ss = app.getSaleService();
+		TransactionService ts = app.getTransactionService();
 		
 		// the interaction
 		try {
@@ -52,6 +59,26 @@ public class SimpleClient {
 			// adds two products to the database
 			ss.addProductToSale(sale, 123, 10);
 			ss.addProductToSale(sale, 124, 5);
+			
+			// close sale
+			double total = ss.closeSale(sale);
+			System.out.println("SALE TOTAL: " + total);
+			
+			// make payment
+			ss.makePayment(sale, 300);
+			
+			// check customer's account
+			Account account = cs.getAccount(168027852);
+			for(Transaction t : account.getTransactions())
+				System.out.println(t);
+			
+			// check single transaction
+			Transaction transaction = ts.getTransactionDetails(account.getTransactions().get(0).getId());
+			transaction.printDetails();
+			
+			transaction = ts.getTransactionDetails(account.getTransactions().get(1).getId());
+			transaction.printDetails();
+			
 			
 			// gets the discount amounts
 			double discount = ss.getSaleDiscount(sale);

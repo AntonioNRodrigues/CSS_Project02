@@ -87,7 +87,7 @@ public enum DataSource {
 	 */
 	public PreparedStatement prepare (String sql) throws PersistenceException {
 		try {
-			return connection.prepareStatement(sql);
+			return connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		} catch (SQLException e) {
 			throw new PersistenceException("Error preparing comment", e);
 		} 

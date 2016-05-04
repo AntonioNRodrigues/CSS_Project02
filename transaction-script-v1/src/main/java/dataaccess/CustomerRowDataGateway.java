@@ -3,10 +3,7 @@ package dataaccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import business.ApplicationException;
 import business.DiscountType;
 
 /**
@@ -321,39 +318,6 @@ public class CustomerRowDataGateway {
 		}
 	}
 	
-	
-	/**
-	 * select to retrieve all inserted customers
-	 */
-	private static final String GET_ALL_CUSTOMERS_SQL = "select * from Customer";
-	
-	public static List<CustomerRowDataGateway> getAllCustomers() throws ApplicationException{
-		
-		try(PreparedStatement statement = DataSource.INSTANCE.prepare(GET_ALL_CUSTOMERS_SQL)){
-			
-			// fetch all customers
-			ResultSet rs = statement.executeQuery();
-			
-			// add all customers to a list
-			List<CustomerRowDataGateway> list = new ArrayList<>();
-			while(true){
-				try{
-					list.add(loadCustomer(rs));					
-				}catch(RecordNotFoundException e){
-					break;
-				}
-			}
-			return list;
-			
-		}catch(SQLException e){
-			throw new ApplicationException("Erro when obtaining customers list", e);
-		} catch (PersistenceException e) {
-			throw new ApplicationException("Erro when obtaining customers list", e);
-		}
-		
-	}
-	
-	
 	/**
 	 * Creates a customer from a result set retrieved from the database.
 	 * 
@@ -372,16 +336,5 @@ public class CustomerRowDataGateway {
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Customer does not exist", e);
 		}
-	}
-	
-	@Override
-	public String toString(){
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("ID: "+ this.id+" | ");
-		sb.append("VAT: " + this.vat + " | ");
-		sb.append("Designation: " + this.designation);
-		
-		return sb.toString();
 	}
 }

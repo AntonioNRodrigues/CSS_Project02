@@ -1,12 +1,9 @@
 package business;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import dataaccess.ConfigurationRowDataGateway;
@@ -64,29 +61,6 @@ public class SaleTransactionScripts {
 		}
 	}
 
-	private static final String GET_ALL_SALES_SQL = "select "
-			+ "id, date, total, discount_total, status, closed_at "
-			+ "from sale";
-	public List<String> getAllSales() throws ApplicationException{
-		
-		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_ALL_SALES_SQL)){
-			
-			ResultSet rs = statement.executeQuery();
-			List<String> list = new ArrayList<>();
-			while(rs.next()){
-				
-				StringBuilder sb = new StringBuilder();
-				sb.append("ID: " + rs.getInt("id") + " | ");
-				sb.append("DATE: " + rs.getDate("date"));
-				list.add(sb.toString());
-			}
-			return list;
-			
-		} catch (PersistenceException | SQLException e) {
-			throw new ApplicationException("Error getting all sales",e);
-		}
-		
-	}
 	
 	/**
 	 * Add a product to an open sale.
@@ -174,30 +148,11 @@ public class SaleTransactionScripts {
 	 * @param sale The sale to associate the product sale with
 	 * @throws PersistenceException When there is an error inserting the sale product into the database
 	 */
-	private void addProductToSale(ProductRowDataGateway product, SaleRowDataGateway sale, double qty) throws ApplicationException{
-		
-		// check if product already exists in current sale
-		SaleProductRowDataGateway saleProduct = null;
-		try{			
-			saleProduct = SaleProductRowDataGateway.getSaleProductById(sale.getId(), product.getProductId());
-			saleProduct.increaseQty(qty);
-			saleProduct.update();
-		} catch (PersistenceException e) {
-			System.out.println("EH NOVO");
-			saleProduct = new SaleProductRowDataGateway(sale.getId(), 
-					product.getProductId(), qty);
-			try {
-				saleProduct.insert();
-			} catch (PersistenceException e2) {
-				throw new ApplicationException("Error adding a new sale product line", e2);
-			}
-		}
-		
+	private void addProductToSale(ProductRowDataGateway product, SaleRowDataGateway sale, double qty) throws PersistenceException {
 		// adds product to sale 
-		/*SaleProductRowDataGateway saleProduct = new SaleProductRowDataGateway(sale.getId(), 
+		SaleProductRowDataGateway saleProduct = new SaleProductRowDataGateway(sale.getId(), 
 						product.getProductId(), qty);
 		saleProduct.insert();
-		*/
 	}
 
 	
@@ -234,54 +189,7 @@ public class SaleTransactionScripts {
 		}
 	}
 
-	
-	public void closeSale(int saleId) throws ApplicationException{
 		
-		try{
-			// obtem sale
-			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
-			
-			// obtem sale customer
-			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerById(sale.getClientId());
-			
-			// obtem sale products
-			Iterable<SaleProductRowDataGateway> saleProducts = SaleProductRowDataGateway.getSaleProducts(saleId);
-			
-			// calcula o valor do desconto total, com base no tipo de desconto e valor
-			// dos saleProducts
-			double totalDiscount = computeDiscount(customer, saleProducts);
-			
-			// begin transaction
-			DataSource.INSTANCE.beginTransaction();
-			
-			// actualiza a venda com valor de total_discount
-			sale.setDiscount(totalDiscount);
-			sale.setStatus(SaleStatus.CLOSED);
-			sale.update();
-			
-			// gera nota de debito em conta corrente de customer
-			double saleTotal = 0;
-			for(SaleProductRowDataGateway saleProduct : saleProducts){
-				
-				ProductRowDataGateway prod = new ProductRowDataGateway().getProductById(saleProduct.getProductId());
-				saleTotal += prod.getFaceValue() * saleProduct.getQty();
-				
-			}
-			
-			SaleTransactionRowDataGateway st = 
-					new SaleTransactionRowDataGateway(sale.getId(), saleTotal - totalDiscount, 
-							TransactionType.DEBIT);
-			st.insert();
-			
-			// actualiza base de dados
-			DataSource.INSTANCE.commit();
-			
-		}catch(PersistenceException e){
-			throw new ApplicationException("Erro ao fechar venda", e);
-		}
-		
-	}
-	
 	/**
 	 * Computes the discount amount for a sale (based on the discount type of the customer).
 	 * 
@@ -294,10 +202,8 @@ public class SaleTransactionScripts {
 		try {
 			SaleRowDataGateway sale = getSale(saleId);
 			// If the sale is closed, the discount is already computed
-			if (sale.getStatus() == SaleStatus.CLOSED){
-				System.out.println("IS CLOSED!!!");
+			if (sale.getStatus() == SaleStatus.CLOSED) 
 				return sale.getDiscount();
-			}
 			
 			// Get customer associated with the sale. 
 			// The customer always exists due to the referential integrity enforced by the database
@@ -313,37 +219,119 @@ public class SaleTransactionScripts {
 					+ "the discount for sale " + saleId, e);			
 		}
 	}
-	
+
 	/**
-	 * Get all sale products
+	 * Closes a sale and generates a debit transaction
+	 * to the created sale
 	 * 
-	 * @param saleId, sale's id to be considered when searching for sale
-	 * @return a string representation of sale products
+	 * @param saleId, sale's id to be closed
+	 * 
 	 * @throws ApplicationException
 	 */
-	public List<String> getSaleProducts(int saleId) throws ApplicationException{
+	public double closeSale(int saleId) throws ApplicationException{
 		
-		List<String> products = new ArrayList<>();
-		
-		try {
-			// obtain sale products
-			Iterator<SaleProductRowDataGateway> sp = SaleProductRowDataGateway.getSaleProducts(saleId).iterator();
+		try{
+			// verify if sale is created
+			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
+			if(sale.getStatus() == SaleStatus.CLOSED)
+				throw new ApplicationException("Sale already closed.");
 			
-			// prepare response
-			while(sp.hasNext())
-			{
-				SaleProductRowDataGateway p = sp.next();
-				products.add("PRODUCT: " + p.getProductId() + " | QTY: " + p.getQty());
-			}
+			// obtain customer associated to sale
+			CustomerRowDataGateway customer = CustomerRowDataGateway.getCustomerById(sale.getClientId());
 			
-			return products;
+			// obtain all sale products
+			Set<SaleProductRowDataGateway> saleProducts = SaleProductRowDataGateway.getSaleProducts(saleId);
+			
+			// compute total sale discount value
+			double discount = this.computeDiscount(customer, saleProducts);
+			
+			// compute total sale value
+			double total = this.computeSaleTotal(saleProducts, p -> true);
+			
+			// update sale values
+			sale.setDiscount(discount);
+			sale.setStatus(SaleStatus.CLOSED);
+			sale.setTotal(total);
+			sale.update();
+			
+			// generate credit transaction
+			SaleTransactionRowDataGateway st = 
+					new SaleTransactionRowDataGateway(saleId, TransactionType.DEBIT, 
+							sale.getTotal() - sale.getDiscount());
+			st.insert();
+			
+			return total - discount;
+			
 		} catch (PersistenceException e) {
-			throw new ApplicationException("Error getting sale products", e);
+			throw new ApplicationException("Error closing sale", e);
 		}
 		
+	}
+	
+	/**
+	 * Makes a payment to a previously created sale
+	 * 
+	 * @param saleId, sale's id to be considered
+	 * @param amount, amount beeing payed
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void makePayment(int saleId, double amount) throws ApplicationException{
+		
+		try{
+			// verify if sale exists, its closed and not payed yet
+			SaleRowDataGateway sale = SaleRowDataGateway.getSaleById(saleId);
+			if(sale.getStatus() != SaleStatus.CLOSED)
+				throw new ApplicationException("A sale must be closed before "
+						+ "it can be payed. Please close it.");
+			
+			if(alreadyPayed(sale))
+				throw new ApplicationException("This sale is already payed!");
+			
+			// generates a credit transaction to that sale
+			SaleTransactionRowDataGateway st = 
+					new SaleTransactionRowDataGateway(saleId, TransactionType.CREDIT, amount);
+			st.insert();
+			
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error making payment.", e);
+		}
 		
 	}
-
+	
+	/**
+	 * Checks if a sale is already paued based on it's transactions
+	 * 
+	 * @param sale, sale to be considered
+	 * @return true if sale is already payed, false otherwise
+	 * 
+	 * @throws ApplicationException
+	 */
+	private boolean alreadyPayed(SaleRowDataGateway sale) throws ApplicationException{
+		
+		try{			
+			
+			// get sale transactions
+			List<SaleTransactionRowDataGateway> transactions = SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(sale.getId());
+			
+			// do the math
+			double res = 0;
+			for(SaleTransactionRowDataGateway st : transactions)
+			{
+				if(st.getType() == TransactionType.CREDIT)
+					res += st.getValue();
+				else
+					res -= st.getValue();
+			}
+			return res >= 0;
+			
+		} catch (PersistenceException e) {
+			throw new ApplicationException("Error verifying if sale is already payed", e);
+		}
+		
+	}
+	
+	
 	/**
 	 * Computes the discount for the products of a sale to a customer
 	 * 
@@ -427,53 +415,4 @@ public class SaleTransactionScripts {
 		}
 		return saleEligibleTotal;
 	}
-	
-	public List<String> getTransactionDetails(int transactionId)
-		throws ApplicationException{
-		
-		// check if is debit or credit type transaction
-		try{
-			SaleTransactionRowDataGateway transaction = 
-					SaleTransactionRowDataGateway.getTransactionById(transactionId);
-			
-			List<String> list = new ArrayList<>();
-			
-			// if is payment type
-			if(transaction.isCredit())
-			{
-				list.add("pagaento");
-			}
-			// if is a debit type
-			else
-			{
-				// obtain all sale products
-				Iterator<SaleProductRowDataGateway> prods = 
-						SaleProductRowDataGateway.getSaleProducts(transaction.getSaleId()).iterator();
-				
-				// foreach sale product obtain it's details so add more details
-				// about it
-				while(prods.hasNext())
-				{
-					SaleProductRowDataGateway cur = prods.next();
-					StringBuilder sb = new StringBuilder();
-					ProductRowDataGateway product = 
-							new ProductRowDataGateway().getProductById(cur.getSaleId());
-					sb.append("ID: " + product.getProdCod() + " | ");
-					sb.append("Description: " + product.getDescription() + " | ");
-					sb.append("QTY: " + cur.getQty() + " | ");
-					sb.append("Unit Price: " + product.getFaceValue() + " | ");
-					sb.append("SUB-TOTAL: " + cur.getQty() * product.getFaceValue());
-					list.add(sb.toString());
-					
-				}
-			}
-			return list;
-			
-		} catch (PersistenceException e) {
-			throw new ApplicationException("Error getting transaction details", e);
-		}
-		
-		
-	}
-	
 }

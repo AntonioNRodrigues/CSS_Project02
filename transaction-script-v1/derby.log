@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Thu Apr 28 23:53:34 WEST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0154-5f13-cdfe-000001cb5018 
-on database directory /Users/JoaoR/Documents/FAC/CSS/Projecto1/css0181516/transaction-script-v1/data/derby/cssdb with class loader sun.misc.Launcher$AppClassLoader@2a139a55 
+Wed May 04 11:01:21 WEST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0154-7b36-fa7f-000001cc0e00 
+on database directory /Users/JoaoR/Documents/FAC/CSS/Projecto1/LocalProject/transaction-script-v1/data/derby/cssdb with class loader sun.misc.Launcher$AppClassLoader@2a139a55 
 Loaded from file:/Users/JoaoR/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_77-b03
-user.dir=/Users/JoaoR/Documents/FAC/CSS/Projecto1/css0181516/transaction-script-v1
+user.dir=/Users/JoaoR/Documents/FAC/CSS/Projecto1/LocalProject/transaction-script-v1
 os.name=Mac OS X
 os.arch=x86_64
 os.version=10.11.4
