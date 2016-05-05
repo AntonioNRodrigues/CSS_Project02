@@ -1,9 +1,10 @@
 package presentation;
 
+import business.*;
 import dataaccess.Persistence;
-import business.ApplicationException;
-import business.Customer;
-import business.DiscountType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handles customer transactions. 
@@ -51,5 +52,22 @@ public class CustomerService extends Service {
 			int phoneNumber, DiscountType discountType) throws ApplicationException {
 		Customer customer = new Customer (persistence);
 		customer.addCustomer(vat, designation, phoneNumber, discountType);
+	}
+
+	public void showCustomerCurrentAccount(int vat) throws ApplicationException {
+		Customer customer = new Customer(persistence);
+//		customer.show
+		if (!customer.isValidVAT(vat))
+			throw new ApplicationException("Invalid VAT number");
+
+		int customerId = customer.getCustomerId(vat);
+		Transaction transaction = new Transaction(persistence);
+		Sale sale = new Sale(persistence);
+		List<Integer> saleIds = sale.getAllSaleidsFromCustomer(customerId);
+		List<Integer> transactionIds = new ArrayList<>();
+		for (int saleId : saleIds) {
+			transactionIds.addAll(transaction.getAllTransactionsIds(saleId));
+		}
+
 	}
 }

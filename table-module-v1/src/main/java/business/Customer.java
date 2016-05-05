@@ -113,7 +113,7 @@ public class Customer extends TableModule {
 	 * @param vat The VAT number to checked.
 	 * @return Whether the VAT number is valid. 
 	 */
-	private boolean isValidVAT(int vat) {
+	public boolean isValidVAT(int vat) {
 		// If the number of digits is not 9, error!
 		if (vat < 100000000 || vat > 999999999)
 			return false;

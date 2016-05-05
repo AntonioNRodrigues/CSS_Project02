@@ -13,7 +13,7 @@ public class PaymentTransaction extends Transaction {
         super(persistence);
     }
 
-    public int newTransaction(int saleId, double value, Date date, String description) throws ApplicationException, PersistenceException {
-        return super.newTransaction(saleId, value, description, this.type);
+    public int newTransaction(int saleId, double value) throws ApplicationException, PersistenceException {
+        return super.newTransaction(saleId, value, this.type);
     }
 }

@@ -1,7 +1,10 @@
 package business;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import dataaccess.Persistence;
 import dataaccess.PersistenceException;
@@ -49,7 +52,7 @@ public class Sale extends TableModule {
 	public boolean isClosed(int saleId) throws ApplicationException {
 		try {
 			TableData td = getSale (saleId);
-			return persistence.saleTableGateway.readStatus(td.iterator().next()).equals(SaleStatus.CLOSED);
+			return !persistence.saleTableGateway.readStatus(td.iterator().next()).equals(SaleStatus.OPEN);
 		} catch (PersistenceException e) {
 			throw new ApplicationException("Internal error checking if sale with id " + saleId + " is open", e);
 		}
@@ -233,7 +236,6 @@ public class Sale extends TableModule {
 		return saleEligibleTotal * appSettings.getEligiblePercentage();
 	}
 
-	
 	/**
 	 * @param saleId The sale id to obtain the discount amount. When the sale is closed
 	 * the discount is computed and stored in an attribute so it need not to be computed 
@@ -249,8 +251,7 @@ public class Sale extends TableModule {
 			throw new ApplicationException("Internal error obtaining the discount for sale with id " + saleId, e);
 		}
 	}
-	
-	
+
 	/**
 	 * A service method to get a sale by id.
 	 * 
@@ -283,25 +284,19 @@ public class Sale extends TableModule {
 
 		try {
 			// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
-			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId), new Date(), saleId + "");
+			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId));
 			return transactionId;
 		} catch (PersistenceException e) {
 			throw new ApplicationException("There was an error making a payment", e);
 		}
 	}
 
-	private boolean isPayed(int saleId) {
-		return false;
-	}
-
-
-
-	
-	public boolean updateSaleStatus(int saleId, SaleStatus status) throws ApplicationException {
+	private boolean isPayed(int saleId) throws ApplicationException {
 		try {
-			return persistence.saleTableGateway.updateStatusSale(saleId, status);
+			TableData td = getSale (saleId);
+			return persistence.saleTableGateway.readStatus(td.iterator().next()).equals(SaleStatus.PAYED);
 		} catch (PersistenceException e) {
-			throw new ApplicationException("There was an internal error updating the sale status", e);
+			throw new ApplicationException("Internal error checking if sale with id " + saleId + " is payed", e);
 		}
 	}
 
@@ -324,7 +319,22 @@ public class Sale extends TableModule {
 		// Gerar transaction de debito, que o cliente tem a pagar
 		DebitTransaction debitTransaction = new DebitTransaction(persistence);
 		try {
-			return debitTransaction.newTransaction(saleId, finalTotal - finalDiscount, saleId + "");
+			return debitTransaction.newTransaction(saleId, finalTotal - finalDiscount);
+		} catch (PersistenceException e) {
+			throw new ApplicationException("There was an error creating a DebitTransaction in closing a sale", e);
+		}
+	}
+
+	public List<Integer> getAllSaleidsFromCustomer(int customerId) throws ApplicationException {
+		try {
+			List<Integer> list = new ArrayList<>();
+			TableData td = persistence.saleTableGateway.getAllSalesFromCustomer(customerId);
+			Iterator<Row> iter = td.iterator();
+			while (iter.hasNext()) {
+				Row row = iter.next();
+				list.add(persistence.saleTableGateway.readId(row));
+			}
+			return list;
 		} catch (PersistenceException e) {
 			throw new ApplicationException("There was an error creating a DebitTransaction in closing a sale", e);
 		}

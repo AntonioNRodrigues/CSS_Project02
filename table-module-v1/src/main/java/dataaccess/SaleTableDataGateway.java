@@ -4,10 +4,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import business.Sale;
 import business.SaleStatus;
 import dataaccess.TableData.Row;
+
+import static business.SaleStatus.CLOSED;
 
 /**
  * Table Data Gateway for the sales's table
@@ -54,6 +59,7 @@ public class SaleTableDataGateway extends TableDataGateway {
 	 */
 	private static final String CLOSED = "C";
 	private static final String OPEN = "O";
+	private static final String PAYED = "P";
 
 	SaleTableDataGateway(DataSource dataSource) {
 		super(dataSource);
@@ -144,34 +150,26 @@ public class SaleTableDataGateway extends TableDataGateway {
 	/**
 	 * The update a sale by Id SQL statement
 	 */
-	private static final String UPDATE_COLUMN_SQL =
-			"update sale set " + STATUS + " = ? " +
-					"where " + ID + " = ?";
-
-	public boolean updateStatusSale(int saleId, SaleStatus status) throws PersistenceException {
-		try (PreparedStatement statement = dataSource.prepare(UPDATE_COLUMN_SQL)) {
-			// set statement arguments
-			statement.setString(1, status == SaleStatus.CLOSED ? CLOSED : OPEN);
-			statement.setInt(2, saleId);
-
-			// execute SQL
-			statement.executeUpdate();
-			return true;
-		} catch (SQLException | PersistenceException e) {
-			throw new PersistenceException("Internal error while updating a sale", e);
-		}
-	}
-
-	/**
-	 * The update a sale by Id SQL statement
-	 */
 	private static final String UPDATE_SALE_SQL =
 			"update sale set " + STATUS + " = ?, " + TOTAL + " = ?, " + DISCOUNT + " = ? where " + ID + " = ?";
 
 	public boolean updateSale(int saleId, SaleStatus status, double total, double discount) throws PersistenceException {
 		try (PreparedStatement statement = dataSource.prepare(UPDATE_SALE_SQL)) {
+
 			// set statement arguments
-			statement.setString(1, status == SaleStatus.CLOSED ? CLOSED : OPEN);
+			String finalStatus = OPEN;
+			switch (status) {
+				case OPEN:
+					finalStatus = OPEN;
+					break;
+				case CLOSED:
+					finalStatus = CLOSED;
+					break;
+				case PAYED:
+					finalStatus = PAYED;
+					break;
+			}
+			statement.setString(1, finalStatus);
 			statement.setDouble(2, total);
 			statement.setDouble(3, discount);
 			statement.setInt(4, saleId);
@@ -250,4 +248,28 @@ public class SaleTableDataGateway extends TableDataGateway {
 		return r.getInt(CUSTOMER_ID);
 	}
 
+	/**
+	 * The select all sales by customer_id SQL statement
+	 */
+	private static final String GET_ALL_SALES_FROM_CUSTOMER_SQL =
+			"select * from sale " + "where " + CUSTOMER_ID + " = ?";
+
+
+	public TableData getAllSalesFromCustomer(int customerId) throws PersistenceException {
+		try (PreparedStatement statement = dataSource.prepare(GET_ALL_SALES_FROM_CUSTOMER_SQL)) {
+			// set statement arguments
+			statement.setInt(1, customerId);
+			// execute SQL
+			try (ResultSet rs = statement.executeQuery()) {
+				TableData td = new TableData();;
+				td.populate(rs);
+				return td;
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException("Internal error getting all sales ids", e);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
