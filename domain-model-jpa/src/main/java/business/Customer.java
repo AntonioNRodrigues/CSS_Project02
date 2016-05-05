@@ -110,6 +110,14 @@ public class Customer {
 		this.discount = discountType;
 		this.currentAccount = account;
 	}
+	
+	public Customer(int vatNumber, String designation, int phoneNumber, Discount discountType) {
+		this.vatNumber = vatNumber;
+		this.designation = designation;
+		this.phoneNumber = phoneNumber;
+		this.discount = discountType;
+		this.currentAccount = new Account();
+	}
 
 	// 2. getters and setters
 

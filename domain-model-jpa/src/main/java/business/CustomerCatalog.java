@@ -100,4 +100,36 @@ public class CustomerCatalog {
 		}
 
 	}
+	
+	/**
+	 * Adds a new customer
+	 * 
+	 * @param vat
+	 *            The customer's VAT number
+	 * @param designation
+	 *            The customer's designation
+	 * @param phoneNumber
+	 *            The customer's phone number
+	 * @param discountType
+	 *            The customer's discount type
+	 * @throws ApplicationException
+	 *             When the customer is already in the repository or the vat
+	 *             number is invalid.
+	 */
+	public void addCustomer(int vat, String designation, int phoneNumber, Discount discountType)
+			throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			Customer c = new Customer(vat, designation, phoneNumber, discountType);
+			em.persist(c);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			throw new ApplicationException("Error adding customer", e);
+		} finally {
+			em.close();
+		}
+	}
 }
