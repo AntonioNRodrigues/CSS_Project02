@@ -148,17 +148,11 @@ public class CustomerTransactionScripts {
 						SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(s.getId());
 				for(SaleTransactionRowDataGateway t : l)					
 					if(t.getType() == TransactionType.CREDIT)
-					transactions.add(
-							new CreditTransaction(
-									t.getId(), t.getSaleId(), 
-									t.getValue(), 
-									t.getCreatedAt()));
+						transactions.add(
+								new CreditTransaction(t));
 					else
 						transactions.add(
-								new DebitTransaction(
-										t.getId(), t.getSaleId(), 
-										t.getValue(), 
-										t.getCreatedAt()));
+								new DebitTransaction(t));
 				
 			}
 			

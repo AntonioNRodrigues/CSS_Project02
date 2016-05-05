@@ -285,10 +285,20 @@ public class SaleTransactionScripts {
 				throw new ApplicationException("A sale must be closed before "
 						+ "it can be payed. Please close it.");
 			
+			if(sale.getStatus() == SaleStatus.PAYED)
+				throw new ApplicationException("This sale is already payed.");
+			
 			if(alreadyPayed(sale))
 				throw new ApplicationException("This sale is already payed!");
 			
-			// generates a credit transaction to that sale
+			if(amount < (sale.getTotal() - sale.getDiscount()))
+				throw new ApplicationException("Please enter sale value");
+			
+			// update sale status to PAYED 'P'
+			sale.setStatus(SaleStatus.PAYED);
+			sale.update();
+			
+			// generate debit sale transaction
 			SaleTransactionRowDataGateway st = 
 					new SaleTransactionRowDataGateway(saleId, TransactionType.CREDIT, amount);
 			st.insert();

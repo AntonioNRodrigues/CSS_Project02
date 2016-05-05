@@ -74,6 +74,7 @@ public class SaleRowDataGateway {
 	 */
 	private static final String CLOSED = "C";
 	private static final String OPEN = "O";
+	private static final String PAYED = "P";
 	
 
 	// 1. constructor 
@@ -136,7 +137,8 @@ public class SaleRowDataGateway {
 	 * @return The sale's status. 
 	 */
 	public SaleStatus getStatus() {
-		return status.equals(OPEN) ? SaleStatus.OPEN : SaleStatus.CLOSED;
+		return status.equals(OPEN) ? SaleStatus.OPEN :
+			status.equals(PAYED) ? SaleStatus.PAYED : SaleStatus.CLOSED;
 	}
 
 	/**
@@ -148,7 +150,8 @@ public class SaleRowDataGateway {
 	 * @param status The new sale status
 	 */
 	public void setStatus(SaleStatus status) {
-		this.status = status == SaleStatus.OPEN ? OPEN : CLOSED;
+		this.status = status == SaleStatus.OPEN ? OPEN : 
+			status == SaleStatus.PAYED ? PAYED : CLOSED;
 	}
 
 	/**
@@ -232,7 +235,7 @@ public class SaleRowDataGateway {
 	 * update sql query
 	 */
 	private static final String UPDATE_SALE_SQL = "update sale "
-			+ "set total = ?, discount_total = ?, status = 'C' "
+			+ "set total = ?, discount_total = ?, status = ? "
 			+ "where id = ?";
 	
 	/**
@@ -248,7 +251,8 @@ public class SaleRowDataGateway {
 			// populated sql parameters
 			statement.setDouble(1, this.total);
 			statement.setDouble(2, this.discount);
-			statement.setInt(3, this.id);
+			statement.setString(3, this.status);
+			statement.setInt(4, this.id);
 			
 			// execute database update
 			if(statement.executeUpdate() != 1)

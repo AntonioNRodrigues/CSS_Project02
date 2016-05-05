@@ -1,19 +1,37 @@
 package domain;
 
-import java.util.Date;
+import dataaccess.SaleTransactionRowDataGateway;
 
+/**
+ * This class represents a specialized concept of transaction
+ * In more detail it represents a Credit Transaction
+ * 
+ * @author JoaoR
+ *
+ */
 public class CreditTransaction extends Transaction {
 
-	public CreditTransaction(int id, int saleId, double value, Date date){
-		super(id, saleId, value, date);
+	/**
+	 * Constructor
+	 * 
+	 * @param transaction, sale transaction gateway
+	 */
+	public CreditTransaction(SaleTransactionRowDataGateway transaction){
+		super(transaction);
 	}
-
+	
+	/**
+	 * @see Transaction.printDetails()
+	 */
 	@Override
 	public void printDetails() {
 		System.out.println("CREDIT TRANSACTION");
 		System.out.println(super.toString());
 	}
 
+	/**
+	 * @see Transaction.getType()
+	 */
 	@Override
 	public String getType() {
 		return "CREDIT";

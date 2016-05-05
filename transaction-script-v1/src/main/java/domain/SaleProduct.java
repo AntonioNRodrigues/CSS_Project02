@@ -1,63 +1,87 @@
 package domain;
 
+import dataaccess.SaleProductRowDataGateway;
+
+/**
+ * This class represents a sale product with no persistence control
+ * 
+ * @author JoaoR
+ *
+ */
 public class SaleProduct {
+	
+	/**
+	 * product designation
+	 */
+	private String prodDesignation;
+	
+	/**
+	 * sale price
+	 */
+	private double salePrice;
+	
+	/**
+	 * sale product gateway
+	 */
+	private SaleProductRowDataGateway saleProduct;
 
-	private int id;
-	
-	private double qty;
-	
-	private String desigantion;
-	
-	private double price;
-
-	public SaleProduct(int id, double qty, String desigantion, double price) {
+	/**
+	 * Constructor
+	 * 
+	 * @param s, sale product gateway
+	 * @param designation, producto designation
+	 * @param price, sale price
+	 */
+	public SaleProduct(SaleProductRowDataGateway s, String designation, double price) {
 		super();
-		this.id = id;
-		this.qty = qty;
-		this.desigantion = desigantion;
-		this.price = price;
+		this.saleProduct = s;
+		this.prodDesignation = designation;
 	}
 
+	/**
+	 * Gets sale id
+	 * 
+	 * @return sale id
+	 */
 	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public double getQty() {
-		return qty;
-	}
-
-	public void setQty(double qty) {
-		this.qty = qty;
-	}
-
-	public String getDesigantion() {
-		return desigantion;
-	}
-
-	public void setDesigantion(String desigantion) {
-		this.desigantion = desigantion;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
+		return saleProduct.getId();
 	}
 	
+	/**
+	 * Gets sale product quantity
+	 * 
+	 * @return product quantity
+	 */
+	public double getQty() {
+		return saleProduct.getQty();
+	}
+
+	/**
+	 * Gets product designation
+	 * 
+	 * @return product designation
+	 */
+	public String getDesigantion() {
+		return prodDesignation;
+	}
+
+	/**
+	 * Gets sale price
+	 * 
+	 * @return sale price
+	 */
+	public double getPrice() {
+		return salePrice;
+	}
+
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("ID: " + this.id + " | ");
-		sb.append("DESIGNATION: " + this.desigantion + " | ");
-		sb.append("QTY: " + this.qty + " | ");
-		sb.append("PRICE: " + this.price );
+		sb.append("ID: " + saleProduct.getId() + " | ");
+		sb.append("DESIGNATION: " + this.prodDesignation + " | ");
+		sb.append("QTY: " + saleProduct.getQty() + " | ");
+		sb.append("PRICE: " + this.salePrice );
 		
 		return sb.toString();
 	}

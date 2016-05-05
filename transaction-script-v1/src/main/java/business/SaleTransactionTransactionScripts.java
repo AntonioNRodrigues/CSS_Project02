@@ -13,18 +13,34 @@ import domain.DebitTransaction;
 import domain.SaleProduct;
 import domain.Transaction;
 
+/**
+ * This class is a transaction scripts that handles sale transaction operations
+ * 
+ * @author JoaoR
+ *
+ */
 public class SaleTransactionTransactionScripts {
-
+	
+	/**
+	 * Gets a transaction by id
+	 * 
+	 * @param transactionId, transaction by id
+	 * @return the corresponding transaction
+	 * 
+	 * @throws ApplicationException
+	 */
 	public <T extends Transaction> T getTransactionDetails(int transactionId) 
 		throws ApplicationException{
 		
 		try{
 			
+			// gets transaction by id
 			SaleTransactionRowDataGateway st = SaleTransactionRowDataGateway.getTransactionById(transactionId);
 			
 			// if is a credit transaction
 			if(st.getType() == TransactionType.CREDIT)
 				return (T) convertToCreditTransaction(st);
+			// if is a debit transaction
 			else
 				return (T) convertToDebitTransaction(st);
 			
@@ -33,10 +49,24 @@ public class SaleTransactionTransactionScripts {
 		}
 	}
 	
+	/**
+	 * Converts a sale transaction into a credit transaction
+	 * 
+	 * @param st, sale transaction to be considered
+	 * @return corresponding credit transaction
+	 */
 	private CreditTransaction convertToCreditTransaction(SaleTransactionRowDataGateway st){
-		return new CreditTransaction(st.getId(), st.getSaleId(), st.getValue(), st.getCreatedAt());
+		return new CreditTransaction(st);
 	}
 	
+	/**
+	 * Converts a sale transaction into a debit transaction
+	 * 
+	 * @param st, sale transaction to be considered
+	 * @return corresponding debit transaction wiht all sale products
+	 * 
+	 * @throws ApplicationException
+	 */
 	private DebitTransaction convertToDebitTransaction(SaleTransactionRowDataGateway st)
 		throws ApplicationException{
 		
@@ -49,11 +79,11 @@ public class SaleTransactionTransactionScripts {
 			List<SaleProduct> products = new ArrayList<>();
 			for(SaleProductRowDataGateway s : saleProducts){				
 				ProductRowDataGateway p = new ProductRowDataGateway().getProductById(s.getProductId());
-				SaleProduct sp = new SaleProduct(p.getProductId(), s.getQty(), p.getDescription(), (p.getFaceValue() * s.getQty()));
+				SaleProduct sp = new SaleProduct(s, p.getDescription(), (p.getFaceValue() * s.getQty()));
 				products.add(sp);
 			}
 			
-			return new DebitTransaction(st.getId(), st.getSaleId(), st.getValue(), st.getCreatedAt(), products);
+			return new DebitTransaction(st, products);
 
 			
 		} catch (PersistenceException e) {
