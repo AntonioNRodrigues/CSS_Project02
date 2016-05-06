@@ -27,7 +27,7 @@ import business.Sale;
  * @Date 2016/04/28
  * 
  */
-@Entity
+@Entity 
 @Inheritance(strategy = SINGLE_TABLE)
 @NamedQueries({
 		@NamedQuery(name = Transation.FIND_ID, query = "SELECT t FROM Transation t WHERE t.id_trans = :" + Transation.FIND_ID),
@@ -88,5 +88,11 @@ public abstract class Transation {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	@Override
+	public String toString() {
+		return "[id_trans=" + id_trans + ", value=" + value + ", date=" + date + ", sale=" + sale + "]";
+	}
+	
+	
 
 }

@@ -39,4 +39,9 @@ public class Debit extends Transation {
 		return new ArrayList<>();
 	}
 
+	@Override
+	public String toString() {
+		return "DEBIT:: "+ super.toString();
+	}
+
 }

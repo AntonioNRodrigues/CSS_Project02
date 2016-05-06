@@ -33,7 +33,7 @@ public class SaleSys {
 		CustomerCatalog customerCatalog = new CustomerCatalog(emf);
 		this.addCustomerHandler = new AddCustomerHandler(customerCatalog, new DiscountCatalog(emf));
 		this.processSaleHandler = new ProcessSaleHandler(new SaleCatalog(emf), customerCatalog, new ProductCatalog(emf),
-				new TransationCatalog(emf));
+				new TransationCatalog(emf), new AccountCatalog(emf));
 		this.currentAccountHandler = new CurrentAccountHandler(new SaleCatalog(emf), customerCatalog,
 				new ProductCatalog(emf), new TransationCatalog(emf), new AccountCatalog(emf));
 	}

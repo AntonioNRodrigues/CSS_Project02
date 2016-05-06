@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 /**
  * A catalog for sales
@@ -15,7 +16,7 @@ import javax.persistence.EntityManagerFactory;
 public class SaleCatalog {
 
 	/**
-	 * Entity manager factory for accessing the persistence service 
+	 * Entity manager factory for accessing the persistence service
 	 */
 	private EntityManagerFactory emf;
 
@@ -29,10 +30,11 @@ public class SaleCatalog {
 	/**
 	 * Creates a new sale and adds it to the repository
 	 * 
-	 * @param customer The customer the sales belongs to
+	 * @param customer
+	 *            The customer the sales belongs to
 	 * @return The newly created sale
 	 */
-	public Sale newSale (Customer customer) throws ApplicationException {
+	public Sale newSale(Customer customer) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -55,11 +57,10 @@ public class SaleCatalog {
 	 * @param qty
 	 * @throws ApplicationException
 	 */
-	public Sale addProductToSale (Sale sale, Product product, double qty) 
-			throws ApplicationException {
-		EntityManager em = emf.createEntityManager(); 
+	public Sale addProductToSale(Sale sale, Product product, double qty) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
 		try {
-			em.getTransaction().begin(); 
+			em.getTransaction().begin();
 			sale = em.merge(sale);
 			sale.addProductToSale(product, qty);
 			em.merge(product);
@@ -73,21 +74,34 @@ public class SaleCatalog {
 		}
 		return sale;
 	}
-	
-	public boolean closeSale(Sale sale){
 
-		EntityManager em = emf.createEntityManager(); 
+	public void updateSale(Sale sale) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
 		try {
-			
+			em.getTransaction().begin();
+			em.merge(sale);
+			em.getTransaction().commit();
 		} catch (Exception e) {
-			
-			
-		}finally {
-			
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			throw new ApplicationException("Error updating sale", e);
+		} finally {
+			em.close();
 		}
-		
-		return true;
-		
+
+	}
+
+	public Sale getSale(int idSale) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
+		TypedQuery<Sale> query = em.createNamedQuery(Sale.FIND_BY_ID, Sale.class);
+		query.setParameter(Sale.FIND_BY_ID, idSale);
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			throw new ApplicationException("Probling getting the Sale", e);
+		} finally {
+			em.close();
+		}
 	}
 
 }

@@ -27,7 +27,7 @@ public class ProcessSaleService {
 		return saleHandler.closeSale(vat);
 
 	}
-	public boolean paymentSale(int idSale) throws ApplicationException{
-		return saleHandler.paymentSale(idSale);
+	public boolean paySale(int idSale, int vat) throws ApplicationException{
+		return saleHandler.paySale(idSale, vat);
 	}
 }

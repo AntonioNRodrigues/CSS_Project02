@@ -33,12 +33,12 @@ import business.entities.Transation;
  * @version 1.1 (17/04/2015)
  * 
  */
-@Entity
+@Entity 
 @NamedQueries({
-	@NamedQuery(name = Sale.FIND_NAME , query = "SELECT s FROM Sale s WHERE s.id_Sale=:"+ Sale.FIND_NAME)
+	@NamedQuery(name = Sale.FIND_BY_ID , query = "SELECT s FROM Sale s WHERE s.id_Sale=:"+ Sale.FIND_BY_ID)
 })
 public class Sale {
-	public static final String FIND_NAME = "id_Sale";
+	public static final String FIND_BY_ID = "id_sale";
 	/**
 	 * Sale primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
@@ -76,7 +76,7 @@ public class Sale {
 	@OneToOne
 	private Transation trans;
 
-	@Enumerated(EnumType.ORDINAL)  
+	@Enumerated(EnumType.STRING)  
 	private PaymentStatus statusPayment;
 	// 1. constructor
 
@@ -99,6 +99,7 @@ public class Sale {
 		this.date = date;
 		this.customer = customer;
 		this.status = SaleStatus.OPEN;
+		this.statusPayment = PaymentStatus.NOT_PAYDED;
 		this.saleProducts = new LinkedList<SaleProduct>();
 	}
 

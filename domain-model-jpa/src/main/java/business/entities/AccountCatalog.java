@@ -71,6 +71,7 @@ public class AccountCatalog {
 			em.getTransaction().begin();
 			em.merge(account);
 			em.getTransaction().commit();
+			
 		} catch (Exception e) {
 			throw new ApplicationException("Error Updating the Account", e);
 		} finally {

@@ -23,7 +23,7 @@ import javax.persistence.OneToMany;
  * @Date 2016/04/28
  *
  */
-@Entity
+@Entity 
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID) })
 
@@ -77,11 +77,11 @@ public class Account {
 	 * @return
 	 */
 	private void calcBalance(Transation transation) {
-		// TESTAR------------------------------------------->
+
 		if (transation instanceof Debit) {
 			this.balance += transation.getValue();
 		}
-		if (transation instanceof Credit) {
+		else if (transation instanceof Credit) {
 			this.balance -= transation.getValue();
 		} else {
 			throw new UnsupportedOperationException();
