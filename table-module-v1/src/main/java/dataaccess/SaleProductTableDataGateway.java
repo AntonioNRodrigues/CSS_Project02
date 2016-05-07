@@ -85,7 +85,7 @@ public class SaleProductTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -95,7 +95,7 @@ public class SaleProductTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -105,7 +105,7 @@ public class SaleProductTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */

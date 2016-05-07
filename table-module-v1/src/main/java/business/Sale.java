@@ -261,7 +261,7 @@ public class Sale extends TableModule {
 	 * database error occurs.
 	 * @ensures !TableData.isEmpty()
 	 */
-	private TableData getSale(int saleId) throws ApplicationException {
+	public TableData getSale(int saleId) throws ApplicationException {
 		try {
 			TableData td = persistence.saleTableGateway.find(saleId);
 			if (td.isEmpty()) 
@@ -325,7 +325,7 @@ public class Sale extends TableModule {
 		}
 	}
 
-	public List<Integer> getAllSaleidsFromCustomer(int customerId) throws ApplicationException {
+	public List<Integer> getAllSaleIdsFromCustomer(int customerId) throws ApplicationException {
 		try {
 			List<Integer> list = new ArrayList<>();
 			TableData td = persistence.saleTableGateway.getAllSalesFromCustomer(customerId);
@@ -338,5 +338,11 @@ public class Sale extends TableModule {
 		} catch (PersistenceException e) {
 			throw new ApplicationException("There was an error creating a DebitTransaction in closing a sale", e);
 		}
+	}
+
+	public String print(TableData.Row row) throws PersistenceException {
+		return this.persistence.saleTableGateway.readId(row) + " | "
+				+ this.persistence.saleTableGateway.readDate(row) + " | "
+				+ (this.persistence.saleTableGateway.readTotal(row) - this.persistence.saleTableGateway.readDiscount(row));
 	}
 }

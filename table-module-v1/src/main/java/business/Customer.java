@@ -151,11 +151,10 @@ public class Customer extends TableModule {
 		int customerId = getCustomerId(vat);
 		Transaction transaction = new Transaction(persistence);
 		Sale sale = new Sale(persistence);
-		List<Integer> saleIds = sale.getAllSaleidsFromCustomer(customerId);
-		List<Integer> transactionIds = new ArrayList<>();
-		CustomerAccount account = new CustomerAccount(persistence.transactionTableGateway);
+		List<Integer> saleIds = sale.getAllSaleIdsFromCustomer(customerId);
+		CustomerAccount account = new CustomerAccount(persistence);
 		for (int saleId : saleIds) {
-			account.addTransactions(transaction.getAllTransactionsIds(saleId));
+			account.addTransactions(transaction.getAllTransactionsFromSale(saleId));
 		}
 		return account;
 	}

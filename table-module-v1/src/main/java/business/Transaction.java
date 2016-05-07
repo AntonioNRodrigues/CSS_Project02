@@ -20,12 +20,19 @@ public class Transaction extends TableModule {
         }
     }
 
-    public TableData getAllTransactionsIds(int saleId) throws ApplicationException {
+    public TableData getAllTransactionsFromSale(int saleId) throws ApplicationException {
         try {
             TableData td = persistence.transactionTableGateway.getAllTransactions(saleId);
             return td;
         } catch (PersistenceException e) {
             throw new ApplicationException("There was an internal error getting all Transaction Ids", e);
         }
+    }
+
+    public String print(TableData.Row row) throws PersistenceException {
+        return this.persistence.transactionTableGateway.readId(row) + " | "
+                + this.persistence.transactionTableGateway.readType(row) + " | "
+                + this.persistence.transactionTableGateway.readCreatedAt(row) + " | "
+                + this.persistence.transactionTableGateway.readValue(row);
     }
 }

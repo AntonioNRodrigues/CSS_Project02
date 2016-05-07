@@ -107,8 +107,4 @@ public class TransactionTableDataGateway extends TableDataGateway {
     public double readValue(Row row) throws PersistenceException {
         return row.getDouble(VALUE);
     }
-
-    public String print(Row row) throws PersistenceException {
-        return readId(row) + " | " + readType(row) + " | " + readCreatedAt(row) + " | " + readValue(row);
-    }
 }

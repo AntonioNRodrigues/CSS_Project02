@@ -6,6 +6,7 @@ import dataaccess.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Handles customer transactions. 
@@ -58,6 +59,25 @@ public class CustomerService extends Service {
 	public void showCustomerCurrentAccount(int vat) throws ApplicationException, PersistenceException {
 		Customer customer = new Customer(persistence);
 		CustomerAccount account = customer.getCustomerCurrentAccount(vat);
-		System.out.println(account.print());
+		String command = "";
+		Scanner sc = new Scanner(System.in);
+		while (!command.equals("quit")) {
+			System.out.print("List of Transactions:");
+			System.out.println(account.print());
+			System.out.println();
+			System.out.println("Your total is: " + account.computeTotal());
+			System.out.println("Which one do you want to see? (write 'quit' to exit)");
+
+			command = sc.nextLine();
+			if (!command.equals("quit") && !command.equals("")) {
+				int index = Integer.parseInt(command);
+
+				System.out.println("Printing details: ");
+				System.out.println(account.printTransaction(index));
+				System.out.println();
+				System.out.println("Press Enter to see the list of Transactions");
+				command = sc.nextLine();
+			}
+		}
 	}
 }
