@@ -284,7 +284,7 @@ public class Sale extends TableModule {
 
 		try {
 			// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
-			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId));
+			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId) - getDiscount(saleId));
 			return transactionId;
 		} catch (PersistenceException e) {
 			throw new ApplicationException("There was an error making a payment", e);

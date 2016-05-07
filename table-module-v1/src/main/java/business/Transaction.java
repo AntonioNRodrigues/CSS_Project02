@@ -20,17 +20,12 @@ public class Transaction extends TableModule {
         }
     }
 
-    public List<Integer> getAllTransactionsIds(int saleId) throws ApplicationException {
+    public TableData getAllTransactionsIds(int saleId) throws ApplicationException {
         try {
             TableData td = persistence.transactionTableGateway.getAllTransactions(saleId);
-            Iterator<TableData.Row> iter = td.iterator();
-            List<Integer> list = new ArrayList<Integer>();
-            while (iter.hasNext()) {
-                TableData.Row row = iter.next();
-                list.add(persistence.transactionTableGateway.readId(row));
-            }
+            return td;
         } catch (PersistenceException e) {
-            throw new ApplicationException("There was an internal error creating a new Transaction", e);
+            throw new ApplicationException("There was an internal error getting all Transaction Ids", e);
         }
     }
 }

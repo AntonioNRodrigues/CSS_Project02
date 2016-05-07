@@ -4,6 +4,9 @@ import dataaccess.Persistence;
 import dataaccess.PersistenceException;
 import dataaccess.TableData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The table module of a customer. I choose to implement it as a regular instance,
  * but it could be implemented as a singleton, instead. The singleton implementation
@@ -139,5 +142,21 @@ public class Customer extends TableModule {
 		if (checkDigitCalc == 10)
 			checkDigitCalc = 0;
 		return checkDigit == checkDigitCalc;
+	}
+
+	public CustomerAccount getCustomerCurrentAccount(int vat) throws ApplicationException {
+		if (!isValidVAT(vat))
+			throw new ApplicationException("Invalid VAT number");
+
+		int customerId = getCustomerId(vat);
+		Transaction transaction = new Transaction(persistence);
+		Sale sale = new Sale(persistence);
+		List<Integer> saleIds = sale.getAllSaleidsFromCustomer(customerId);
+		List<Integer> transactionIds = new ArrayList<>();
+		CustomerAccount account = new CustomerAccount(persistence.transactionTableGateway);
+		for (int saleId : saleIds) {
+			account.addTransactions(transaction.getAllTransactionsIds(saleId));
+		}
+		return account;
 	}
 }

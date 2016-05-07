@@ -51,13 +51,16 @@ public class SimpleClient {
 
 				// creates a new sale
 				int sale = vs.newSale(168027852);
+				int sale2 = vs.newSale(168027852);
 
 				// adds two products to the database
 				vs.addProductToSale(sale, 123, 10);
 				vs.addProductToSale(sale, 124, 5);
+				vs.addProductToSale(sale2, 123, 20);
 
-
+				System.out.println();
 				int transactionDebitId = vs.closeSale(sale);
+				vs.closeSale(sale2);
 				System.out.println("ID de transaction debit: " + transactionDebitId);
 
 				int transactionId = vs.makePayment(sale);
@@ -69,6 +72,9 @@ public class SimpleClient {
 
 				double total = vs.getSaleTotal(sale);
 				System.out.println("TOTAL: " + total);
+
+				System.out.println();
+				cs.showCustomerCurrentAccount(168027852);
 
 
 			} catch (ApplicationException e) {

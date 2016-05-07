@@ -2,6 +2,7 @@ package presentation;
 
 import business.*;
 import dataaccess.Persistence;
+import dataaccess.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,20 +55,9 @@ public class CustomerService extends Service {
 		customer.addCustomer(vat, designation, phoneNumber, discountType);
 	}
 
-	public void showCustomerCurrentAccount(int vat) throws ApplicationException {
+	public void showCustomerCurrentAccount(int vat) throws ApplicationException, PersistenceException {
 		Customer customer = new Customer(persistence);
-//		customer.show
-		if (!customer.isValidVAT(vat))
-			throw new ApplicationException("Invalid VAT number");
-
-		int customerId = customer.getCustomerId(vat);
-		Transaction transaction = new Transaction(persistence);
-		Sale sale = new Sale(persistence);
-		List<Integer> saleIds = sale.getAllSaleidsFromCustomer(customerId);
-		List<Integer> transactionIds = new ArrayList<>();
-		for (int saleId : saleIds) {
-			transactionIds.addAll(transaction.getAllTransactionsIds(saleId));
-		}
-
+		CustomerAccount account = customer.getCustomerCurrentAccount(vat);
+		System.out.println(account.print());
 	}
 }

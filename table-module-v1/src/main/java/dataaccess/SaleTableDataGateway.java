@@ -4,15 +4,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import business.Sale;
 import business.SaleStatus;
 import dataaccess.TableData.Row;
-
-import static business.SaleStatus.CLOSED;
 
 /**
  * Table Data Gateway for the sales's table

@@ -67,24 +67,21 @@ public class TransactionTableDataGateway extends TableDataGateway {
      * The get all transactions by sale_id SQL statement
      */
     private static final String GET_ALL_TRANSACTIONS_FROM_SALE_ID_SQL =
-            "select * from transaction where " + SALE_ID + " = ?";
+            "select * from sale_transaction where " + SALE_ID + " = ?";
 
     public TableData getAllTransactions(int saleId) throws PersistenceException {
         try (PreparedStatement statement = dataSource.prepareGetGenKey(GET_ALL_TRANSACTIONS_FROM_SALE_ID_SQL)) {
             // set statement arguments
             statement.setInt(1, saleId);
 
-            // execute SQL
-            statement.executeUpdate();
-
-            // Gets sale Id generated automatically by the database engine
-            try (ResultSet rs = statement.getGeneratedKeys()) {
+            // Gets all transactions
+            try (ResultSet rs = statement.executeQuery()) {
                 TableData td = new TableData();
                 td.populate(rs);
                 return td;
             }
         } catch (SQLException e) {
-            throw new PersistenceException ("Internal error inserting a new Transaction", e);
+            throw new PersistenceException ("Internal error getting all transaction ids", e);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
@@ -99,8 +96,8 @@ public class TransactionTableDataGateway extends TableDataGateway {
         return row.getInt(SALE_ID);
     }
 
-    public String readType(Row row) throws PersistenceException {
-        return row.getString(TYPE);
+    public TransactionType readType(Row row) throws PersistenceException {
+        return row.getInt(TYPE) == CREDIT ? TransactionType.CREDIT : TransactionType.DEBIT;
     }
 
     public Date readCreatedAt(Row row) throws PersistenceException {
@@ -108,6 +105,10 @@ public class TransactionTableDataGateway extends TableDataGateway {
     }
 
     public double readValue(Row row) throws PersistenceException {
-        return row.getDouble(CREATED_AT);
+        return row.getDouble(VALUE);
+    }
+
+    public String print(Row row) throws PersistenceException {
+        return readId(row) + " | " + readType(row) + " | " + readCreatedAt(row) + " | " + readValue(row);
     }
 }
