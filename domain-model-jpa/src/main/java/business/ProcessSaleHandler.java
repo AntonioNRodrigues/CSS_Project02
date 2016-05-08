@@ -112,37 +112,28 @@ public class ProcessSaleHandler {
 
 	/**
 	 * method to close the sale
-	 * @return  id of the closed Sale or -1 for errors
+	 * 
+	 * @return id of the closed Sale or -1 for errors
 	 * @throws ApplicationException
 	 */
 	public int closeSale(int vat) throws ApplicationException {
-
-		currentSale.setSatus(SaleStatus.CLOSED);
-		
-		Customer customer = customerCatalog.getCustomer(vat);
-
-		Account account = customer.getAccount();
-
-		Transation transation = null;
-		
-		try{
-			transation = Transation.factory(
-					"debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale, account);
+		try {
 			
+			currentSale.setSatus(SaleStatus.CLOSED);
+
+			Customer customer = customerCatalog.getCustomer(vat);
+		
+			Transation transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), 
+					new Date(), currentSale, customer.getAccount());
+
 			transationCatalog.addTransation(transation);
-
-			currentSale.addTransationSale(transation);
-			
-			account.addTransation(transation);
-			
-			accountCatalog.updateAccount(account);
 
 			saleCatalog.updateSale(currentSale);
 
 			customerCatalog.updateCustomer(customer);
 
 			return currentSale.getIdSale();
-		
+
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		}
@@ -151,29 +142,33 @@ public class ProcessSaleHandler {
 	}
 
 	/**
-	 * method to pay the sale 
-	 * @param idSale 
+	 * method to pay the sale
+	 * 
+	 * @param idSale
 	 * @return true is is payed and false if is not
 	 * @throws ApplicationException
 	 */
 	public boolean paySale(int idSale, int vat) throws ApplicationException {
+		
 		Sale sale = saleCatalog.getSale(idSale);
 
 		if (sale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
 			sale.setStatusPayment(PaymentStatus.PAYED);
-			Customer c = customerCatalog.getCustomer(vat);
-			Account account = c.getAccount();
-			Transation transation = 
-					Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale, account);
 		
+			Customer c = customerCatalog.getCustomer(vat);
+			
+			Account account = c.getAccount();
+			
+			Transation transation = 
+					Transation.factory("credit", 
+							getSaleTotal() - getSaleDiscount(), new Date(), sale, account);
+
 			transationCatalog.addTransation(transation);
 
-			sale.addTransationSale(transation);
-
 			saleCatalog.updateSale(sale);
-
-			account.addTransation(transation);
-
+			
+			account.updateBalance(transation);
+			
 			accountCatalog.updateAccount(account);
 
 		} else {

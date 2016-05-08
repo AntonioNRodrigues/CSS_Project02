@@ -42,7 +42,6 @@ public class SaleCatalog {
 	public Sale newSale(Customer customer) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
-			System.out.println(customer);
 			em.getTransaction().begin();
 			Sale sale = new Sale(new Date(), customer);
 			em.persist(sale);

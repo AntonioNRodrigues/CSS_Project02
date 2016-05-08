@@ -4,7 +4,7 @@ import static javax.persistence.CascadeType.ALL;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import business.ApplicationException;
 import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +41,7 @@ public class Account {
 	private double balance;
 
 	@OneToMany(cascade = ALL)
-	@JoinColumn(name="ACCOUNT_ID")
+	@JoinColumn(name = "ACCOUNT_ID")
 	private List<Transation> listTransactions;
 
 	public Account() {
@@ -65,30 +65,25 @@ public class Account {
 	}
 
 	/**
-	 * method that updates the balance of the customer when a new Transation is
-	 * added
-	 */
-	private void calcBalance(Transation transation) {
-
-		if (transation instanceof Debit) {
-			this.balance += transation.getValue();
-		} else if (transation instanceof Credit) {
-			this.balance -= transation.getValue();
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	/**
 	 * method to add a new Transation
 	 * 
 	 * @param transation
 	 *            to be added
 	 * @return true is the transation is added an false otherwise
 	 */
-	public boolean addTransation(Transation transation) {
-		calcBalance(transation);
-		return this.listTransactions.add(transation);
+	public void updateBalance(Transation t) throws ApplicationException {
+
+		try {
+
+			if (t instanceof Debit)
+				this.balance += t.getValue();
+
+			if (t instanceof Credit)
+				this.balance -= t.getValue();
+
+		} catch (Exception e) {
+			throw new ApplicationException("Probling updating the balance", e);
+		}
 	}
 
 	/**
@@ -99,14 +94,16 @@ public class Account {
 	public List<Transation> getTransations() {
 		return this.listTransactions;
 	}
+
 	/**
 	 * getter of the id
+	 * 
 	 * @return
 	 */
 	public int getId() {
 		return this.id;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Account [balance=" + balance + ", listTransactions=" + listTransactions + "]";

@@ -49,24 +49,23 @@ public class SimpleClient {
 		try {
 			// adds a customer.
 
-			addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
-			addCustomerService.addCustomer(224531700, "Antonio", 217500255,2, new Account());
+			//addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
 			// starts a new sale
-			Customer c = addCustomerService.getCustomer(224531700);
+			Customer c = addCustomerService.getCustomer(168027852);
 			processSaleService.newSale(c.getVATNumber());
 			// adds two products to the sale
 			processSaleService.addProductToSale(123, 3);
 			processSaleService.addProductToSale(124, 1);
 			processSaleService.addProductToSale(123, 1);
 
-			System.out.println(processSaleService.getSaleDiscount());
+			processSaleService.getSaleDiscount();
 
 			int idSale = processSaleService.closeSale(c.getVATNumber());
 
 			if (idSale != -1) {
+				System.out.println("The Sale id:" + idSale);
 				System.out.println("The Sale has been closed");
 				System.out.println("Sarting its payment");
-				System.out.println("ID_SALE " + idSale);
 				paySale(idSale, c.getVATNumber());
 
 			} else {
