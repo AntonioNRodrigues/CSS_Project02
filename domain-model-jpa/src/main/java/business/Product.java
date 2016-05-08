@@ -145,7 +145,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [description=" + description + ", faceValue=" + faceValue + ", unit=" + unit + "]";
+		return "Product: " + description + " ";
 	}
 
 }

@@ -1,5 +1,6 @@
 package business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import business.entities.Account;
@@ -8,6 +9,17 @@ import business.entities.Credit;
 import business.entities.Debit;
 import business.entities.Transation;
 import business.entities.TransationCatalog;
+
+/**
+ * Entity implementation class for Entity: Account
+ * 
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
+ *
+ */
 
 public class CurrentAccountHandler {
 
@@ -29,16 +41,19 @@ public class CurrentAccountHandler {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public List<Transation> getAllTransations(int vat) throws ApplicationException {
+	public List<Transation> getAllTransations(int vat) {
+		Customer c = null;
+		Account a = null;
+		List <Transation> list = new ArrayList<>();
+		try {
+			c = customerCatalog.getCustomer(vat);
+			a = accountCatalog.getAccount(c.getAccount().getId());
+			list = a.getTransations();
+		} catch (ApplicationException e) {
+			System.out.println("The custumer has not been found");
+		}
 
-		Customer c = customerCatalog.getCustomer(vat);
-		Account a = accountCatalog.getAccount(c.getAccount().getId());
-		return a.getTransations();
-	}
-
-	public Customer validateCustomer(int vat) throws ApplicationException {
-		return customerCatalog.getCustomer(vat);
-
+		return list;
 	}
 
 	/**
@@ -57,10 +72,12 @@ public class CurrentAccountHandler {
 
 		if (t instanceof Debit) {
 			lista = ((Debit) t).getInfoSale();
-
+			
+			
 		} else if (t instanceof Credit) {
 
-			return sb.append(t.getDate().toString()).append(" ").append(t.getSale().getIdSale()).toString();
+			return sb.append("Date of Sale: ").append(t.getDate().toString())
+					.append(" Sale ID: ").append(t.getSale().getIdSale()).toString();
 
 		} else {
 

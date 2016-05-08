@@ -27,6 +27,12 @@ import business.entities.AccountCatalog;
  * 
  * @author fmartins
  * @version 1.1 (17/04/2015)
+ * @modified by
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
  */
 public class SimpleClient {
 
@@ -101,11 +107,6 @@ public class SimpleClient {
 		} catch (NumberFormatException e) {
 			throw new ApplicationException("its not a valid Vat number", e);
 		}
-		try {
-			currentAccountService.validateCustomer(vat);
-		} catch (Exception e) {
-			throw new ApplicationException("Client has not been found", e);
-		}
 
 		String value = "";
 		List<Transation> lista = currentAccountService.getAllTransations(vat);
@@ -138,7 +139,7 @@ public class SimpleClient {
 				} catch (NumberFormatException nfe) {
 					break;
 				}
-				System.out.println("Write done:: to choose another transation to see");
+				System.out.println("Write the number to choose another transation to see");
 
 			} while (!(value.equalsIgnoreCase("done")));
 

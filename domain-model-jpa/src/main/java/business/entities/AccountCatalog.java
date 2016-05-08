@@ -1,5 +1,14 @@
 package business.entities;
-
+/**
+ * Entity implementation class for Entity: Account
+ * 
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
+ *
+ */
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;

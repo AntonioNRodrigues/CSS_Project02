@@ -16,8 +16,14 @@ import business.entities.TransationCatalog;
  * 
  * @author fmartins
  * @version 1.1 (17/04/2015)
- *
+ * @modified by:
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
  */
+
 public class SaleCatalog {
 
 	/**

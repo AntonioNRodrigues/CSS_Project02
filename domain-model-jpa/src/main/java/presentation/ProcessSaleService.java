@@ -3,6 +3,16 @@ package presentation;
 import business.ApplicationException;
 import business.ProcessSaleHandler;
 
+/**
+ * Entity implementation class for Entity: Account
+ * 
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
+ *
+ */
 public class ProcessSaleService {
 
 	private ProcessSaleHandler saleHandler;
@@ -27,7 +37,8 @@ public class ProcessSaleService {
 		return saleHandler.closeSale(vat);
 
 	}
-	public boolean paySale(int idSale, int vat) throws ApplicationException{
-		return saleHandler.paySale(idSale, vat);
+
+	public void paySale(int idSale, int vat) throws ApplicationException {
+		saleHandler.paySale(idSale, vat);
 	}
 }

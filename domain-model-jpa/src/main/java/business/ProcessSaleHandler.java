@@ -1,9 +1,7 @@
 package business;
 
 import java.util.Date;
-import java.util.List;
 
-import business.entities.Account;
 import business.entities.AccountCatalog;
 import business.entities.Transation;
 import business.entities.TransationCatalog;
@@ -39,9 +37,6 @@ public class ProcessSaleHandler {
 	 * The current sale
 	 */
 	private Sale currentSale;
-
-	private AccountCatalog accountCatalog;
-
 	/**
 	 * Creates a handler for the process sale use case given the sale, customer,
 	 * and product catalogs.
@@ -59,7 +54,6 @@ public class ProcessSaleHandler {
 		this.customerCatalog = customerCatalog;
 		this.productCatalog = productCatalog;
 		this.transationCatalog = tc;
-		this.accountCatalog = accountCatalog;
 	}
 
 	/**
@@ -118,19 +112,15 @@ public class ProcessSaleHandler {
 	 */
 	public int closeSale(int vat) throws ApplicationException {
 		try {
-			
+
 			currentSale.setSatus(SaleStatus.CLOSED);
 
 			Customer customer = customerCatalog.getCustomer(vat);
-		
-			Transation transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), 
-					new Date(), currentSale, customer.getAccount());
 
-			//transationCatalog.addTransation(transation);
+			Transation transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), new Date(),
+					currentSale, customer.getAccount());
+
 			transationCatalog.addTransationToSale(transation, currentSale, customer);
-			//saleCatalog.updateSale(currentSale);
-
-			//customerCatalog.updateCustomer(customer);
 
 			return currentSale.getIdSale();
 
@@ -148,33 +138,28 @@ public class ProcessSaleHandler {
 	 * @return true is is payed and false if is not
 	 * @throws ApplicationException
 	 */
-	public boolean paySale(int idSale, int vat) throws ApplicationException {
-		
-		Sale sale = saleCatalog.getSale(idSale);
+	public void paySale(int idSale, int vat) throws ApplicationException {
+		Sale sale = null;
+		try {
+			sale = saleCatalog.getSale(idSale);
+		} catch (Exception e) {
+			throw new ApplicationException("Problem getting the sale", e);
+		}
 
 		if (sale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
 			sale.setStatusPayment(PaymentStatus.PAYED);
-		
+
 			Customer c = customerCatalog.getCustomer(vat);
-			
-			Account account = c.getAccount();
-			
-			Transation transation = 
-					Transation.factory("credit", 
-							getSaleTotal() - getSaleDiscount(), new Date(), sale, account);
 
-			transationCatalog.addTransation(transation);
-
-			saleCatalog.updateSale(sale);
+			Transation transation = Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale,
+					c.getAccount());
 			
-			account.updateBalance(transation);
+			c.getAccount().updateBalance(transation);
 			
-			accountCatalog.updateAccount(account);
-
+			transationCatalog.addTransationToSale(transation, sale, c);
+	
 		} else {
 			System.out.println("Sale already payed");
 		}
-
-		return true;
 	}
 }
