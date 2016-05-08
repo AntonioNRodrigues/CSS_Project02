@@ -4,7 +4,6 @@ import dataaccess.Persistence;
 import dataaccess.PersistenceException;
 import dataaccess.TableData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -116,7 +115,7 @@ public class Customer extends TableModule {
 	 * @param vat The VAT number to checked.
 	 * @return Whether the VAT number is valid. 
 	 */
-	public boolean isValidVAT(int vat) {
+	private boolean isValidVAT(int vat) {
 		// If the number of digits is not 9, error!
 		if (vat < 100000000 || vat > 999999999)
 			return false;
@@ -144,6 +143,13 @@ public class Customer extends TableModule {
 		return checkDigit == checkDigitCalc;
 	}
 
+	/**
+	 * Creates a new CustomerAccount based on the customer validated vat number
+	 *
+	 * @param vat Customers VAT number
+	 * @return CustomerTransaction object with Transactions in the form of Rows
+	 * @throws ApplicationException
+     */
 	public CustomerAccount getCustomerCurrentAccount(int vat) throws ApplicationException {
 		if (!isValidVAT(vat))
 			throw new ApplicationException("Invalid VAT number");

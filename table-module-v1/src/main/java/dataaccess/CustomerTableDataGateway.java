@@ -143,7 +143,7 @@ public class CustomerTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error interacting with the database
 	 */
@@ -153,7 +153,7 @@ public class CustomerTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -163,8 +163,8 @@ public class CustomerTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
-	 * @return the conversion of the value read from the result set 
+	 * @param r
+	 * @return the conversion of the value read from the result set
 	 * @throws PersistenceException  When there is an error in the reading or conversion
 	 */
 	public String readDesignation(Row r) throws PersistenceException {
@@ -173,7 +173,7 @@ public class CustomerTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */
@@ -183,7 +183,7 @@ public class CustomerTableDataGateway extends TableDataGateway {
 
 	/**
 	 * Reads from a result set the value of the corresponding column
-	 * @param rs 
+	 * @param r
 	 * @return the conversion of the value read from the result set 
 	 * @throws PersistenceException When there is an error in the reading or conversion
 	 */

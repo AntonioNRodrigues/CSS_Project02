@@ -4,8 +4,6 @@ import business.*;
 import dataaccess.Persistence;
 import dataaccess.PersistenceException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -56,6 +54,14 @@ public class CustomerService extends Service {
 		customer.addCustomer(vat, designation, phoneNumber, discountType);
 	}
 
+	/**
+	 * Show Customer's CurrentAccount operation, which will list all Transactions for
+	 * a Customer
+	 *
+	 * @param vat VAT of the Customer, to be validated and get all the Transactions from him
+	 * @throws ApplicationException
+	 * @throws PersistenceException
+     */
 	public void showCustomerCurrentAccount(int vat) throws ApplicationException, PersistenceException {
 		Customer customer = new Customer(persistence);
 		CustomerAccount account = customer.getCustomerCurrentAccount(vat);

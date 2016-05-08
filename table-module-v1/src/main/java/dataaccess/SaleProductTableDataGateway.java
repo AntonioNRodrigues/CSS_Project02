@@ -58,7 +58,7 @@ public class SaleProductTableDataGateway extends TableDataGateway {
 	/**
 	 * The select the products of a sale by sale Id SQL statement
 	 */
-	private static String GET_SALE_PRODUCTS_SQL =
+	private static final String GET_SALE_PRODUCTS_SQL =
 			"select * from saleproduct a " +
 				"where " + SALE_ID + " = ?";
 

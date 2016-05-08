@@ -2,7 +2,6 @@ package business;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class Sale extends TableModule {
 			TableData td = getSale (saleId);
 			return !persistence.saleTableGateway.readStatus(td.iterator().next()).equals(SaleStatus.OPEN);
 		} catch (PersistenceException e) {
-			throw new ApplicationException("Internal error checking if sale with id " + saleId + " is open", e);
+			throw new ApplicationException("Internal error checking if sale with id " + saleId + " is closed", e);
 		}
 	}
 	
@@ -191,13 +190,12 @@ public class Sale extends TableModule {
 
 
 	/**
-	 * @throws PersistenceException 
 	 * Computes the type 1 discount
 	 * @param td The result set with the sold products
 	 * @return The discount value
 	 * @throws SQLException When some unexpected error occurs.
-	 * @throws ApplicationException 
-	 * @throws  
+	 * @throws ApplicationException
+	 * @throws PersistenceException
 	 */
 	private double discountOnSaleAmount(TableData td) 
 				throws SQLException, ApplicationException, PersistenceException {
@@ -272,6 +270,13 @@ public class Sale extends TableModule {
 		} 
 	}
 
+	/**
+	 * Operation where a new Transaction payment is made
+	 * Validates if sale is closed and not payed
+	 * @param saleId    The Id of the sale we want to create a Transaction for
+	 * @return the id of the new Transaction that was made
+	 * @throws ApplicationException
+     */
 	public int makePayment(int saleId) throws ApplicationException {
 		// Verifica que a venda não foi paga
 		PaymentTransaction paymentTransaction = new PaymentTransaction(persistence);
@@ -281,16 +286,25 @@ public class Sale extends TableModule {
 			throw new ApplicationException("Sale already payed!");
 
 		// Marca a sale como paga
+		double total = getTotal(saleId);
+		double discount = getDiscount(saleId);
+		updateSale(saleId, SaleStatus.PAYED, total, discount);
 
 		try {
-			// Gera uma transacção no cliente, incluindo valor, data, descrição e id da sale
-			int transactionId = paymentTransaction.newTransaction(saleId, getTotal(saleId) - getDiscount(saleId));
+			// Gera uma transacção do cliente, incluindo valor, data, descrição e id da sale
+			int transactionId = paymentTransaction.newTransaction(saleId, total - discount);
 			return transactionId;
 		} catch (PersistenceException e) {
-			throw new ApplicationException("There was an error making a payment", e);
+			throw new ApplicationException("There was an error making a payment transaction", e);
 		}
 	}
 
+	/**
+	 * Checks if the sale with saleId has been payed
+	 * @param saleId Id of the sale we want to check
+	 * @return True if the sale has PAYED status
+	 * @throws ApplicationException
+     */
 	private boolean isPayed(int saleId) throws ApplicationException {
 		try {
 			TableData td = getSale (saleId);
@@ -300,6 +314,15 @@ public class Sale extends TableModule {
 		}
 	}
 
+	/**
+	 * Updates the sale with saleId with a new total, discount and status
+	 * @param saleId The sale Id of the sale we want to update
+	 * @param status New status
+	 * @param total New total
+	 * @param discount New discount
+	 * @return True is the sale was successfully updated, false otherwise
+	 * @throws ApplicationException
+     */
 	public boolean updateSale(int saleId, SaleStatus status, double total, double discount) throws ApplicationException {
 		try {
 			return persistence.saleTableGateway.updateSale(saleId, status, total, discount);
@@ -308,8 +331,15 @@ public class Sale extends TableModule {
 		}
 	}
 
+	/**
+	 * Close Sale operation, where it calculates the values of the total and discount
+	 * and creates a new Transaction of the DEBIT type
+	 * @param saleId The sale Id of the sale we want to close
+	 * @return id of the new Transaction created
+	 * @throws ApplicationException
+     */
 	public int closeSale(int saleId) throws ApplicationException {
-		// Calcular valor final atraves da soma dos produtos da venda e aplicar desconto
+		// Calcular valor final atraves da soma do valor dos produtos da venda e aplicar desconto
 		double finalTotal = getSaleTotal(saleId);
 		double finalDiscount = getSaleDiscount(saleId);
 
@@ -325,6 +355,13 @@ public class Sale extends TableModule {
 		}
 	}
 
+	/**
+	 * Get all the sale Ids from a Customer, from it's ID
+	 *
+	 * @param customerId Id of the customer that has the sales we want
+	 * @return List of int that represent the sale Ids of the Customer
+	 * @throws ApplicationException
+     */
 	public List<Integer> getAllSaleIdsFromCustomer(int customerId) throws ApplicationException {
 		try {
 			List<Integer> list = new ArrayList<>();
@@ -340,6 +377,12 @@ public class Sale extends TableModule {
 		}
 	}
 
+	/**
+	 * Textual representation of a Sale
+	 * @param row Row that has all the data from a Sale
+	 * @return String that represents the Sale
+	 * @throws PersistenceException
+     */
 	public String print(TableData.Row row) throws PersistenceException {
 		return this.persistence.saleTableGateway.readId(row) + " | "
 				+ this.persistence.saleTableGateway.readDate(row) + " | "

@@ -1,10 +1,8 @@
 package business;
 
-
 import dataaccess.Persistence;
 import dataaccess.PersistenceException;
 import dataaccess.TableData;
-
 
 public class SaleProduct extends TableModule {
 
@@ -33,6 +31,12 @@ public class SaleProduct extends TableModule {
 		}		
 	}
 
+	/**
+	 * Get a TableData that has all the SaleProducts for the Sale with Id saleId
+	 * @param saleId The Id of the sale we want the SaleProducts from
+	 * @return TableData with all the rows that represent SaleProducts
+	 * @throws ApplicationException
+     */
 	public TableData getSaleProductsFromSale(int saleId) throws ApplicationException {
 		try {
 			return persistence.saleProductTableGateway.getSaleProducts(saleId);
@@ -41,6 +45,12 @@ public class SaleProduct extends TableModule {
 		}
 	}
 
+	/**
+	 * Textual representation of a SaleProduct
+	 * @param row Row that has all the data to construct a String
+	 * @return String representatin of a SaleProduct
+	 * @throws PersistenceException
+     */
 	public String print(TableData.Row row) throws PersistenceException {
 		return this.persistence.saleProductTableGateway.readSaleId(row) + " | "
 				+ this.persistence.saleProductTableGateway.readQuantity(row) + " | "

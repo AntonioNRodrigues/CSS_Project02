@@ -1,7 +1,7 @@
 package business;
 
 /**
- * Created by simon on 04/05/16.
+ * Transaction Types
  */
 public enum TransactionType {
     DEBIT, CREDIT;

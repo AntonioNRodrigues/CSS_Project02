@@ -1,15 +1,9 @@
 package presentation;
 
-import business.PaymentTransaction;
-import business.Transaction;
 import dataaccess.Persistence;
 import business.ApplicationException;
 import business.Sale;
 import dataaccess.PersistenceException;
-import dataaccess.TableData;
-
-import java.util.Date;
-import java.util.Iterator;
 
 /**
  * Handles sales' transactions. 
@@ -73,7 +67,7 @@ public class SaleService extends Service {
 	 * @throws ApplicationException When the sale id does not exist, or there is an internal
 	 * integrity error, such as the discount id associated with the sale is not found, etc.
 	 */
-	public double getSaleDiscount (int saleId) throws ApplicationException {
+	public double getSaleDiscount(int saleId) throws ApplicationException {
 		Sale sale = new Sale(persistence);
 		return sale.getSaleDiscount(saleId);
 	}
@@ -83,11 +77,25 @@ public class SaleService extends Service {
 		return sale.getSaleTotal(saleId);
 	}
 
+	/**
+	 * Close Sale operation, where a Sale gets CLOSED Status and a Transaction is made to the Customer pay
+	 * @param saleId The Sale Id of the Sale to be closed
+	 * @return Id of the new Transaction created
+	 * @throws ApplicationException
+     */
 	public int closeSale(int saleId) throws ApplicationException {
 		Sale sale = new Sale(persistence);
 		return sale.closeSale(saleId);
 	}
 
+	/**
+	 * Make Payment operation, where a Sale gets PAYED Status and a Transaction is made, where a Customer
+	 * pays for the Sale value
+	 * @param saleId The sale to be payed for
+	 * @return Id of the Transaction that pays for the Sale
+	 * @throws ApplicationException
+	 * @throws PersistenceException
+     */
 	public int makePayment(int saleId) throws ApplicationException, PersistenceException {
 		Sale sale = new Sale(persistence);
 		return sale.makePayment(saleId);

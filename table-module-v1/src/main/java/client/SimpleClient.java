@@ -9,7 +9,6 @@ import presentation.CustomerService;
 import presentation.SaleService;
 import business.ApplicationException;
 import business.DiscountType;
-import presentation.TransactionService;
 
 /**
  * The big bang class.
@@ -41,8 +40,6 @@ public class SimpleClient {
 			// Creates the two available services
 			CustomerService cs = new CustomerService(persistence);
 			SaleService vs = new SaleService(persistence);
-			TransactionService ts = new TransactionService(persistence);
-
 
 			// runs a small test
 			try {

@@ -1,7 +1,5 @@
 package dataaccess;
 
-import business.SaleStatus;
-
 /**
  * Layer super type that stores information shared by all data gateway classes.
  * 

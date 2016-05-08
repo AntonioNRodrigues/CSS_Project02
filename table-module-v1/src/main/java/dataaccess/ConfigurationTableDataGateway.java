@@ -31,7 +31,6 @@ public class ConfigurationTableDataGateway extends TableDataGateway {
 	
 	/**
 	 * Gets configuration settings
-	 * 
 	 * @return The result set of the query
 	 * @throws PersistenceException When there is an internal error accessing the database
 	 */

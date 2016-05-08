@@ -102,7 +102,13 @@ public class Product extends TableModule {
 			throw new ApplicationException ("Internal error retrieving customer with internal id " + productId, e);
 		}
 	}
-	
+
+	/**
+	 * Get the price of ad Product from it's Id
+	 * @param productId Id of the product we want to get the price from
+	 * @return The price, faceValue of the Product
+	 * @throws ApplicationException
+     */
 	public double getFaceValue(int productId) throws ApplicationException {
 		try {
 			TableData td = findProduct(productId);

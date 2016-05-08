@@ -9,6 +9,9 @@ import java.sql.SQLException;
 
 import dataaccess.TableData.Row;
 
+/**
+ * Table Data Gateway for the Transactions table
+ */
 public class TransactionTableDataGateway extends TableDataGateway {
 
     /**
@@ -24,11 +27,11 @@ public class TransactionTableDataGateway extends TableDataGateway {
      * Strings used to register the types of a transaction
      */
     private static final int CREDIT = 1;
-    private static final int DEBIT = 0;
+    private static final int DEBIT = -1;
 
     /**
-     *
-     * @param dataSource
+     *  Constructor
+     * @param dataSource Datasource
      */
     TransactionTableDataGateway(DataSource dataSource) {
         super(dataSource);
@@ -42,6 +45,14 @@ public class TransactionTableDataGateway extends TableDataGateway {
                     CREATED_AT + ") " +
                     "values (DEFAULT, ?, ?, ?, ?)";
 
+    /**
+     * Inserts a new Transaction in the DB
+     * @param saleId Sale Id that the Transaction will be associated with
+     * @param value The value of the Transaction
+     * @param type Type of Transaction
+     * @return Returns the new Id of the inserted Transaction
+     * @throws PersistenceException
+     */
     public int newTransaction(int saleId, double value, TransactionType type) throws PersistenceException {
         try (PreparedStatement statement = dataSource.prepareGetGenKey(INSERT_TRANSACTION_SQL)) {
             // set statement arguments
@@ -69,6 +80,12 @@ public class TransactionTableDataGateway extends TableDataGateway {
     private static final String GET_ALL_TRANSACTIONS_FROM_SALE_ID_SQL =
             "select * from sale_transaction where " + SALE_ID + " = ?";
 
+    /**
+     * Get all Transactions from a Sale, with Id saleId
+     * @param saleId The Id of the Sale that is associated with the Transactions to be returned
+     * @return TableData with Rows that represent Transactions
+     * @throws PersistenceException
+     */
     public TableData getAllTransactions(int saleId) throws PersistenceException {
         try (PreparedStatement statement = dataSource.prepareGetGenKey(GET_ALL_TRANSACTIONS_FROM_SALE_ID_SQL)) {
             // set statement arguments
@@ -88,22 +105,52 @@ public class TransactionTableDataGateway extends TableDataGateway {
         return null;
     }
 
+    /**
+     * Reads the ID property of a Row
+     * @param row Row that has the Transaction data
+     * @return the Id of the Transaction
+     * @throws PersistenceException
+     */
     public int readId(Row row) throws PersistenceException {
         return row.getInt(ID);
     }
 
+    /**
+     * Reads the Sale ID property of a Row
+     * @param row Row that has the Transaction data
+     * @return the Sale Id of the Transaction
+     * @throws PersistenceException
+     */
     public int readSaleId(Row row) throws PersistenceException {
         return row.getInt(SALE_ID);
     }
 
+    /**
+     * Reads the TransactionType property of a Row
+     * @param row Row that has the Transaction data
+     * @return the TransactionType of the Transaction
+     * @throws PersistenceException
+     */
     public TransactionType readType(Row row) throws PersistenceException {
         return row.getInt(TYPE) == CREDIT ? TransactionType.CREDIT : TransactionType.DEBIT;
     }
 
+    /**
+     * Reads the Date of createdAt property of a Row
+     * @param row Row that has the Transaction data
+     * @return the Data of when the Transaction was created
+     * @throws PersistenceException
+     */
     public Date readCreatedAt(Row row) throws PersistenceException {
         return row.getDate(CREATED_AT);
     }
 
+    /**
+     * Reads the value property of a Row
+     * @param row Row that has the Transaction data
+     * @return the value of the Transaction
+     * @throws PersistenceException
+     */
     public double readValue(Row row) throws PersistenceException {
         return row.getDouble(VALUE);
     }

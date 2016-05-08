@@ -147,6 +147,15 @@ public class SaleTableDataGateway extends TableDataGateway {
 	private static final String UPDATE_SALE_SQL =
 			"update sale set " + STATUS + " = ?, " + TOTAL + " = ?, " + DISCOUNT + " = ? where " + ID + " = ?";
 
+	/**
+	 * Updates a Sale with the parameters received
+	 * @param saleId Sale Id of the Sale to be updated
+	 * @param status Status to be updated
+	 * @param total Total to be updated
+	 * @param discount Discount to be updated
+	 * @return True if the update in the DB was successful
+	 * @throws PersistenceException
+     */
 	public boolean updateSale(int saleId, SaleStatus status, double total, double discount) throws PersistenceException {
 		try (PreparedStatement statement = dataSource.prepare(UPDATE_SALE_SQL)) {
 
@@ -228,6 +237,8 @@ public class SaleTableDataGateway extends TableDataGateway {
 			return SaleStatus.OPEN;
 		else if (status.equals(CLOSED))
 			return SaleStatus.CLOSED;
+		else if (status.equals(PAYED))
+			return SaleStatus.PAYED;
 		else
 			throw new PersistenceException("Internal error reading sale status");
 	}
@@ -248,7 +259,12 @@ public class SaleTableDataGateway extends TableDataGateway {
 	private static final String GET_ALL_SALES_FROM_CUSTOMER_SQL =
 			"select * from sale " + "where " + CUSTOMER_ID + " = ?";
 
-
+	/**
+	 * Gets All the Sales from a Customer, by it's Id
+	 * @param customerId Customer Id that has the Sales to be returned
+	 * @return TableData with Rows of data that represent Sales
+	 * @throws PersistenceException
+     */
 	public TableData getAllSalesFromCustomer(int customerId) throws PersistenceException {
 		try (PreparedStatement statement = dataSource.prepare(GET_ALL_SALES_FROM_CUSTOMER_SQL)) {
 			// set statement arguments
