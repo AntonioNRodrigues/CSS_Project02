@@ -14,7 +14,6 @@ public class AddCustomerService {
 	public AddCustomerService(AddCustomerHandler customerHandler) {
 		this.customerHandler = customerHandler;
 	}
-	
 	public void addCustomer(int vat, String denomination, int phoneNumber, 
 			int discountType, Account account) throws ApplicationException {
 		customerHandler.addCustomer(vat, denomination, phoneNumber, discountType, account);

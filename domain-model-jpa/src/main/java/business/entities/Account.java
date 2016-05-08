@@ -25,7 +25,7 @@ import javax.persistence.OneToMany;
  * @Date 2016/04/28
  *
  */
-@Entity
+@Entity 
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID) })
 
@@ -57,7 +57,7 @@ public class Account {
 	}
 
 	/**
-	 * 
+	 * getter of the balance
 	 * @return
 	 */
 	public double getBalance() {
@@ -95,11 +95,6 @@ public class Account {
 		return this.listTransactions;
 	}
 
-	/**
-	 * getter of the id
-	 * 
-	 * @return
-	 */
 	public int getId() {
 		return this.id;
 	}

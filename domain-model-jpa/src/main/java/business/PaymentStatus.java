@@ -3,8 +3,11 @@ package business;
 /**
  * The sale status
  * 
- * @author fmartins
- * @version 1.1 (4/10/2014)
+ * @author Antonio Rodrigues
+ * @author Simão Neves
+ * @author Joao Rodrigues
+ * @Group:: css018
+ * @Date 2016/04/28
  * 
  */
 public enum PaymentStatus {

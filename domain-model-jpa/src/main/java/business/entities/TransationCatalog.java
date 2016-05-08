@@ -12,7 +12,9 @@ import org.omg.CORBA.TRANSACTION_MODE;
 
 import business.ApplicationException;
 import business.Customer;
+import business.CustomerCatalog;
 import business.Sale;
+import business.SaleCatalog;
 
 public class TransationCatalog {
 
@@ -48,7 +50,6 @@ public class TransationCatalog {
 			em.close();
 		}
 	}
-
 	/**
 	 * method to build a new transations and persist 
 	 * @param ctr 
@@ -116,6 +117,25 @@ public class TransationCatalog {
 			em.close();
 		}
 
+	}
+
+	public void addTransationToSale(Transation transation, Sale currentSale, Customer customer) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(transation);
+			em.merge(currentSale);
+			em.merge(customer);
+			em.getTransaction().commit();
+			
+		}catch (Exception e){
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+
+			throw new ApplicationException("Error adding Transation to Sale", e);
+		}finally {
+			em.close();
+		}
 	}
 
 

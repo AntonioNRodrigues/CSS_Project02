@@ -40,6 +40,7 @@ import business.Sale;
 public abstract class Transation {
 	public static final String FIND_ALL = "Transation.findAll";
 	public static final String FIND_ID = "id_trans";
+	
 	private static final String DEBIT = "debit";
 	private static final String CREDIT = "credit";
 	@Id

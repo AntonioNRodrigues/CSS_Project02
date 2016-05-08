@@ -126,11 +126,11 @@ public class ProcessSaleHandler {
 			Transation transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), 
 					new Date(), currentSale, customer.getAccount());
 
-			transationCatalog.addTransation(transation);
+			//transationCatalog.addTransation(transation);
+			transationCatalog.addTransationToSale(transation, currentSale, customer);
+			//saleCatalog.updateSale(currentSale);
 
-			saleCatalog.updateSale(currentSale);
-
-			customerCatalog.updateCustomer(customer);
+			//customerCatalog.updateCustomer(customer);
 
 			return currentSale.getIdSale();
 
