@@ -50,11 +50,11 @@ public class TransationCatalog {
 	}
 
 	/**
-	 * 
-	 * @param ctr
+	 * method to build a new transations and persist 
+	 * @param ctr 
 	 * @param value
 	 * @param date
-	 * @throws ApplicationException
+	 * @throws ApplicationException if the transations is not added
 	 */
 	public void addTransation(String ctr, double value, Date date, Sale sale) throws ApplicationException {
 		Transation trans = Transation.factory(ctr, value, date, sale);
@@ -62,10 +62,10 @@ public class TransationCatalog {
 	}
 
 	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws ApplicationException
+	 * Getter of a transation
+	 * @param id id of the transation
+	 * @return the transation
+	 * @throws ApplicationException is there is a probling getting the Transation
 	 */
 	public Transation getTransation(int id) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
@@ -79,7 +79,12 @@ public class TransationCatalog {
 			em.close();
 		}
 	}
-
+	
+	/**
+	 * getter of all transations
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public Collection<Transation> getTransations() throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -92,7 +97,11 @@ public class TransationCatalog {
 		}
 	}
 
-	
+	/**
+	 * update the transation 
+	 * @param trans
+	 * @throws ApplicationException
+	 */
 	public void updateTransation(Transation trans) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {

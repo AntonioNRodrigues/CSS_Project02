@@ -83,7 +83,10 @@ public class SimpleClient {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * method of the use case checkAccount
+	 * @throws ApplicationException
+	 */
 	public void checkAccount() throws ApplicationException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Running the CheckAccount use case");
@@ -132,7 +135,12 @@ public class SimpleClient {
 		}
 
 	}
-
+	/**
+	 * method to pay the sale
+	 * @param idSale 
+	 * @param vat
+	 * @throws ApplicationException
+	 */
 	public void paySale(int idSale, int vat) throws ApplicationException {
 		processSaleService.paySale(idSale, vat);
 

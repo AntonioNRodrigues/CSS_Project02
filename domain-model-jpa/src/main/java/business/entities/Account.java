@@ -16,7 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
- * Entity implementation class for Entity: ContaCorrente
+ * Entity implementation class for Entity: Account
  * 
  * @author Antonio Rodrigues
  * @author Simão Neves
@@ -32,7 +32,6 @@ import javax.persistence.OneToMany;
 public class Account {
 
 	public static final String FIND_BY_ID = "id";
-	// public static final String FIND_ALL = "Account.getTransations";
 
 	@Id
 	@GeneratedValue
@@ -66,16 +65,8 @@ public class Account {
 	}
 
 	/**
-	 * 
-	 * @param balance
-	 */
-	public void setBalance(double balance) {
-		this.balance = balance;
-	}
-
-	/**
-	 * 
-	 * @return
+	 * method that updates the balance of the customer when a new Transation is
+	 * added
 	 */
 	private void calcBalance(Transation transation) {
 
@@ -88,21 +79,36 @@ public class Account {
 		}
 	}
 
+	/**
+	 * method to add a new Transation
+	 * 
+	 * @param transation
+	 *            to be added
+	 * @return true is the transation is added an false otherwise
+	 */
 	public boolean addTransation(Transation transation) {
 		calcBalance(transation);
 		return this.listTransactions.add(transation);
 	}
 
+	/**
+	 * getter of the list os Transations
+	 * 
+	 * @return
+	 */
 	public List<Transation> getTransations() {
 		return this.listTransactions;
 	}
-
+	/**
+	 * getter of the id
+	 * @return
+	 */
+	public int getId() {
+		return this.id;
+	}
+	
 	@Override
 	public String toString() {
 		return "Account [balance=" + balance + ", listTransactions=" + listTransactions + "]";
-	}
-
-	public int getId() {
-		return this.id;
 	}
 }

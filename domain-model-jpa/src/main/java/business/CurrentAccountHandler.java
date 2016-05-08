@@ -12,7 +12,7 @@ import business.entities.TransationCatalog;
 public class CurrentAccountHandler {
 
 	private CustomerCatalog customerCatalog;
-	
+
 	private AccountCatalog accountCatalog;
 
 	public CurrentAccountHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog,
@@ -41,6 +41,14 @@ public class CurrentAccountHandler {
 
 	}
 
+	/**
+	 * method to see the content of the transation depending of its type
+	 * 
+	 * @param t
+	 * @return info of Sale if its the instance os Debit and the date and its id
+	 *         if its of type Credit
+	 * @throws ApplicationException
+	 */
 	public String seeTransation(Transation t) throws ApplicationException {
 
 		List<SaleProduct> lista = null;

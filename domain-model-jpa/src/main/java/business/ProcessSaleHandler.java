@@ -111,8 +111,8 @@ public class ProcessSaleHandler {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * method to close the sale
+	 * @return  id of the closed Sale or -1 for errors
 	 * @throws ApplicationException
 	 */
 	public int closeSale(int vat) throws ApplicationException {
@@ -152,8 +152,8 @@ public class ProcessSaleHandler {
 	}
 
 	/**
-	 * 
-	 * @param idSale
+	 * method to pay the sale 
+	 * @param idSale 
 	 * @return true is is payed and false if is not
 	 * @throws ApplicationException
 	 */
