@@ -12,6 +12,13 @@ import business.TransactionType;
 import domain.CreditTransaction;
 import domain.SaleProduct;
 
+/**
+ * This class represents a sale transaction script
+ * It is responsible for all transactions related operations
+ * 
+ * @author JoaoR
+ *
+ */
 public class SaleTransactionRowDataGateway {
 	
 	/**
@@ -58,6 +65,15 @@ public class SaleTransactionRowDataGateway {
 		this.value = value;
 	}
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param id, sale transaction id
+	 * @param saleId, sale id
+	 * @param type, transaction type
+	 * @param value, transaction value
+	 * @param createdAt, transaction creation date
+	 */
 	public SaleTransactionRowDataGateway(int id, int saleId, TransactionType type, double value, Date createdAt){
 		this.id = id;
 		this.saleId = saleId;
@@ -153,9 +169,19 @@ public class SaleTransactionRowDataGateway {
 		
 	}
 	
-	
+	/**
+	 * Get transaction by id query
+	 */
 	private static final String GET_TRANSACTION_BY_ID = "select * from sale_transaction "
 			+ "where id = ?";
+	/**
+	 * Gets a transaction by it's id
+	 * 
+	 * @param transactionId, transaction id
+	 * @return the corresponding sale transaction
+	 * 
+	 * @throws PersistenceException
+	 */
 	public static final SaleTransactionRowDataGateway  getTransactionById(int transactionId)
 		throws PersistenceException{
 		

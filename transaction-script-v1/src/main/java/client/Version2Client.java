@@ -1,14 +1,12 @@
 package client;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import SaleSys.SaleSys;
 import business.ApplicationException;
 import business.DiscountType;
 import domain.Account;
-import domain.CreditTransaction;
-import domain.DebitTransaction;
-import domain.SaleProduct;
 import domain.Transaction;
 import presentation.CustomerService;
 import presentation.SaleService;
@@ -65,19 +63,26 @@ public class Version2Client {
 			System.out.println("SALE TOTAL: " + total);
 			
 			// make payment
-			ss.makePayment(sale, 300);
+			ss.makePayment(sale, 1057.5);
 			
 			// check customer's account
-			Account account = cs.getAccount(168027852);
-			for(Transaction t : account.getTransactions())
-				System.out.println(t);
-			
-			// check single transaction
-			Transaction transaction = ts.getTransactionDetails(account.getTransactions().get(0).getId());
-			transaction.printDetails();
-			
-			transaction = ts.getTransactionDetails(account.getTransactions().get(1).getId());
-			transaction.printDetails();
+			int id = 0;
+			Scanner sc = new Scanner(System.in);
+			do{
+				System.out.println("==============================");
+				Account account = cs.getAccount(168027852);
+				for(Transaction t : account.getTransactions())
+					System.out.println(t);
+				
+				System.out.print("Transaction ID: ");
+				id = sc.nextInt();
+				
+				// check single transaction
+				Transaction transaction = ts.getTransactionDetails(id);
+				transaction.printDetails();
+				
+				
+			} while (id != 0);
 			
 			
 			// gets the discount amounts

@@ -2,59 +2,76 @@ package domain;
 
 import java.util.Date;
 
+import dataaccess.SaleTransactionRowDataGateway;
+
+/**
+ * This class represents a generalized concept of transaction
+ * 
+ * @author JoaoR
+ *
+ */
 public abstract class Transaction {
 
-	private int id;
-	
-	private int saleId;
-	
-	private double value;
-	
-	private Date date;
+	/**
+	 * sale transaction gateway
+	 */
+	private SaleTransactionRowDataGateway transaction;
 
-	public Transaction(int id, int saleId, double value, Date date) {
-		super();
-		this.id = id;
-		this.saleId = saleId;
-		this.value = value;
-		this.date = date;
+	/**
+	 * Constructor
+	 * 
+	 * @param transaction sale transaction gateway
+	 */
+	public Transaction(SaleTransactionRowDataGateway transaction){
+		this.transaction = transaction;
 	}
-
+	
+	/**
+	 * Gets sale id
+	 * 
+	 * @return sale id
+	 */
 	public int getSaleId() {
-		return saleId;
+		return transaction.getSaleId();
 	}
 
-	public void setSaleId(int saleId) {
-		this.saleId = saleId;
-	}
-
+	/**
+	 * Gets transaction id
+	 * 
+	 * @return id
+	 */
 	public int getId() {
-		return id;
+		return transaction.getId();
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	/**
+	 * Gets transaction value
+	 * 
+	 * @return value
+	 */
 	public double getValue() {
-		return value;
+		return transaction.getValue();
 	}
 
-	public void setValue(double value) {
-		this.value = value;
-	}
-
+	/**
+	 * Gets transaction date
+	 * 
+	 * @return transaction date
+	 */
 	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+		return transaction.getCreatedAt();
 	}
 	
-	
+	/**
+	 * Prints sale details
+	 */
 	public abstract void printDetails();
 	
+	/**
+	 * Gets transaction type textual represented
+	 * 
+	 * @return transaction type
+	 */
 	public abstract String getType();
 	
 	@Override
@@ -62,13 +79,13 @@ public abstract class Transaction {
 		StringBuilder sb = new StringBuilder();
 		
 		// id
-		sb.append("ID: " + id + " | ");
+		sb.append("ID: " + getId() + " | ");
 		// type
 		sb.append("TYPE: " + getType() + " | ");
 		// date
-		sb.append("DATE: " + date + " | ");
+		sb.append("DATE: " + getDate() + " | ");
 		// value
-		sb.append("VALUE: " + value);
+		sb.append("VALUE: " + getValue());
 		
 		return sb.toString();
 	}
