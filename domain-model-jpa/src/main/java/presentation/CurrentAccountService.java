@@ -5,6 +5,7 @@ import java.util.List;
 import business.ApplicationException;
 import business.CurrentAccountHandler;
 import business.entities.Transation;
+import business.Customer;
 
 public class CurrentAccountService {
 
@@ -14,7 +15,7 @@ public class CurrentAccountService {
 		this.currentAccountHandler = current;
 	}
 	
-	public boolean validateCustomer(int vat) throws ApplicationException{
+	public Customer validateCustomer(int vat) throws ApplicationException{
 		return currentAccountHandler.validateCustomer(vat);
 	}
 

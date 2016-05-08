@@ -3,6 +3,8 @@ package presentation;
 import business.AddCustomerHandler;
 import business.ApplicationException;
 import business.entities.Account;
+import business.Customer;
+
 
 
 public class AddCustomerService {
@@ -16,5 +18,8 @@ public class AddCustomerService {
 	public void addCustomer(int vat, String denomination, int phoneNumber, 
 			int discountType, Account account) throws ApplicationException {
 		customerHandler.addCustomer(vat, denomination, phoneNumber, discountType, account);
+	}
+	public Customer getCustomer (int vat) throws ApplicationException {
+		return customerHandler.getCustomer(vat);
 	}
 }

@@ -4,6 +4,7 @@ import presentation.AddCustomerService;
 import presentation.CurrentAccountService;
 import presentation.ProcessSaleService;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import business.entities.Transation;
 import business.ApplicationException;
 import business.CurrentAccountHandler;
 import business.Customer;
+import business.CustomerCatalog;
 import business.DiscountCatalog;
 import business.entities.Account;
 import business.entities.AccountCatalog;
@@ -52,22 +54,22 @@ public class SimpleClient {
 			// addCustomerService.addCustomer(224531700, "Antonio", 217500255,
 			// 2, new Account());
 			// starts a new sale
-
-			processSaleService.newSale(168027852);
+			Customer c = addCustomerService.getCustomer(224531700);
+			processSaleService.newSale(c.getVATNumber());
 			// adds two products to the sale
 			processSaleService.addProductToSale(123, 3);
 			processSaleService.addProductToSale(124, 1);
-			// processSaleService.addProductToSale(123, 1);
+			processSaleService.addProductToSale(123, 1);
 
 			System.out.println(processSaleService.getSaleDiscount());
 
-			int idSale = processSaleService.closeSale(168027852);
-			
+			int idSale = processSaleService.closeSale(c.getVATNumber());
+
 			if (idSale != -1) {
 				System.out.println("The Sale has been closed");
 				System.out.println("Sarting its payment");
 				System.out.println("ID_SALE " + idSale);
-				paySale(idSale, 168027852);
+				paySale(idSale, c.getVATNumber());
 
 			} else {
 				System.out.println("Something went Wrong");
@@ -83,8 +85,10 @@ public class SimpleClient {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * method of the use case checkAccount
+	 * 
 	 * @throws ApplicationException
 	 */
 	public void checkAccount() throws ApplicationException {
@@ -92,32 +96,40 @@ public class SimpleClient {
 		System.out.println("Running the CheckAccount use case");
 
 		System.out.println("Insert vat number o client");
+		String customer = sc.nextLine();
+		int vat;
 
-		int vat = 168027852;
-
+		try {
+			vat = Integer.parseInt(customer);
+		} catch (NumberFormatException e) {
+			throw new ApplicationException("its not a valid Vat number", e);
+		} 
 		try {
 			currentAccountService.validateCustomer(vat);
 		} catch (Exception e) {
 			throw new ApplicationException("Client has not been found", e);
-		}
-		String value = null;
+		} 
+		
+		String value = "";
 		List<Transation> lista = currentAccountService.getAllTransations(vat);
 		Map<Integer, Transation> mapa = new HashMap<>(lista.size());
-
-		value = "";
 
 		while (!(value.equalsIgnoreCase("quit"))) {
 
 			System.out.println("List of Transations");
+			if (lista.isEmpty()) {
+				System.out.println("List is empty");
+				break;
+			}
 
-			int i = 0;
+			int i = 1;
 			for (Transation t : lista) {
 				mapa.put(i, t);
 				System.out.println("Numero: " + i + " Conteudo: " + t);
 				i++;
 			}
 
-			System.out.println("Insert the number of the transation to see more");
+			System.out.println("Insert the number of the transation to see more or quit to leave");
 			do {
 				int number;
 				value = sc.nextLine();
@@ -133,11 +145,13 @@ public class SimpleClient {
 			} while (!(value.equalsIgnoreCase("done")));
 
 		}
-
+		sc.close();
 	}
+
 	/**
 	 * method to pay the sale
-	 * @param idSale 
+	 * 
+	 * @param idSale
 	 * @param vat
 	 * @throws ApplicationException
 	 */

@@ -125,8 +125,7 @@ public class ProcessSaleHandler {
 
 		Transation transation = null;
 		
-		try {
-			// new Transation
+		try{
 			transation = Transation.factory(
 					"debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale);
 			

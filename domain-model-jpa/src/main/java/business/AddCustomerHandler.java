@@ -50,5 +50,9 @@ public class AddCustomerHandler {
 			throws ApplicationException {
 		Discount discount = discountCatalog.getDiscount(discountType);
 		customerCatalog.addCustomer(vat, denomination, phoneNumber, discount, account);
+	}
+
+	public Customer getCustomer(int vat) throws ApplicationException {
+		return customerCatalog.getCustomer(vat);
 	}	
 }

@@ -36,8 +36,8 @@ public class CurrentAccountHandler {
 		return a.getTransations();
 	}
 
-	public boolean validateCustomer(int vat) throws ApplicationException {
-		return customerCatalog.getCustomer(vat) != null ? false : true;
+	public Customer validateCustomer(int vat) throws ApplicationException {
+		return customerCatalog.getCustomer(vat);
 
 	}
 
