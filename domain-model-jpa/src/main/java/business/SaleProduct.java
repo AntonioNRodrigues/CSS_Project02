@@ -85,7 +85,7 @@ public class SaleProduct {
 
 	@Override
 	public String toString() {
-		return product + ", qty=" + qty;
+		return product + ", qty=" + qty + "\n";
 	}
 	
 }
