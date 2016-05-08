@@ -145,7 +145,7 @@ public class CustomerTransactionScripts {
 			{
 				// for each sale get it's transactions
 				List<SaleTransactionRowDataGateway> l = 
-						SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(s.getId());
+						SaleTransactionRowDataGateway.getSaleTransactions(s.getId());
 				for(SaleTransactionRowDataGateway t : l)					
 					if(t.getType() == TransactionType.CREDIT)
 						transactions.add(
@@ -163,23 +163,6 @@ public class CustomerTransactionScripts {
 			e.printStackTrace();
 			throw new ApplicationException("Error getting customer balance");
 		}
-	}
-	
-	
-	private static double computeCustomerBalance(
-			List<SaleTransactionRowDataGateway> transactions){
-		
-		double res = 0;
-		
-		for(SaleTransactionRowDataGateway st : transactions)
-			if(st.getType() == TransactionType.CREDIT)
-				res += st.getValue();
-			else
-				res -= st.getValue();
-		
-		
-		return res;
-		
 	}
 	
 }

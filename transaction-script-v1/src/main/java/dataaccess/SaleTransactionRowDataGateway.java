@@ -221,7 +221,7 @@ public class SaleTransactionRowDataGateway {
 	 * 
 	 * @throws ApplicationException
 	 */
-	public static List<SaleTransactionRowDataGateway> getSaleTransactionsBySaleId(int saleId)
+	public static List<SaleTransactionRowDataGateway> getSaleTransactions(int saleId)
 			throws PersistenceException{
 		
 		try(PreparedStatement statement = 

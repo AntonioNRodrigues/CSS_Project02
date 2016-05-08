@@ -322,7 +322,7 @@ public class SaleTransactionScripts {
 		try{			
 			
 			// get sale transactions
-			List<SaleTransactionRowDataGateway> transactions = SaleTransactionRowDataGateway.getSaleTransactionsBySaleId(sale.getId());
+			List<SaleTransactionRowDataGateway> transactions = SaleTransactionRowDataGateway.getSaleTransactions(sale.getId());
 			
 			// do the math
 			double res = 0;

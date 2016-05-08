@@ -36,6 +36,7 @@ public class SaleProduct {
 		super();
 		this.saleProduct = s;
 		this.prodDesignation = designation;
+		this.salePrice = price;
 	}
 
 	/**

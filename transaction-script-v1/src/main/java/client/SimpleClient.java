@@ -1,18 +1,22 @@
 package client;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
-import presentation.CustomerService;
-import presentation.SaleService;
 import SaleSys.SaleSys;
 import business.ApplicationException;
 import business.DiscountType;
+import domain.Account;
+import domain.Transaction;
+import presentation.CustomerService;
+import presentation.SaleService;
+import presentation.TransactionService;
 
 /**
  * A simple application client that uses both services.
  *	
- * @author fmartins
- * @version 1.2 (11/02/2015)
+ * @author Joao Rodrigues & Simao Neves & Antonio Rodrigues
+ * @version 2.1 (03/05/2016)
  * 
  */
 public class SimpleClient {
@@ -39,7 +43,8 @@ public class SimpleClient {
 			
 		// Access both available services
 		CustomerService cs = app.getCustomerService();
-		SaleService ss = app.getSaleService();		
+		SaleService ss = app.getSaleService();
+		TransactionService ts = app.getTransactionService();
 		
 		// the interaction
 		try {
@@ -53,9 +58,34 @@ public class SimpleClient {
 			ss.addProductToSale(sale, 123, 10);
 			ss.addProductToSale(sale, 124, 5);
 			
-			// gets the discount amounts
-			double discount = ss.getSaleDiscount(sale);
-			System.out.println(discount);
+			// close sale
+			double total = ss.closeSale(sale);
+			System.out.println("SALE TOTAL: " + total);
+			
+			// make payment
+			ss.makePayment(sale, 1057.5);
+			
+			// check customer's account
+			int id = 0;
+			Scanner sc = new Scanner(System.in);
+			do{
+				System.out.println("==============================");
+				Account account = cs.getAccount(168027852);
+				for(Transaction t : account.getTransactions())
+					System.out.println(t);
+				
+				System.out.print("Transaction ID (para sair 0): ");
+				id = sc.nextInt();
+				if(id == 0)
+					break;
+				
+				// check single transaction
+				Transaction transaction = ts.getTransactionDetails(id);
+				transaction.printDetails();
+				
+				
+			} while (id != 0);
+			
 		} catch (ApplicationException e) {
 			System.out.println("Error: " + e.getMessage());
 			// for debugging purposes only. Typically, in the application
