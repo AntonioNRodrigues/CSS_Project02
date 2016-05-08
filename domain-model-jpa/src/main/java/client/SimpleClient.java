@@ -49,7 +49,7 @@ public class SimpleClient {
 		try {
 			// adds a customer.
 
-			//addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
+			addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
 			// starts a new sale
 			Customer c = addCustomerService.getCustomer(168027852);
 			processSaleService.newSale(c.getVATNumber());
