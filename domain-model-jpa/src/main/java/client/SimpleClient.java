@@ -103,13 +103,13 @@ public class SimpleClient {
 			vat = Integer.parseInt(customer);
 		} catch (NumberFormatException e) {
 			throw new ApplicationException("its not a valid Vat number", e);
-		} 
+		}
 		try {
 			currentAccountService.validateCustomer(vat);
 		} catch (Exception e) {
 			throw new ApplicationException("Client has not been found", e);
-		} 
-		
+		}
+
 		String value = "";
 		List<Transation> lista = currentAccountService.getAllTransations(vat);
 		Map<Integer, Transation> mapa = new HashMap<>(lista.size());
@@ -137,6 +137,7 @@ public class SimpleClient {
 					number = Integer.parseInt(value);
 					String str = currentAccountService.seeTransation(mapa.get(number));
 					System.out.println(str);
+
 				} catch (NumberFormatException nfe) {
 					break;
 				}
