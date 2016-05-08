@@ -41,7 +41,7 @@ public class Account {
 	private double balance;
 
 	@OneToMany(cascade = ALL)
-	@JoinColumn
+	@JoinColumn(name="ACCOUNT_ID")
 	private List<Transation> listTransactions;
 
 	public Account() {

@@ -36,7 +36,7 @@ import business.entities.Transation;
  * @version 1.1 (17/04/2015)
  * 
  */
-@Entity    
+@Entity      
 @NamedQueries({ 
 	@NamedQuery(name = Sale.FIND_BY_ID, query = "SELECT s FROM Sale s WHERE s.id_Sale=:" + Sale.FIND_BY_ID),
 	@NamedQuery(name = Sale.FIND_ALL, query = "SELECT s FROM Sale s") 

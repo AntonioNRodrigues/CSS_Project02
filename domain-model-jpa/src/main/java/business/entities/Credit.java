@@ -24,8 +24,8 @@ public class Credit extends Transation {
 		super();
 	}
 
-	public Credit(double v, Date d, Sale s) {
-		super(v, d, s);
+	public Credit(double v, Date d, Sale s, Account c) {
+		super(v, d, s, c);
 	}
 	
 

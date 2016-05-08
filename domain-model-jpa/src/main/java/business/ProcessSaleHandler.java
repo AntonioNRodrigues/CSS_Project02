@@ -127,7 +127,7 @@ public class ProcessSaleHandler {
 		
 		try{
 			transation = Transation.factory(
-					"debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale);
+					"debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale, account);
 			
 			transationCatalog.addTransation(transation);
 
@@ -161,19 +161,16 @@ public class ProcessSaleHandler {
 
 		if (sale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
 			sale.setStatusPayment(PaymentStatus.PAYED);
-
+			Customer c = customerCatalog.getCustomer(vat);
+			Account account = c.getAccount();
 			Transation transation = 
-					Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale);
+					Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale, account);
 		
 			transationCatalog.addTransation(transation);
 
 			sale.addTransationSale(transation);
 
 			saleCatalog.updateSale(sale);
-
-			Customer c = customerCatalog.getCustomer(vat);
-			
-			Account account = c.getAccount();
 
 			account.addTransation(transation);
 

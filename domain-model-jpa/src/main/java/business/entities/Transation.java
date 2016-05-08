@@ -55,15 +55,18 @@ public abstract class Transation {
 
 	@ManyToOne
 	private Sale sale;
+	
+	@ManyToOne
+	private Account account;
 
 	public Transation() {
-
 	}
 
-	public Transation(double value, Date d, Sale sale) {
+	public Transation(double value, Date d, Sale sale, Account account) {
 		this.date = d;
 		this.value = value;
 		this.sale = sale;
+		this.account = account;
 	}
 
 	/**
@@ -75,9 +78,9 @@ public abstract class Transation {
 	 * @return
 	 * @required String control as
 	 */
-	public static Transation factory(String control, double value, Date date, Sale sale) {
-		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, date, sale)
-				: (control.equalsIgnoreCase(CREDIT)) ? new Credit(value, date, sale) : null;
+	public static Transation factory(String control, double value, Date date, Sale sale, Account account) {
+		return (control.equalsIgnoreCase(DEBIT)) ? new Debit(value, date, sale, account)
+				: (control.equalsIgnoreCase(CREDIT)) ? new Credit(value, date, sale, account) : null;
 	}
 
 	public Date getDate() {

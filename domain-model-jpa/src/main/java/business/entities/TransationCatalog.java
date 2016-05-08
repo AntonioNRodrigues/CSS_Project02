@@ -56,8 +56,8 @@ public class TransationCatalog {
 	 * @param date
 	 * @throws ApplicationException if the transations is not added
 	 */
-	public void addTransation(String ctr, double value, Date date, Sale sale) throws ApplicationException {
-		Transation trans = Transation.factory(ctr, value, date, sale);
+	public void addTransation(String ctr, double value, Date date, Sale sale, Account account) throws ApplicationException {
+		Transation trans = Transation.factory(ctr, value, date, sale, account);
 		addTransation(trans);
 	}
 

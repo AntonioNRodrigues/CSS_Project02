@@ -31,8 +31,8 @@ public class Debit extends Transation {
 	 * @param date
 	 * @param idSale
 	 */
-	public Debit(double value, Date date, Sale sale) {
-		super(value, date, sale);
+	public Debit(double value, Date date, Sale sale, Account account) {
+		super(value, date, sale, account);
 	}
 
 	public List<SaleProduct> getInfoSale() {
