@@ -118,25 +118,24 @@ public class ProcessSaleHandler {
 	public int closeSale(int vat) throws ApplicationException {
 
 		currentSale.setSatus(SaleStatus.CLOSED);
+		
 		Customer customer = customerCatalog.getCustomer(vat);
+
 		Account account = customer.getAccount();
 
 		Transation transation = null;
+		
 		try {
 			// new Transation
-			transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale);
+			transation = Transation.factory(
+					"debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale);
+			
 			transationCatalog.addTransation(transation);
 
 			currentSale.addTransationSale(transation);
-
-			currentSale.getSaleTransations().size();
-			customer.getAccount().getTransations().size();
-			System.out.println(customer);
-			System.out.println(currentSale);
-
-			// get the account of the current user
+			
 			account.addTransation(transation);
-			// associate the transation to the account
+			
 			accountCatalog.updateAccount(account);
 
 			saleCatalog.updateSale(currentSale);
@@ -144,6 +143,7 @@ public class ProcessSaleHandler {
 			customerCatalog.updateCustomer(customer);
 
 			return currentSale.getIdSale();
+		
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		}
@@ -163,7 +163,9 @@ public class ProcessSaleHandler {
 		if (sale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
 			sale.setStatusPayment(PaymentStatus.PAYED);
 
-			Transation transation = Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale);
+			Transation transation = 
+					Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale);
+		
 			transationCatalog.addTransation(transation);
 
 			sale.addTransationSale(transation);
@@ -171,13 +173,12 @@ public class ProcessSaleHandler {
 			saleCatalog.updateSale(sale);
 
 			Customer c = customerCatalog.getCustomer(vat);
+			
 			Account account = c.getAccount();
 
 			account.addTransation(transation);
 
 			accountCatalog.updateAccount(account);
-
-			System.out.println(account.getTransations());
 
 		} else {
 			System.out.println("Sale already payed");

@@ -56,8 +56,8 @@ public class TransationCatalog {
 	 * @param date
 	 * @throws ApplicationException
 	 */
-	public void addTransation(String ctr, double value, Date date) throws ApplicationException {
-		Transation trans = Transation.factory(ctr, value, date);
+	public void addTransation(String ctr, double value, Date date, Sale sale) throws ApplicationException {
+		Transation trans = Transation.factory(ctr, value, date, sale);
 		addTransation(trans);
 	}
 
@@ -92,19 +92,7 @@ public class TransationCatalog {
 		}
 	}
 
-	public Collection<Transation> getTransations(int id_Account) throws ApplicationException {
-		EntityManager em = emf.createEntityManager();
-		try {
-			TypedQuery<Transation> query = (TypedQuery<Transation>) em
-					.createQuery("SELECT t FROM Transations t, Account a, Account_Transition at Where a.account_id = :"
-							+ id_Account + " AND at.listTransactions_id_trans=t.id_trans");
-			return query.getResultList();
-		} catch (Exception e) {
-			throw new ApplicationException("Error obtaining the Transation list", e);
-		} finally {
-			em.close();
-		}
-	}
+	
 	public void updateTransation(Transation trans) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {

@@ -11,43 +11,28 @@ import business.entities.TransationCatalog;
 
 public class CurrentAccountHandler {
 
-	/**
-	 * The sale's catalog
-	 */
-	private SaleCatalog saleCatalog;
-
-	/**
-	 * The customer's catalog
-	 */
 	private CustomerCatalog customerCatalog;
-	/**
-	 * the transtion catalog
-	 */
-	private TransationCatalog transationCatalog;
-	/**
-	 * The current sale
-	 */
+	
 	private AccountCatalog accountCatalog;
 
 	public CurrentAccountHandler(SaleCatalog saleCatalog, CustomerCatalog customerCatalog,
 			TransationCatalog transationCatalog, AccountCatalog accountCatalog) {
-		this.saleCatalog = saleCatalog;
 		this.customerCatalog = customerCatalog;
-		this.transationCatalog = transationCatalog;
 		this.accountCatalog = accountCatalog;
 
 	}
+
 	/**
 	 * method to get all transations of a customer
+	 * 
 	 * @param vat
 	 * @return
 	 * @throws ApplicationException
 	 */
 	public List<Transation> getAllTransations(int vat) throws ApplicationException {
-		
+
 		Customer c = customerCatalog.getCustomer(vat);
 		Account a = accountCatalog.getAccount(c.getAccount().getId());
-		System.out.println(a.getTransations());
 		return a.getTransations();
 	}
 
@@ -57,15 +42,20 @@ public class CurrentAccountHandler {
 	}
 
 	public String seeTransation(Transation t) throws ApplicationException {
-		// get the sale of that transation;
-		Transation trans = transationCatalog.getTransation(t.getId());
+
 		List<SaleProduct> lista = null;
+
 		StringBuilder sb = new StringBuilder();
+
 		if (t instanceof Debit) {
 			lista = ((Debit) t).getInfoSale();
+
 		} else if (t instanceof Credit) {
+
 			return sb.append(t.getDate().toString()).append(" ").append(t.getSale().getIdSale()).toString();
+
 		} else {
+
 			throw new ApplicationException("Problem geting the Transation");
 		}
 		return lista.toString();

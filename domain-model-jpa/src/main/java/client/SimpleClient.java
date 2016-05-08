@@ -7,6 +7,7 @@ import presentation.ProcessSaleService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.omg.CORBA.INTERNAL;
 
@@ -42,27 +43,26 @@ public class SimpleClient {
 	 * A simple interaction with the application services
 	 */
 	public void createASale() {
-		System.out.println("ADD_CUSTOMER_SERVICE: " + addCustomerService);
-
-		System.out.println("PROCES_SSALE_SERVICE: " + processSaleService);
-
 		// the interaction
 		try {
 			// adds a customer.
 
-			//addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
-			// addCustomerService.addCustomer(224531700, "Antonio", 217500255, 2, new Account());
+			// addCustomerService.addCustomer(168027852, "Customer 1",
+			// 217500255, 1, new Account());
+			// addCustomerService.addCustomer(224531700, "Antonio", 217500255,
+			// 2, new Account());
 			// starts a new sale
-			
+
 			processSaleService.newSale(168027852);
 			// adds two products to the sale
 			processSaleService.addProductToSale(123, 3);
 			processSaleService.addProductToSale(124, 1);
-			//processSaleService.addProductToSale(123, 1);
+			// processSaleService.addProductToSale(123, 1);
 
 			System.out.println(processSaleService.getSaleDiscount());
 
 			int idSale = processSaleService.closeSale(168027852);
+			
 			if (idSale != -1) {
 				System.out.println("The Sale has been closed");
 				System.out.println("Sarting its payment");
@@ -85,6 +85,7 @@ public class SimpleClient {
 	}
 
 	public void checkAccount() throws ApplicationException {
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Running the CheckAccount use case");
 
 		System.out.println("Insert vat number o client");
@@ -96,23 +97,40 @@ public class SimpleClient {
 		} catch (Exception e) {
 			throw new ApplicationException("Client has not been found", e);
 		}
-
-		currentAccountService.getAllTransations(vat).isEmpty();
+		String value = null;
 		List<Transation> lista = currentAccountService.getAllTransations(vat);
-		
 		Map<Integer, Transation> mapa = new HashMap<>(lista.size());
 
-		int i = 0;
-		for (Transation t : lista) {
-			mapa.put(i, t);
-			System.out.println("Numero: " + i + " Conteudo: " + t);
-			i++;
-		}
-		System.out.println("Selecione o numero da Transaction que quer consultar");
-		int numberSelected = 15;
+		value = "";
 
-		String str = currentAccountService.seeTransation(mapa.get(numberSelected));
-		System.out.println(str);
+		while (!(value.equalsIgnoreCase("quit"))) {
+
+			System.out.println("List of Transations");
+
+			int i = 0;
+			for (Transation t : lista) {
+				mapa.put(i, t);
+				System.out.println("Numero: " + i + " Conteudo: " + t);
+				i++;
+			}
+
+			System.out.println("Insert the number of the transation to see more");
+			do {
+				int number;
+				value = sc.nextLine();
+				try {
+					number = Integer.parseInt(value);
+					String str = currentAccountService.seeTransation(mapa.get(number));
+					System.out.println(str);
+				} catch (NumberFormatException nfe) {
+					break;
+				}
+				System.out.println("Write done:: to choose another transation to see");
+
+			} while (!(value.equalsIgnoreCase("done")));
+
+		}
+
 	}
 
 	public void paySale(int idSale, int vat) throws ApplicationException {

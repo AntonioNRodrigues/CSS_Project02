@@ -99,7 +99,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [id=" + id + ", balance=" + balance + ", listTransactions=" + listTransactions + "]";
+		return "Account [balance=" + balance + ", listTransactions=" + listTransactions + "]";
 	}
 
 	public int getId() {
