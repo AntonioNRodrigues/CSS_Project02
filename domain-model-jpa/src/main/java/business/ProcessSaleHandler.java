@@ -115,45 +115,39 @@ public class ProcessSaleHandler {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public boolean closeSale(int vat) throws ApplicationException {
-		double value = getSaleTotal();
-		double discount = getSaleDiscount();
+	public int closeSale(int vat) throws ApplicationException {
 
 		currentSale.setSatus(SaleStatus.CLOSED);
 		Customer customer = customerCatalog.getCustomer(vat);
+		Account account = customer.getAccount();
 
 		Transation transation = null;
 		try {
 			// new Transation
-			transation = Transation.factory("debit", value, new Date());
-			// close sale
-			// associate the tansation to the current sale
-			currentSale.setTransation(transation);
-			// get the account of the current user
-			Account account = customer.getAccount();
-			// associate the transation to the account
+			transation = Transation.factory("debit", (getSaleTotal() - getSaleDiscount()), new Date(), currentSale);
+			transationCatalog.addTransation(transation);
 
+			currentSale.addTransationSale(transation);
+
+			currentSale.getSaleTransations().size();
+			customer.getAccount().getTransations().size();
+			System.out.println(customer);
+			System.out.println(currentSale);
+
+			// get the account of the current user
 			account.addTransation(transation);
+			// associate the transation to the account
+			accountCatalog.updateAccount(account);
 
 			saleCatalog.updateSale(currentSale);
 
-			accountCatalog.updateAccount(account);
-
-			transationCatalog.addTransation(transation);
-
 			customerCatalog.updateCustomer(customer);
-			
-			System.out.println(customer.getVATNumber());
-			List<Transation> l = account.getTransation();
-			for (Transation t : l){
-				System.out.println(t);
-			}
-			
-			return true;
+
+			return currentSale.getIdSale();
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 
 	}
 
@@ -165,30 +159,29 @@ public class ProcessSaleHandler {
 	 */
 	public boolean paySale(int idSale, int vat) throws ApplicationException {
 		Sale sale = saleCatalog.getSale(idSale);
-		
+
 		if (sale.getStatusPayment() == PaymentStatus.NOT_PAYDED) {
 			sale.setStatusPayment(PaymentStatus.PAYED);
-			
-			Transation transation = Transation.factory("credit", getSaleTotal(), new Date());
-			sale.setTransation(transation);
-			
+
+			Transation transation = Transation.factory("credit", getSaleTotal() - getSaleDiscount(), new Date(), sale);
+			transationCatalog.addTransation(transation);
+
+			sale.addTransationSale(transation);
+
 			saleCatalog.updateSale(sale);
-			
-			// get the account of the current user
+
 			Customer c = customerCatalog.getCustomer(vat);
 			Account account = c.getAccount();
-			// associate the transation to the account
 
 			account.addTransation(transation);
 
 			accountCatalog.updateAccount(account);
-			
-		
-		}else{
+
+			System.out.println(account.getTransations());
+
+		} else {
 			System.out.println("Sale already payed");
 		}
-		
-		
 
 		return true;
 	}

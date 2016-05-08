@@ -37,8 +37,8 @@ public class Startup {
 		SimpleClient simpleClient = new SimpleClient(cs, ss, ca);
 		
 		simpleClient.createASale();
-//		simpleClient.checkAccount();
-
+ 		simpleClient.checkAccount();
+ 		
 		emf.close();
 	}
 }

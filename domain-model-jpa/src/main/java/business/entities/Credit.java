@@ -1,5 +1,6 @@
 package business.entities;
 
+import business.Sale;
 import business.entities.Transation;
 
 import java.util.Date;
@@ -23,9 +24,14 @@ public class Credit extends Transation {
 		super();
 	}
 
-	public Credit(double v, Date d) {
-		super(v, d);
+	public Credit(double v, Date d, Sale s) {
+		super(v, d, s);
 	}
 	
+
+	@Override
+	public String toString() {
+		return "CREDIT:: "+ super.toString();
+	}
 
 }

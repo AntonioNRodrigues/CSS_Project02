@@ -6,6 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
+import com.sun.org.apache.xml.internal.resolver.Catalog;
+
+import business.entities.Transation;
+import business.entities.TransationCatalog;
+
 /**
  * A catalog for sales
  * 
@@ -37,6 +42,7 @@ public class SaleCatalog {
 	public Sale newSale(Customer customer) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		try {
+			System.out.println(customer);
 			em.getTransaction().begin();
 			Sale sale = new Sale(new Date(), customer);
 			em.persist(sale);
@@ -94,6 +100,7 @@ public class SaleCatalog {
 	public Sale getSale(int idSale) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		TypedQuery<Sale> query = em.createNamedQuery(Sale.FIND_BY_ID, Sale.class);
+		
 		query.setParameter(Sale.FIND_BY_ID, idSale);
 		try {
 			return query.getSingleResult();

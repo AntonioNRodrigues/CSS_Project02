@@ -95,6 +95,8 @@ public class CustomerCatalog {
 			em.merge(customer);
 			em.getTransaction().commit();
 		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
 			throw new ApplicationException("Error Updating the client", e);
 		} finally {
 			em.close();

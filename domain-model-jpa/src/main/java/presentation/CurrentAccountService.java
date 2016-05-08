@@ -1,22 +1,33 @@
 package presentation;
 
+import java.util.List;
+
 import business.ApplicationException;
 import business.CurrentAccountHandler;
-import business.Customer;
-import business.entities.Account;
+import business.entities.Transation;
 
 public class CurrentAccountService {
-	
-	private CurrentAccountHandler accountHandler;
+
+	private CurrentAccountHandler currentAccountHandler;
 
 	public CurrentAccountService(CurrentAccountHandler current) {
-		this.accountHandler = current;
+		this.currentAccountHandler = current;
 	}
-	public Customer getCustomer(int vat) throws ApplicationException{
-		return accountHandler.getCustomer(vat);
+	
+	public boolean validateCustomer(int vat) throws ApplicationException{
+		return currentAccountHandler.validateCustomer(vat);
 	}
-	public Account getAccount(int id_account)throws ApplicationException{
-		return accountHandler.getAccount(id_account);
+
+	public List<Transation> getAllTransations(int vat) throws ApplicationException {
+		return currentAccountHandler.getAllTransations(vat);
 	}
+
+	public String seeTransation(Transation t) throws ApplicationException{
+		return currentAccountHandler.seeTransation(t);
+		
+	}
+
+	
+	
 
 }

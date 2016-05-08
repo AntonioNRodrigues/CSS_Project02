@@ -3,6 +3,15 @@ package client;
 import presentation.AddCustomerService;
 import presentation.CurrentAccountService;
 import presentation.ProcessSaleService;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.omg.CORBA.INTERNAL;
+
+import business.entities.Transation;
+
 import business.ApplicationException;
 import business.CurrentAccountHandler;
 import business.Customer;
@@ -21,7 +30,9 @@ public class SimpleClient {
 	private AddCustomerService addCustomerService;
 	private ProcessSaleService processSaleService;
 	private CurrentAccountService currentAccountService;
-	public SimpleClient(AddCustomerService addCustomerService, ProcessSaleService processSaleService, CurrentAccountService currentAccountService) {
+
+	public SimpleClient(AddCustomerService addCustomerService, ProcessSaleService processSaleService,
+			CurrentAccountService currentAccountService) {
 		this.addCustomerService = addCustomerService;
 		this.processSaleService = processSaleService;
 		this.currentAccountService = currentAccountService;
@@ -31,30 +42,36 @@ public class SimpleClient {
 	 * A simple interaction with the application services
 	 */
 	public void createASale() {
-		System.out.println("ADD_CUSTOMER_SERVICE: "+addCustomerService);
+		System.out.println("ADD_CUSTOMER_SERVICE: " + addCustomerService);
 
-		System.out.println("PROCES_SSALE_SERVICE: "+ processSaleService);
-		
+		System.out.println("PROCES_SSALE_SERVICE: " + processSaleService);
+
 		// the interaction
 		try {
 			// adds a customer.
-		
+
 			//addCustomerService.addCustomer(168027852, "Customer 1", 217500255, 1, new Account());
-			
+			// addCustomerService.addCustomer(224531700, "Antonio", 217500255, 2, new Account());
 			// starts a new sale
+			
 			processSaleService.newSale(168027852);
 			// adds two products to the sale
-			processSaleService.addProductToSale(123, 50);
-			processSaleService.addProductToSale(124, 0);
 			processSaleService.addProductToSale(123, 3);
+			processSaleService.addProductToSale(124, 1);
+			//processSaleService.addProductToSale(123, 1);
 
-			// gets the discount amount
 			System.out.println(processSaleService.getSaleDiscount());
 
-			// close's the sale
-			System.out.println("The Sale has been closed: " + processSaleService.closeSale(168027852));
-			
-			paySale();
+			int idSale = processSaleService.closeSale(168027852);
+			if (idSale != -1) {
+				System.out.println("The Sale has been closed");
+				System.out.println("Sarting its payment");
+				System.out.println("ID_SALE " + idSale);
+				paySale(idSale, 168027852);
+
+			} else {
+				System.out.println("Something went Wrong");
+			}
 
 		} catch (ApplicationException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -66,17 +83,40 @@ public class SimpleClient {
 			e.printStackTrace();
 		}
 	}
-	public void checkAccount() throws ApplicationException{
+
+	public void checkAccount() throws ApplicationException {
 		System.out.println("Running the CheckAccount use case");
-		Customer c = currentAccountService.getCustomer(224531700);
-		System.out.println(c);
-		//currentAccountService.getAccount(1);
+
+		System.out.println("Insert vat number o client");
+
+		int vat = 168027852;
+
+		try {
+			currentAccountService.validateCustomer(vat);
+		} catch (Exception e) {
+			throw new ApplicationException("Client has not been found", e);
+		}
+
+		currentAccountService.getAllTransations(vat).isEmpty();
+		List<Transation> lista = currentAccountService.getAllTransations(vat);
 		
+		Map<Integer, Transation> mapa = new HashMap<>(lista.size());
+
+		int i = 0;
+		for (Transation t : lista) {
+			mapa.put(i, t);
+			System.out.println("Numero: " + i + " Conteudo: " + t);
+			i++;
+		}
+		System.out.println("Selecione o numero da Transaction que quer consultar");
+		int numberSelected = 15;
+
+		String str = currentAccountService.seeTransation(mapa.get(numberSelected));
+		System.out.println(str);
 	}
-	public void paySale()throws ApplicationException{
-		System.out.println("Running the PaySale use case");
-		
-		processSaleService.paySale(3, 168027852);
-		
+
+	public void paySale(int idSale, int vat) throws ApplicationException {
+		processSaleService.paySale(idSale, vat);
+
 	}
 }

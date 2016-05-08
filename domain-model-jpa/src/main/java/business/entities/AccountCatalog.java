@@ -63,7 +63,11 @@ public class AccountCatalog {
 			em.close();
 		}
 	}
-
+	/**
+	 * 
+	 * @param account
+	 * @throws ApplicationException
+	 */
 	public void updateAccount(Account account) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 
@@ -71,8 +75,10 @@ public class AccountCatalog {
 			em.getTransaction().begin();
 			em.merge(account);
 			em.getTransaction().commit();
-			
+
 		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
 			throw new ApplicationException("Error Updating the Account", e);
 		} finally {
 			em.close();

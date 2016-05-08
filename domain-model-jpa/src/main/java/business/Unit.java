@@ -21,6 +21,12 @@ public class Unit {
 	 */
 	@Id @GeneratedValue private int id;
 	@SuppressWarnings("unused") private String description;
-	@SuppressWarnings("unused") private String abbreviation;	
+	@SuppressWarnings("unused") private String abbreviation;
+	@Override
+	public String toString() {
+		return abbreviation;
+	}	
+	
+	
 }
  

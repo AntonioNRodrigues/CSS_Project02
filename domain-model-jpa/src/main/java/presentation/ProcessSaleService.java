@@ -23,7 +23,7 @@ public class ProcessSaleService {
 		return saleHandler.getSaleDiscount();
 	}
 
-	public boolean closeSale(int vat) throws ApplicationException {
+	public int closeSale(int vat) throws ApplicationException {
 		return saleHandler.closeSale(vat);
 
 	}

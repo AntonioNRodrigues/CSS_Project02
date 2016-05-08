@@ -12,6 +12,7 @@ import org.omg.CORBA.TRANSACTION_MODE;
 
 import business.ApplicationException;
 import business.Customer;
+import business.Sale;
 
 public class TransationCatalog {
 
@@ -40,6 +41,8 @@ public class TransationCatalog {
 			// commit the transation
 			em.getTransaction().commit();
 		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
 			throw new ApplicationException("Error adding the transation", e);
 		} finally {
 			em.close();
@@ -57,13 +60,14 @@ public class TransationCatalog {
 		Transation trans = Transation.factory(ctr, value, date);
 		addTransation(trans);
 	}
+
 	/**
 	 * 
 	 * @param id
 	 * @return
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
-	public Transation getTransation(int id) throws ApplicationException{
+	public Transation getTransation(int id) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		TypedQuery<Transation> query = em.createNamedQuery(Transation.FIND_ID, Transation.class);
 		query.setParameter(Transation.FIND_ID, id);
@@ -75,30 +79,47 @@ public class TransationCatalog {
 			em.close();
 		}
 	}
-	
-	public Collection<Transation> getTransations() throws ApplicationException{
+
+	public Collection<Transation> getTransations() throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
-		try{
+		try {
 			TypedQuery<Transation> query = em.createQuery(Transation.FIND_ALL, Transation.class);
 			return query.getResultList();
-		}catch(Exception e){
-			throw new ApplicationException ("Error obtaining the Transation list", e);
-		}finally {
+		} catch (Exception e) {
+			throw new ApplicationException("Error obtaining the Transation list", e);
+		} finally {
 			em.close();
 		}
 	}
-	
-	public Collection<Transation> getTransations(int id_Account) throws ApplicationException{
+
+	public Collection<Transation> getTransations(int id_Account) throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
-		try{
-			TypedQuery<Transation> query = (TypedQuery<Transation>) em.createQuery("SELECT * FROM Transations t WHERE t.account = :"+ id_Account);
+		try {
+			TypedQuery<Transation> query = (TypedQuery<Transation>) em
+					.createQuery("SELECT t FROM Transations t, Account a, Account_Transition at Where a.account_id = :"
+							+ id_Account + " AND at.listTransactions_id_trans=t.id_trans");
 			return query.getResultList();
-		}catch(Exception e){
-			throw new ApplicationException ("Error obtaining the Transation list", e);
-		}finally {
+		} catch (Exception e) {
+			throw new ApplicationException("Error obtaining the Transation list", e);
+		} finally {
 			em.close();
 		}
 	}
-	
+	public void updateTransation(Transation trans) throws ApplicationException {
+		EntityManager em = emf.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(trans);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			throw new ApplicationException("Error updating Trans", e);
+		} finally {
+			em.close();
+		}
+
+	}
+
 
 }

@@ -3,13 +3,13 @@
  */
 package business.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
 
-import business.Product;
+import business.Sale;
+import business.SaleProduct;
 
 /**
  * @author Antonio Rodrigues
@@ -31,12 +31,12 @@ public class Debit extends Transation {
 	 * @param date
 	 * @param idSale
 	 */
-	public Debit(double value, Date date) {
-		super(value, date);
+	public Debit(double value, Date date, Sale sale) {
+		super(value, date, sale);
 	}
 
-	public List<Product> getAllProdutsByID() {
-		return new ArrayList<>();
+	public List<SaleProduct> getInfoSale() {
+		return super.getSale().getSaleProducts();
 	}
 
 	@Override

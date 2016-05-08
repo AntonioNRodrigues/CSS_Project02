@@ -82,4 +82,10 @@ public class SaleProduct {
 	public double getEligibleSubtotal() {
 		return product.isEligibleForDiscount() ? getSubTotal() : 0;
 	}
+
+	@Override
+	public String toString() {
+		return product + ", qty=" + qty;
+	}
+	
 }

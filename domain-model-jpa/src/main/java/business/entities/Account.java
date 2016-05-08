@@ -1,14 +1,16 @@
 package business.entities;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.ArrayList;
 import java.util.List;
-import business.entities.Transation;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -23,7 +25,7 @@ import javax.persistence.OneToMany;
  * @Date 2016/04/28
  *
  */
-@Entity 
+@Entity
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_ID, query = "SELECT a FROM Account a WHERE a.id = :" + Account.FIND_BY_ID) })
 
@@ -39,16 +41,15 @@ public class Account {
 	@Column
 	private double balance;
 
-	@OneToMany
+	@OneToMany(cascade = ALL)
+	@JoinColumn
 	private List<Transation> listTransactions;
 
 	public Account() {
-		this.balance = 0.0;
 	}
 
 	public Account(double balance) {
 		this.balance = balance;
-		listTransactions = new ArrayList<>();
 	}
 
 	@PostConstruct
@@ -80,8 +81,7 @@ public class Account {
 
 		if (transation instanceof Debit) {
 			this.balance += transation.getValue();
-		}
-		else if (transation instanceof Credit) {
+		} else if (transation instanceof Credit) {
 			this.balance -= transation.getValue();
 		} else {
 			throw new UnsupportedOperationException();
@@ -93,8 +93,16 @@ public class Account {
 		return this.listTransactions.add(transation);
 	}
 
-	public List<Transation> getTransation() {
+	public List<Transation> getTransations() {
 		return this.listTransactions;
 	}
 
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", balance=" + balance + ", listTransactions=" + listTransactions + "]";
+	}
+
+	public int getId() {
+		return this.id;
+	}
 }
