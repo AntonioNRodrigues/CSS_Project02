@@ -1,0 +1,121 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>pt.ulisboa.ciencias.di</groupId>
+	<artifactId>domain-model-ee</artifactId>
+	<version>1.0</version>
+
+	<packaging>pom</packaging>
+
+	<name>domain-model-ee</name>
+
+	<modules>
+		<module>domain-model-ee-ear</module>
+		<module>domain-model-ee-business</module>
+		<module>domain-model-ee-web-client</module>
+		<module>domain-model-ee-soap-client</module>
+	</modules>
+
+	<properties>
+		<!-- Explicitly declaring the source encoding eliminates the following 
+			message: -->
+		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
+			resources, i.e. build is platform dependent! -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Define the version of the JBoss BOMs we want to import to specify 
+			tested stacks. -->
+		<version.jboss.bom>8.0.0.Final</version.jboss.bom>
+		<version.wildfly>8.1.0.Final</version.wildfly>
+
+		<!-- other plugin versions -->
+		<version.compiler.plugin>3.1</version.compiler.plugin>
+		<version.ear.plugin>2.6</version.ear.plugin>
+		<version.ejb.plugin>2.3</version.ejb.plugin>
+		<version.surefire.plugin>2.16</version.surefire.plugin>
+		<version.war.plugin>2.1.1</version.war.plugin>
+
+		<!-- maven-compiler-plugin -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Define the version of the EJB and EJB client jar so that we don't need to repeat 
+				ourselves in every module -->
+			<dependency>
+				<groupId>pt.ulisboa.ciencias.di</groupId>
+				<artifactId>domain-model-ee-business</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+
+			<dependency>
+				<groupId>pt.ulisboa.ciencias.di</groupId>
+				<artifactId>domain-model-ee-business</artifactId>
+				<version>${project.version}</version>
+				<type>ejb-client</type>
+			</dependency>
+
+			<!-- Define the version of the WAR so that we don't need to repeat ourselves 
+				in every module -->
+ 			<dependency>
+				<groupId>pt.ulisboa.ciencias.di</groupId>
+				<artifactId>domain-model-ee-web-client</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+
+			<!-- JBoss Bill of Materials (BOM) -->
+			<dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>jboss-javaee-7.0-with-tools</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Compiler plugin enforces Java 1.8 compatibility and activates annotation 
+					processors -->
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.compiler.plugin}</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+					</configuration>
+				</plugin>
+				<!-- The WildFly plugin deploys your ear to a local JBoss AS container -->
+				<!-- Due to Maven's lack of intelligence with EARs we need to configure 
+					the wildfly maven plugin to skip deployment for all modules. We then enable 
+					it specifically in the ear module. -->
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>${version.wildfly.maven.plugin}</version>
+					<inherited>true</inherited>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
