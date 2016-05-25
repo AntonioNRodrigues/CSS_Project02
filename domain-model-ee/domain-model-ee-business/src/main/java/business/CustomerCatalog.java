@@ -1,5 +1,7 @@
 package business;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -55,6 +57,34 @@ public class CustomerCatalog {
 	@Transactional(Transactional.TxType.REQUIRES_NEW)
 	public void addCustomer (int vat, String designation, int phoneNumber, Discount discountType) 
 			throws ApplicationException {
-		em.persist(new Customer(vat, designation, phoneNumber, discountType));
+		Customer customer = new Customer(vat, designation, phoneNumber, discountType);
+		Account account = new Account(customer, null, null);
+		customer.setAccount(account);
+		em.persist(customer);
+		em.persist(account);
+	}
+	
+	/**
+	 * Get all customers 
+	 * 
+	 * @return a list of a customer
+	 * @throws ApplicationException
+	 */
+	public List<Customer> getAll() throws ApplicationException{
+		
+		try{
+			
+			// get all customers
+			TypedQuery<Customer> customersQuery = em.createNamedQuery(Customer.FIND_ALL, Customer.class);
+			List<Customer> customers = customersQuery.getResultList();
+			
+			return customers;
+			
+		} catch (Exception e) {
+			System.out.println("========================================");
+			e.printStackTrace();
+			throw new ApplicationException("Error getting customers", e);
+		}
+		
 	}
 }

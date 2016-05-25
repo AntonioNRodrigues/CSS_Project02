@@ -46,7 +46,14 @@ public class Sale implements ISale {
 	 */
 	@Enumerated(STRING) private SaleStatus status;
 	
+	/**
+	 * Sale owner
+	 */
 	@ManyToOne private Customer customer;
+	
+	private double totalValue;
+	
+	private double discountValue;
 	
 	/**
 	 * The products of the sale
@@ -81,7 +88,21 @@ public class Sale implements ISale {
 
 	
 	// 2. getters and setters
-
+	
+	public void setTotalValue(double totalValue){
+		this.totalValue = totalValue;
+	}
+	public double getTotalValue(){
+		return this.totalValue;
+	}
+	
+	public void setDiscountValue(double discountValue){
+		this.discountValue = discountValue;
+	}
+	public double getDiscountValue(){
+		return this.discountValue;
+	}
+	
 	/**
 	 * @return The sale's total 
 	 */
@@ -152,5 +173,21 @@ public class Sale implements ISale {
 	}
 	public List<Transaction> getTransactions(){
 		return this.transactions;
+	}
+	
+	public void setStatus(SaleStatus status){
+		this.status = status;
+	}
+	
+	public double calculateTotal(){
+		
+		double total = 0;
+		
+		List<SaleProduct> saleProducts = this.saleProducts;
+		for(SaleProduct sp : saleProducts)
+			total += sp.getQty() * sp.getProduct().getFaceValue();
+		
+		return total;
+		
 	}
 }

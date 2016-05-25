@@ -43,6 +43,13 @@ public abstract class Transaction {
 		this.amount = amount;
 		this.createdAt = createdAt;
 	}
+	
+	public Transaction(Sale sale, Account account, double amount, Date createdAt){
+		this.amount = amount;
+		this.createdAt = createdAt;
+		this.sale = sale;
+		this.account = account;
+	}
 
 	public int getVersion() {
 		return version;
