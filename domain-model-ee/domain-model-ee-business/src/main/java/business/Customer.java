@@ -1,10 +1,13 @@
 package business;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
@@ -16,13 +19,22 @@ import javax.persistence.OneToOne;
  * 
  */
 @Entity  
-@NamedQuery(name=Customer.FIND_BY_VAT_NUMBER, query="SELECT c FROM Customer c WHERE c.vatNumber = :" + 
-		Customer.NUMBER_VAT_NUMBER)
-public class Customer {
+@NamedQueries({
+	@NamedQuery(name=Customer.FIND_BY_VAT_NUMBER, query="SELECT c FROM Customer c WHERE c.vatNumber = :" + 
+			Customer.NUMBER_VAT_NUMBER),
+	@NamedQuery(name=Customer.FIND_ALL, query="SELECT c FROM Customer c")
+})
+public class Customer implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Named query name constants
 	public static final String FIND_BY_VAT_NUMBER = "Customer.findByVATNumber";
+	public static final String FIND_ALL = "Customer.getAll";
 	public static final String NUMBER_VAT_NUMBER = "vatNumber";
+	
 
 	
 	// Customer attributes 
@@ -54,6 +66,8 @@ public class Customer {
 	 */
 	@OneToOne @JoinColumn(nullable = false) private Discount discount;
 	
+	@OneToOne
+	private Account account;
 	
 	// 1. constructor 
 
@@ -81,6 +95,13 @@ public class Customer {
 
 	
 	// 2. getters and setters
+	
+	public void setAccount(Account account){
+		this.account = account;
+	}
+	public Account getAccount(){
+		return this.account;
+	}
 	
 	/**
 	 * @return The discount type of the customer
@@ -136,4 +157,42 @@ public class Customer {
 			checkDigitCalc = 0;
 		return checkDigit == checkDigitCalc;
 	}
+	
+	public int getId(){
+		return this.id;
+	}
+
+	public int getVatNumber() {
+		return vatNumber;
+	}
+
+	public void setVatNumber(int vatNumber) {
+		this.vatNumber = vatNumber;
+	}
+
+	public int getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(int phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Discount getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Discount discount) {
+		this.discount = discount;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+	
+	
 }

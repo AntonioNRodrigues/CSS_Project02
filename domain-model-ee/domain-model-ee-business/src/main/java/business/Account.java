@@ -1,5 +1,6 @@
 package business;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Account {
+public class Account implements Serializable{
 
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
@@ -30,6 +31,7 @@ public class Account {
 		this.sales = sales;
 		this.transactions = transactions;
 	}
+	
 	public int getId() {
 		return id;
 	}
