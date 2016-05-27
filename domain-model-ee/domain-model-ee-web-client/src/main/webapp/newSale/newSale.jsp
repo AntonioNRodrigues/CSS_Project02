@@ -12,7 +12,7 @@
 
 	<div>
 		
-		<h2>Criação de nova venda</h2>
+		<h2>Sale ${model.getId}</h2>
 		
 		<form action="criarVenda" method="post">
 			<table>

@@ -5,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import facade.exceptions.ApplicationException;
+import facade.handlers.ISaleHandlerRemote;
+import facade.interfaces.ISale;
 
 @Stateless
-public class SaleCatalog {
+public class SaleCatalog{
 
 	@PersistenceContext
 	private EntityManager em;
