@@ -35,6 +35,4 @@ public class AddSaleHandler implements IAddSaleHandlerRemote{
 		
 	}
 
-	
-	
 }

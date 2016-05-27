@@ -28,8 +28,12 @@ public class SimpleSOAPClient {
 
 	    // Make the actual call
 	    try {
-			customerHandler.addCustomer(168027852, "Customer 1", 217500255, 1);
-			System.out.println("Cliente adiciondo com sucesso.");
+
+
+
+//			customerHandler.addCustomer(233299051, "Simão", 217500255, 1);
+//			System.out.println("Cliente adiciondo com sucesso.");
+
 		} catch (ApplicationException_Exception e) {
 			System.out.println("Erro ao adicionar cliente.");
 			System.out.println("Causa:");
