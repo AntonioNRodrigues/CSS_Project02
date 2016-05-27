@@ -8,5 +8,5 @@ package business;
  * 
  */
 public enum SaleStatus {
-	OPEN, CLOSED;
+	OPEN, CLOSED, PAYED;
 }

@@ -40,5 +40,18 @@ public class GetCustomersHandler implements IGetCustomersHandlerRemote{
 		}
 		
 	}
+
+	@Override
+	public Customer getCustomerById(int customerID) throws ApplicationException {
+		
+		try {
+			
+			return customerCatalog.getCustomerById(customerID);
+			
+		} catch (Exception e) {
+			throw new ApplicationException("Erro ao obter customer por id", e);
+		}
+		
+	}
 	
 }

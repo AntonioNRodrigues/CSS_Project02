@@ -3,6 +3,7 @@ package business;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,8 +31,16 @@ import facade.interfaces.ISale;
  * 
  */
 @Entity 
-public class Sale implements ISale {
+@NamedQueries({
+	@NamedQuery(name=Sale.FIND_CUSTOMER_SALES, query="SELECT s FROM Sale s WHERE s.customer.id =:"+Sale.CUSTOMER_ID)
+})
+public class Sale implements ISale, Serializable {
 
+	
+	
+	public final static String FIND_CUSTOMER_SALES = "Sales.customerSales";
+	public final static String CUSTOMER_ID = "customerID";
+	
 	/**
 	 * Sale primary key. Needed by JPA. Notice that it is not part of the
 	 * original domain model.
@@ -61,7 +72,7 @@ public class Sale implements ISale {
 	@OneToMany(cascade = ALL) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
-	@OneToMany
+	@OneToMany(mappedBy="sale")
 	private List<Transaction> transactions;
 	
 	// 1. constructor
@@ -140,6 +151,14 @@ public class Sale implements ISale {
 	 */
 	public boolean isOpen() {
 		return status == SaleStatus.OPEN;
+	}
+	
+	public boolean isClosed() {
+		return status == SaleStatus.CLOSED;
+	}
+	
+	public boolean isPayed() {
+		return status == SaleStatus.PAYED;
 	}
 
 	/**
