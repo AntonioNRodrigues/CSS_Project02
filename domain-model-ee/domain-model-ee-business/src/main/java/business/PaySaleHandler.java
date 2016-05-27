@@ -23,6 +23,11 @@ public class PaySaleHandler implements IPaySaleHandlerRemote{
 			
 			// paga sale
 			Sale sale = saleCatalog.getSale(saleId);
+			
+			// validate sale status
+			if(!sale.isClosed())
+				throw new ApplicationException("A Sale já foi paga...");
+			
 			sale.setStatus(SaleStatus.PAYED);
 			saleCatalog.update(sale);
 			

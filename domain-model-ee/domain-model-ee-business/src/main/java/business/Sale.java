@@ -72,7 +72,7 @@ public class Sale implements ISale, Serializable {
 	@OneToMany(cascade = ALL) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
-	@OneToMany
+	@OneToMany(mappedBy="sale")
 	private List<Transaction> transactions;
 	
 	// 1. constructor
