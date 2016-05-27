@@ -87,4 +87,16 @@ public class CustomerCatalog {
 		}
 		
 	}
+	
+	public Customer getCustomerById(int id) throws ApplicationException{
+		
+		try {
+			
+			return em.find(Customer.class, id);
+			
+		} catch (Exception e) {
+			throw new ApplicationException("Catalog: Erro ao obter customer por id", e);
+		}
+		
+	}
 }

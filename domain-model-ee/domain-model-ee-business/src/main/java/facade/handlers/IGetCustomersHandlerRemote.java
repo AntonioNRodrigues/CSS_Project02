@@ -12,4 +12,6 @@ public interface IGetCustomersHandlerRemote {
 	
 	public Customer getCustomerByVat(int customerVAT) throws ApplicationException;
 	
+	public Customer getCustomerById(int customerID) throws ApplicationException;
+	
 }

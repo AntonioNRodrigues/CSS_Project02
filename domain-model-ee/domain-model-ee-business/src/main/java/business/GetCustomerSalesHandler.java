@@ -7,11 +7,11 @@ import javax.ejb.Stateless;
 import javax.jws.WebService;
 
 import facade.exceptions.ApplicationException;
-import facade.handlers.IGetSalesHandlerRemote;
+import facade.handlers.IGetCustomerSalesHandlerRemote;
 
 @Stateless
 @WebService
-public class GetCustomerSalesHandler implements IGetSalesHandlerRemote{
+public class GetCustomerSalesHandler implements IGetCustomerSalesHandlerRemote{
 
 	@EJB private SaleCatalog saleCatalog;
 	

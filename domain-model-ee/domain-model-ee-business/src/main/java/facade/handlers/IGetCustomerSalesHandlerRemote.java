@@ -8,7 +8,7 @@ import business.Sale;
 import facade.exceptions.ApplicationException;
 
 @Remote
-public interface IGetSalesHandlerRemote {
+public interface IGetCustomerSalesHandlerRemote {
 
 	public List<Sale> getCustomerSales(int customerID) throws ApplicationException;
 	

@@ -5,7 +5,7 @@ import java.util.List;
 
 import business.Sale;
 import facade.exceptions.ApplicationException;
-import facade.handlers.IGetSalesHandlerRemote;
+import facade.handlers.IGetCustomerSalesHandlerRemote;
 
 public class ViewCustomerSalesModel extends Model{
 	
@@ -28,10 +28,10 @@ public class ViewCustomerSalesModel extends Model{
 	/**
 	 * Customer Sales list
 	 */
-	private IGetSalesHandlerRemote getSalesHandler;
+	private IGetCustomerSalesHandlerRemote getSalesHandler;
 
 	public ViewCustomerSalesModel(){}
-	public ViewCustomerSalesModel(int customerVAT, int customerID, String customerDesignation, IGetSalesHandlerRemote getSalesHandler){
+	public ViewCustomerSalesModel(int customerVAT, int customerID, String customerDesignation, IGetCustomerSalesHandlerRemote getSalesHandler){
 		this.customerDesignation = customerDesignation;
 		this.customerVAT = customerVAT;
 		this.customerID = customerID;

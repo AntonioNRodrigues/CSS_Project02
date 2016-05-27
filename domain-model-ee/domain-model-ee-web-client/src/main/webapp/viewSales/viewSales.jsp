@@ -27,7 +27,7 @@
 				</c:if>
 				<c:if test="${sale.closed}">
 					<td>
-						<form method="post" action="pagarVenda">
+						<form method="post" action="../vendas/pagarVenda">
 							<input type="hidden" name="sale" value="${sale.id}" />
 							<input type="hidden" name="customerVAT" value="${model.customerVAT}" />
 							<input type="submit" value="Pagar venda" />
