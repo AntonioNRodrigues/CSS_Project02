@@ -17,7 +17,6 @@ public class NewSaleModel extends Model{
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
 	}
-	
-	
+
 	
 }
