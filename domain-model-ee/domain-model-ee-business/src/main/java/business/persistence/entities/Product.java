@@ -1,9 +1,10 @@
-package business;
+package business.persistence.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
@@ -14,13 +15,18 @@ import javax.persistence.NamedQuery;
  *
  */
 @Entity  
-@NamedQuery(name=Product.FIND_BY_PRODUCT_CODE, query="SELECT p FROM Product p WHERE p.prodCod = :" + Product.PRODUCT_CODE)
+@NamedQueries({
+	@NamedQuery(name=Product.FIND_BY_PRODUCT_CODE, query="SELECT p FROM Product p WHERE p.prodCod = :" + Product.PRODUCT_CODE),
+	@NamedQuery(name=Product.FIND_AVAILABLE, query="SELECT p FROM Product p WHERE p.qty > 0")
+})
 public class Product {
 
 	// Named query name constants
 
 	public static final String FIND_BY_PRODUCT_CODE = "Product.findByProdCod";
 	public static final String PRODUCT_CODE = "prodCod";
+	
+	public static final String FIND_AVAILABLE = "Product.findAvailable";
 
 	
 	// Customer attributes 

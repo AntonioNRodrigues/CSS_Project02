@@ -1,6 +1,6 @@
 package facade.interfaces;
 
-import business.Customer;
+import business.persistence.entities.Customer;
 import facade.exceptions.ApplicationException;
 
 

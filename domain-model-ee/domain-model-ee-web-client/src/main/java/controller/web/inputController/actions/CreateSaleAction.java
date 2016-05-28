@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import business.Customer;
+import business.persistence.entities.Customer;
 import facade.handlers.IAddSaleHandlerRemote;
 import facade.handlers.IGetCustomersHandlerRemote;
 import presentation.web.model.NewSaleModel;

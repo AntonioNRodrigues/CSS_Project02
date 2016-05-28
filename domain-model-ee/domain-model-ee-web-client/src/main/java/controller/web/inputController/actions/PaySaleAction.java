@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import business.Customer;
-import facade.handlers.IGetCustomerSalesHandlerRemote;
+import business.persistence.entities.Customer;
+import facade.handlers.IViewCustomerSalesHandlerRemote;
 import facade.handlers.IGetCustomersHandlerRemote;
 import facade.handlers.IPaySaleHandlerRemote;
 import presentation.web.model.ViewCustomerSalesModel;
@@ -19,7 +19,7 @@ public class PaySaleAction extends Action{
 
 	@EJB private IPaySaleHandlerRemote paySaleHandler;
 	
-	@EJB private IGetCustomerSalesHandlerRemote getCustomerSales;
+	@EJB private IViewCustomerSalesHandlerRemote getCustomerSales;
 	
 	@EJB private IGetCustomersHandlerRemote getCustomers;
 	

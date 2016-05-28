@@ -1,4 +1,4 @@
-package business;
+package business.catalog;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 import facade.handlers.ISaleHandlerRemote;
 import facade.interfaces.ISale;

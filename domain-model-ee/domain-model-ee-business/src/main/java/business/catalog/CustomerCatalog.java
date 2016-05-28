@@ -1,4 +1,4 @@
-package business;
+package business.catalog;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import business.persistence.entities.Account;
+import business.persistence.entities.Customer;
+import business.persistence.entities.Discount;
 import facade.exceptions.ApplicationException;
 
 /**

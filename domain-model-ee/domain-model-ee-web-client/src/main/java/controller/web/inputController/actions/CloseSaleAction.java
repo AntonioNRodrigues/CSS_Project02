@@ -8,10 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import business.Customer;
+import business.persistence.entities.Customer;
 import facade.handlers.ICloseSaleHandlerRemote;
 import facade.handlers.IGetCustomersHandlerRemote;
-import facade.handlers.IGetCustomerSalesHandlerRemote;
+import facade.handlers.IViewCustomerSalesHandlerRemote;
 import presentation.web.model.ViewCustomerSalesModel;
 
 @Stateless
@@ -19,7 +19,7 @@ public class CloseSaleAction extends Action{
 
 	@EJB private ICloseSaleHandlerRemote closeSaleHandler;
 	
-	@EJB private IGetCustomerSalesHandlerRemote getCustomerSalesHandler;
+	@EJB private IViewCustomerSalesHandlerRemote getCustomerSalesHandler;
 	
 	@EJB private IGetCustomersHandlerRemote getCustomerHandler;
 	

@@ -2,7 +2,8 @@ package facade.handlers;
 
 import java.util.List;
 import javax.ejb.Remote;
-import business.Customer;
+
+import business.persistence.entities.Customer;
 import facade.exceptions.ApplicationException;
 
 @Remote

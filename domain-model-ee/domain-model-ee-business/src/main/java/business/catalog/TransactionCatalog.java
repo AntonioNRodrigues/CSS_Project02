@@ -1,9 +1,10 @@
-package business;
+package business.catalog;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import business.persistence.entities.Transaction;
 import facade.exceptions.ApplicationException;
 
 @Stateless

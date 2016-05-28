@@ -9,10 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import business.Customer;
-import business.Sale;
+import business.persistence.entities.Customer;
+import business.persistence.entities.Sale;
 import facade.handlers.IGetCustomersHandlerRemote;
-import facade.handlers.IGetCustomerSalesHandlerRemote;
+import facade.handlers.IViewCustomerSalesHandlerRemote;
 import presentation.web.model.ViewCustomerSalesModel;
 
 @Stateless
@@ -20,7 +20,7 @@ public class ViewCustomerSalesAction extends Action{
 
 	@EJB private IGetCustomersHandlerRemote customersHandler;
 	
-	@EJB private IGetCustomerSalesHandlerRemote getSalesHandler;
+	@EJB private IViewCustomerSalesHandlerRemote getSalesHandler;
 	
 	@Override
 	public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,4 +1,4 @@
-package business;
+package business.persistence.entities;
 
 import static javax.persistence.InheritanceType.SINGLE_TABLE;
 

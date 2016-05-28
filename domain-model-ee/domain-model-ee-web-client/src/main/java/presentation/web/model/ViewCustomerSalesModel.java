@@ -3,9 +3,9 @@ package presentation.web.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import business.Sale;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
-import facade.handlers.IGetCustomerSalesHandlerRemote;
+import facade.handlers.IViewCustomerSalesHandlerRemote;
 
 public class ViewCustomerSalesModel extends Model{
 	
@@ -28,10 +28,10 @@ public class ViewCustomerSalesModel extends Model{
 	/**
 	 * Customer Sales list
 	 */
-	private IGetCustomerSalesHandlerRemote getSalesHandler;
+	private IViewCustomerSalesHandlerRemote getSalesHandler;
 
 	public ViewCustomerSalesModel(){}
-	public ViewCustomerSalesModel(int customerVAT, int customerID, String customerDesignation, IGetCustomerSalesHandlerRemote getSalesHandler){
+	public ViewCustomerSalesModel(int customerVAT, int customerID, String customerDesignation, IViewCustomerSalesHandlerRemote getSalesHandler){
 		this.customerDesignation = customerDesignation;
 		this.customerVAT = customerVAT;
 		this.customerID = customerID;

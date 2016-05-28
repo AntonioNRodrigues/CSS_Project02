@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import business.Sale;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 
 @Remote
-public interface IGetCustomerSalesHandlerRemote {
+public interface IViewCustomerSalesHandlerRemote {
 
 	public List<Sale> getCustomerSales(int customerID) throws ApplicationException;
 	

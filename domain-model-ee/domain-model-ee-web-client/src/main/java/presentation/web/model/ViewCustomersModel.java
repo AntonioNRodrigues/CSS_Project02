@@ -2,7 +2,7 @@ package presentation.web.model;
 
 import java.util.List;
 
-import business.Customer;
+import business.persistence.entities.Customer;
 
 public class ViewCustomersModel extends Model{
 

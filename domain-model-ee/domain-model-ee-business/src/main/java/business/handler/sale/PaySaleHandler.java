@@ -1,4 +1,4 @@
-package business;
+package business.handler.sale;
 
 import java.util.Date;
 
@@ -6,6 +6,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
+import business.SaleStatus;
+import business.catalog.SaleCatalog;
+import business.catalog.TransactionCatalog;
+import business.persistence.entities.CreditTransaction;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IPaySaleHandlerRemote;
 
