@@ -5,6 +5,8 @@ import business.handler.AddCustomerHandlerService;
 import business.handler.ApplicationException_Exception;
 import business.handler.sale.AddSaleHandler;
 import business.handler.sale.AddSaleHandlerService;
+import business.handler.sale.product.InsertSaleProductHandler;
+import business.handler.sale.product.InsertSaleProductHandlerService;
 
 /**
  * A simple application client that uses both services.
@@ -25,10 +27,12 @@ public class SimpleSOAPClient {
 		// Make services
 	    AddCustomerHandlerService addCustomerHandlerService = new AddCustomerHandlerService();
 	    AddSaleHandlerService addSaleHandlerService = new AddSaleHandlerService();
+		InsertSaleProductHandlerService insertSaleProductHandlerService = new InsertSaleProductHandlerService();
 
 	    // Now use the service to get a stub which implements the SDI.
 	    AddCustomerHandler addCustomerHandler = addCustomerHandlerService.getAddCustomerHandlerPort();
 	    AddSaleHandler addSaleHandler = addSaleHandlerService.getAddSaleHandlerPort();
+	    InsertSaleProductHandler insertSaleProductHandler = insertSaleProductHandlerService.getInsertSaleProductHandlerPort();
 
 	    // Make the actual call
 	    try {
@@ -38,8 +42,17 @@ public class SimpleSOAPClient {
 			int saleId = addSaleHandler.addSale(vat);
 			System.out.println("SaleId: " + saleId);
 
+			insertSaleProductHandler.insertSaleProduct(saleId, 123);
+			insertSaleProductHandler.insertSaleProduct(saleId, 123);
+			insertSaleProductHandler.insertSaleProduct(saleId, 124);
+			System.out.println("Inseriu sale products");
+
+
 		} catch (business.handler.sale.ApplicationException_Exception e) {
 			System.out.println("Erro ao adicionar sale");
+			e.printStackTrace();
+		} catch (business.handler.sale.product.ApplicationException_Exception e) {
+			System.out.println("Erro ao adicionar um product a uma sale");
 			e.printStackTrace();
 		}
 
