@@ -1,6 +1,6 @@
 package presentation.web.model;
 
-import business.Customer;
+import business.persistence.entities.Customer;
 
 public class ViewCustomerProfileModel extends Model{
 

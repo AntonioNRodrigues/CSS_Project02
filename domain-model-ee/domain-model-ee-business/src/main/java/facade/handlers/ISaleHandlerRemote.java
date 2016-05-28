@@ -2,7 +2,7 @@ package facade.handlers;
 
 import javax.ejb.Remote;
 
-import business.Sale;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 
 @Remote

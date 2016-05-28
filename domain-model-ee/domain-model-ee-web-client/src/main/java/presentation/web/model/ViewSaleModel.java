@@ -1,6 +1,6 @@
 package presentation.web.model;
 
-import business.Sale;
+import business.persistence.entities.Sale;
 
 public class ViewSaleModel extends Model {
 	private int id;

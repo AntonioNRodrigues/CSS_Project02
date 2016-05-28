@@ -1,4 +1,4 @@
-package business;
+package business.handler;
 
 import java.util.List;
 
@@ -6,12 +6,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
+import business.catalog.SaleCatalog;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
-import facade.handlers.IGetCustomerSalesHandlerRemote;
+import facade.handlers.IViewCustomerSalesHandlerRemote;
 
 @Stateless
 @WebService
-public class GetCustomerSalesHandler implements IGetCustomerSalesHandlerRemote{
+public class ViewCustomerSalesHandler implements IViewCustomerSalesHandlerRemote{
 
 	@EJB private SaleCatalog saleCatalog;
 	

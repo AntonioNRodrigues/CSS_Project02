@@ -1,4 +1,4 @@
-package business;
+package business.handler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
+import business.catalog.CustomerCatalog;
+import business.catalog.DiscountCatalog;
+import business.persistence.entities.Discount;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IAddCustomerHandlerRemote;
 

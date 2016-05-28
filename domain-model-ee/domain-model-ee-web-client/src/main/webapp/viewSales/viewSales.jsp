@@ -39,7 +39,12 @@
 						PAYED!
 					</td>
 				</c:if>
+				
+				<td>
+					<a href="addProducts?sale=${sale.id}">Add Products</a>
+				</td>
 			</tr>
+			
 		</c:forEach>
 	</table>
 	

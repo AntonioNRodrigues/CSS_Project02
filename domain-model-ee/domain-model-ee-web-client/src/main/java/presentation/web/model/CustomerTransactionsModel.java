@@ -2,8 +2,8 @@ package presentation.web.model;
 
 import java.util.List;
 
-import business.Customer;
-import business.Transaction;
+import business.persistence.entities.Customer;
+import business.persistence.entities.Transaction;
 
 public class CustomerTransactionsModel extends Model{
 

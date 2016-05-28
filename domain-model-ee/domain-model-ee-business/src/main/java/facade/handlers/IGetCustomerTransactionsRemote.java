@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import business.Transaction;
+import business.persistence.entities.Transaction;
 import facade.exceptions.ApplicationException;
 
 @Remote

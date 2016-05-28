@@ -1,4 +1,4 @@
-package business;
+package business.persistence.entities;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import business.SaleStatus;
 import facade.exceptions.ApplicationException;
 import facade.interfaces.ISale;
 
