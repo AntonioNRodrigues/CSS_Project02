@@ -28,4 +28,5 @@ public class AddProductToSaleModel extends Model{
 		this.saleId = saleId;
 	}
 	
+	
 }

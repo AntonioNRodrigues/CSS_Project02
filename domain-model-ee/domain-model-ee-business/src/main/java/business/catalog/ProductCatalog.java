@@ -16,6 +16,11 @@ public class ProductCatalog {
 	@PersistenceContext
 	private EntityManager em;
 	
+	/**
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public List<Product> getAvailableProducts() throws ApplicationException{
 		
 		try {
@@ -25,6 +30,25 @@ public class ProductCatalog {
 			
 		} catch (Exception e) {
 			throw new ApplicationException("", e);
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @param prodCod
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public Product getProductByCod(int prodCod) throws ApplicationException{
+		
+		try {
+			TypedQuery<Product> query = em.createNamedQuery(Product.FIND_BY_PRODUCT_CODE, Product.class);
+			query.setParameter(Product.PRODUCT_CODE, prodCod);
+			Product product = query.getSingleResult();
+			return product;
+		} catch (Exception e) {
+			throw new ApplicationException("Erro ao obter product by code", e);
 		}
 		
 	}

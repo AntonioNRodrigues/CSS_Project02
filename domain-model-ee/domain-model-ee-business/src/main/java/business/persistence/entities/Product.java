@@ -1,5 +1,7 @@
 package business.persistence.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +21,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name=Product.FIND_BY_PRODUCT_CODE, query="SELECT p FROM Product p WHERE p.prodCod = :" + Product.PRODUCT_CODE),
 	@NamedQuery(name=Product.FIND_AVAILABLE, query="SELECT p FROM Product p WHERE p.qty > 0")
 })
-public class Product {
+public class Product implements Serializable{
 
 	// Named query name constants
 
@@ -124,6 +126,10 @@ public class Product {
 	public double getQty() {
 		return qty;
 	}
+	
+	public int getId(){
+		return this.id;
+	}
 
 	/**
 	 * Updates the product's stock quantity
@@ -139,5 +145,9 @@ public class Product {
 	 */
 	public boolean isEligibleForDiscount() {
 		return discountEligibility;
-	}		
+	}	
+	
+	public String getDescription(){
+		return this.description;
+	}
 }

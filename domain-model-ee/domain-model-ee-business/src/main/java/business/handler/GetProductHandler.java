@@ -21,7 +21,9 @@ public class GetProductHandler implements IGetProductHandlerRemote{
 	public List<Product> getAvailableProducts() throws ApplicationException {
 		
 		try {
-			return productsCatalog.getAvailableProducts();
+			
+			List<Product> list = productsCatalog.getAvailableProducts();
+			return list;
 		} catch (Exception e) {
 			throw new ApplicationException("Erro ao obter produtos disponiveis", e);
 		}

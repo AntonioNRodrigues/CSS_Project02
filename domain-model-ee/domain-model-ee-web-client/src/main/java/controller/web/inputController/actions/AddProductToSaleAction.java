@@ -23,19 +23,24 @@ public class AddProductToSaleAction extends Action{
 		
 		try {
 			
+			
 			// get sale id
 			int saleId = Integer.parseInt(request.getParameter("sale"));
 			
+			
 			// get all products
 			List<Product> products = getProductsHandler.getAvailableProducts();
+			
 			
 			// set model
 			AddProductToSaleModel model = new AddProductToSaleModel();
 			model.setProducts(products);
 			model.setSaleId(saleId);
 			
+			
 			// make it available to template
 			request.setAttribute("model", model);
+			
 			
 			// pass control to dispatcher
 			request.getRequestDispatcher("/addProduct/addProduct.jsp").forward(request, response);

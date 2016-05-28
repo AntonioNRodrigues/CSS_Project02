@@ -1,5 +1,7 @@
 package business.persistence.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +15,7 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Unit {
+public class Unit implements Serializable{
 
 	/**
 	 * Customer primary key. Needed by JPA. Notice that it is not part of the
