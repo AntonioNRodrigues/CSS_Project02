@@ -3,10 +3,7 @@ package presentation.cli;
 import business.handler.AddCustomerHandler;
 import business.handler.AddCustomerHandlerService;
 import business.handler.ApplicationException_Exception;
-import business.handler.sale.AddSaleHandler;
-import business.handler.sale.AddSaleHandlerService;
-import business.handler.sale.CloseSaleHandler;
-import business.handler.sale.CloseSaleHandlerService;
+import business.handler.sale.*;
 import business.handler.sale.product.InsertSaleProductHandler;
 import business.handler.sale.product.InsertSaleProductHandlerService;
 
@@ -31,12 +28,14 @@ public class SimpleSOAPClient {
 	    AddSaleHandlerService addSaleHandlerService = new AddSaleHandlerService();
 		InsertSaleProductHandlerService insertSaleProductHandlerService = new InsertSaleProductHandlerService();
 		CloseSaleHandlerService closeSaleHandlerService = new CloseSaleHandlerService();
+		PaySaleHandlerService paySaleHandlerService = new PaySaleHandlerService();
 
 	    // Now use the service to get a stub which implements the SDI.
 	    AddCustomerHandler addCustomerHandler = addCustomerHandlerService.getAddCustomerHandlerPort();
 	    AddSaleHandler addSaleHandler = addSaleHandlerService.getAddSaleHandlerPort();
 	    InsertSaleProductHandler insertSaleProductHandler = insertSaleProductHandlerService.getInsertSaleProductHandlerPort();
 	    CloseSaleHandler closeSaleHandler = closeSaleHandlerService.getCloseSaleHandlerPort();
+	    PaySaleHandler paySaleHandler = paySaleHandlerService.getPaySaleHandlerPort();
 
 	    // Make the actual call
 	    try {
@@ -53,6 +52,9 @@ public class SimpleSOAPClient {
 
 			closeSaleHandler.closeSale(saleId);
 			System.out.println("Close sale successfull!");
+
+			paySaleHandler.paySale(saleId);
+			System.out.println("Sale payed successfully!");
 
 
 		} catch (business.handler.sale.ApplicationException_Exception e) {
