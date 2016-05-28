@@ -24,9 +24,9 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _AddSaleResponse_QNAME = new QName("http://sale.handler.business/", "addSaleResponse");
-    private final static QName _AddSale_QNAME = new QName("http://sale.handler.business/", "addSale");
+    private final static QName _CloseSaleResponse_QNAME = new QName("http://sale.handler.business/", "closeSaleResponse");
     private final static QName _ApplicationException_QNAME = new QName("http://sale.handler.business/", "ApplicationException");
+    private final static QName _CloseSale_QNAME = new QName("http://sale.handler.business/", "closeSale");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: business.handler.sale
@@ -36,11 +36,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddSale }
+     * Create an instance of {@link CloseSale }
      * 
      */
-    public AddSale createAddSale() {
-        return new AddSale();
+    public CloseSale createCloseSale() {
+        return new CloseSale();
     }
 
     /**
@@ -52,29 +52,20 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddSaleResponse }
+     * Create an instance of {@link CloseSaleResponse }
      * 
      */
-    public AddSaleResponse createAddSaleResponse() {
-        return new AddSaleResponse();
+    public CloseSaleResponse createCloseSaleResponse() {
+        return new CloseSaleResponse();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AddSaleResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link CloseSaleResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "addSaleResponse")
-    public JAXBElement<AddSaleResponse> createAddSaleResponse(AddSaleResponse value) {
-        return new JAXBElement<AddSaleResponse>(_AddSaleResponse_QNAME, AddSaleResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AddSale }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "addSale")
-    public JAXBElement<AddSale> createAddSale(AddSale value) {
-        return new JAXBElement<AddSale>(_AddSale_QNAME, AddSale.class, null, value);
+    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "closeSaleResponse")
+    public JAXBElement<CloseSaleResponse> createCloseSaleResponse(CloseSaleResponse value) {
+        return new JAXBElement<CloseSaleResponse>(_CloseSaleResponse_QNAME, CloseSaleResponse.class, null, value);
     }
 
     /**
@@ -84,6 +75,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://sale.handler.business/", name = "ApplicationException")
     public JAXBElement<ApplicationException> createApplicationException(ApplicationException value) {
         return new JAXBElement<ApplicationException>(_ApplicationException_QNAME, ApplicationException.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CloseSale }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "closeSale")
+    public JAXBElement<CloseSale> createCloseSale(CloseSale value) {
+        return new JAXBElement<CloseSale>(_CloseSale_QNAME, CloseSale.class, null, value);
     }
 
 }
