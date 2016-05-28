@@ -81,7 +81,7 @@ public class Sale implements ISale, Serializable {
 	/**
 	 * Constructor needed by JPA.
 	 */
-	Sale () {
+	public Sale () {
 	}
 	
 	/**

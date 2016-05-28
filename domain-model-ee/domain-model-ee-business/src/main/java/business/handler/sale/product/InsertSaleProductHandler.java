@@ -24,7 +24,6 @@ public class InsertSaleProductHandler implements IInsertSaleProductHandlerRemote
 	public void insertSaleProduct(int saleId, int prodCod) throws ApplicationException{
 		
 		try {
-			
 			// obtain product by prodCod
 			Product product = productCatalog.getProductByCod(prodCod);
 			

@@ -7,6 +7,6 @@ import facade.exceptions.ApplicationException;
 @Remote
 public interface IAddSaleHandlerRemote {
 
-	public void addSale(int customerVAT) throws ApplicationException;
+	public int addSale(int customerVAT) throws ApplicationException;
 	
 }
