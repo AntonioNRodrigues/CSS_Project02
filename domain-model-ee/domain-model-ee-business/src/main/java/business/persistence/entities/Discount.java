@@ -47,7 +47,7 @@ public abstract class Discount implements IDiscount {
 	/**
 	 * Constructor needed by JPA 
 	 */
-	Discount() {
+	public Discount() {
 	}
 
 	/**

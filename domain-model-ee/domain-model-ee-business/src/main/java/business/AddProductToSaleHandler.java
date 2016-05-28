@@ -1,5 +1,7 @@
 package business;
 
+import business.persistence.entities.Product;
+import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IAddProductToSaleHandlerRemote;
 
@@ -10,8 +12,8 @@ import javax.jws.WebService;
 @WebService
 public class AddProductToSaleHandler implements IAddProductToSaleHandlerRemote {
 
-    public void addProductToSale(Sale sale, Product product, int qty) {
 
+    public void addProductToSale(Sale sale, Product product, int qty) {
         try {
 
         } catch (Exception e) {

@@ -73,7 +73,7 @@ public class Product {
 	/**
 	 * Constructor needed by JPA.
 	 */
-	Product() {
+	public Product() {
 	}
 	
 	/**

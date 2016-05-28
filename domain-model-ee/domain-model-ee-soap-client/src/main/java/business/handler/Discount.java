@@ -1,5 +1,5 @@
 
-package business;
+package business.handler;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for addCustomerResponse complex type.
+ * <p>Java class for discount complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="addCustomerResponse">
+ * &lt;complexType name="discount">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "addCustomerResponse")
-public class AddCustomerResponse {
+@XmlType(name = "discount")
+public abstract class Discount {
 
 
 }

@@ -1,7 +1,8 @@
 package business;
 
-import facade.exceptions.ApplicationException;
-import facade.interfaces.IGetSaleHandler;
+import business.catalog.SaleCatalog;
+import business.persistence.entities.Sale;
+import facade.handlers.IGetSaleHandlerRemote;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -9,7 +10,7 @@ import javax.jws.WebService;
 
 @Stateless
 @WebService
-public class getSaleHandler implements IGetSaleHandler {
+public class getSaleHandler implements IGetSaleHandlerRemote {
 
     /**
      * The customer's catalog

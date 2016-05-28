@@ -1,7 +1,8 @@
 package facade.handlers;
 
-import business.Product;
-import business.Sale;
+
+import business.persistence.entities.Product;
+import business.persistence.entities.Sale;
 
 import javax.ejb.Remote;
 

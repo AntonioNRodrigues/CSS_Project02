@@ -1,8 +1,8 @@
 package presentation.cli;
 
-import business.AddCustomerHandler;
-import business.AddCustomerHandlerService;
-import business.ApplicationException_Exception;
+import business.handler.AddCustomerHandler;
+import business.handler.AddCustomerHandlerService;
+import business.handler.ApplicationException_Exception;
 
 /**
  * A simple application client that uses both services.
@@ -28,11 +28,9 @@ public class SimpleSOAPClient {
 
 	    // Make the actual call
 	    try {
-
-
-
-//			customerHandler.addCustomer(233299051, "Simão", 217500255, 1);
-//			System.out.println("Cliente adiciondo com sucesso.");
+			int vat = 233299053;
+			customerHandler.addCustomer(vat, "Simão", 217500255, 1);
+			
 
 		} catch (ApplicationException_Exception e) {
 			System.out.println("Erro ao adicionar cliente.");

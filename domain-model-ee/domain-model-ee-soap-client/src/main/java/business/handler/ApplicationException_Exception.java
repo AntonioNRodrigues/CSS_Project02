@@ -1,5 +1,5 @@
 
-package business;
+package business.handler;
 
 import javax.xml.ws.WebFault;
 
@@ -10,7 +10,7 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.2
  * 
  */
-@WebFault(name = "ApplicationException", targetNamespace = "http://business/")
+@WebFault(name = "ApplicationException", targetNamespace = "http://handler.business/")
 public class ApplicationException_Exception
     extends Exception
 {
@@ -45,7 +45,7 @@ public class ApplicationException_Exception
     /**
      * 
      * @return
-     *     returns fault bean: business.ApplicationException
+     *     returns fault bean: business.handler.ApplicationException
      */
     public ApplicationException getFaultInfo() {
         return faultInfo;
