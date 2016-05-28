@@ -31,7 +31,7 @@ public class CloseSaleHandler implements ICloseSaleHandlerRemote{
 			
 			// obtem sale
 			Sale sale = saleCatalog.getSale(saleId);
-			double saleTotal = sale.total();
+			double saleTotal = sale.calculateTotal();
 			double saleDiscount = sale.discount();
 			
 			

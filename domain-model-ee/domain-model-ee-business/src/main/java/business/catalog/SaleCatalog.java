@@ -6,11 +6,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
+import business.persistence.entities.Product;
 import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
-import facade.handlers.ISaleHandlerRemote;
-import facade.interfaces.ISale;
 
 @Stateless
 public class SaleCatalog{
@@ -61,6 +61,27 @@ public class SaleCatalog{
 			em.persist(sale);
 		} catch (Exception e) {
 			throw new ApplicationException("Error updating sale", e);
+		}
+		
+	}
+	
+	
+	@Transactional(Transactional.TxType.REQUIRES_NEW)
+	public void addProductToSale(Product product, int saleId) throws ApplicationException{
+		
+		try {
+			
+			// get sale by id
+			Sale sale = this.getSale(saleId);
+			
+			// persist
+			em.persist(sale);
+			sale.addProductToSale(product, 1);
+			
+		} catch (Exception e) {
+			
+			throw new ApplicationException("Erro ao adicionar um product a sale", e);
+			
 		}
 		
 	}
