@@ -1,5 +1,7 @@
 package business.persistence.entities;
 
+import facade.interfaces.ICustomer;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -24,7 +26,7 @@ import javax.persistence.OneToOne;
 			Customer.NUMBER_VAT_NUMBER),
 	@NamedQuery(name=Customer.FIND_ALL, query="SELECT c FROM Customer c")
 })
-public class Customer implements Serializable{
+public class Customer implements Serializable, ICustomer {
 
 	/**
 	 * 
@@ -74,7 +76,7 @@ public class Customer implements Serializable{
 	/**
 	 * Constructor needed by JPA.
 	 */
-	Customer() {
+	public Customer() {
 	}
 	
 	/**

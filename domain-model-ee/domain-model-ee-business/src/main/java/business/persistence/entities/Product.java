@@ -75,7 +75,7 @@ public class Product implements Serializable{
 	/**
 	 * Constructor needed by JPA.
 	 */
-	Product() {
+	public Product() {
 	}
 	
 	/**

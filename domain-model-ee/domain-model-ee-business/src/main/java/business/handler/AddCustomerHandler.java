@@ -9,9 +9,11 @@ import javax.jws.WebService;
 
 import business.catalog.CustomerCatalog;
 import business.catalog.DiscountCatalog;
+import business.persistence.entities.Customer;
 import business.persistence.entities.Discount;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IAddCustomerHandlerRemote;
+import facade.interfaces.ICustomer;
 
 /**
  * Handles the add customer use case. This represents a very 
@@ -43,13 +45,13 @@ public class AddCustomerHandler implements IAddCustomerHandlerRemote {
 	 * 
 	 * @param vat The VAT of the customer
 	 * @param denomination The customer's name
-	 * @param phoneNumber The customer's phone 
+	 * @param phoneNumber The customer's phone
 	 * @param discountType The type of discount applicable to the customer
-	 * @throws ApplicationException When the VAT number is invalid (we check it according 
+	 * @throws ApplicationException When the VAT number is invalid (we check it according
 	 * to the Portuguese legislation).
 	 */
-	public void addCustomer (int vat, String denomination, 
-			int phoneNumber, int discountType) 
+	public void addCustomer(int vat, String denomination,
+								int phoneNumber, int discountType)
 			throws ApplicationException {
 		Discount discount = discountCatalog.getDiscount(discountType);
 		try {
@@ -57,7 +59,7 @@ public class AddCustomerHandler implements IAddCustomerHandlerRemote {
 		} catch (Exception e) {
 			throw new ApplicationException ("Error adding customer with VAT " + vat, e);
 		}
-	}	
+	}
 	
 	public List<Discount> getDiscounts() throws ApplicationException {
 		return new LinkedList<>(discountCatalog.getDiscounts());

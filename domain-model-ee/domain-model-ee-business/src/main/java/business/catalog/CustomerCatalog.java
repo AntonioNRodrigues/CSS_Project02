@@ -54,11 +54,11 @@ public class CustomerCatalog {
 	 * @param designation The customer's designation
 	 * @param phoneNumber The customer's phone number
 	 * @param discountType The customer's discount type
-	 * @throws ApplicationException When the customer is already in the repository or the 
+	 * @throws ApplicationException When the customer is already in the repository or the
 	 * vat number is invalid.
 	 */
 	@Transactional(Transactional.TxType.REQUIRES_NEW)
-	public void addCustomer (int vat, String designation, int phoneNumber, Discount discountType) 
+	public void addCustomer (int vat, String designation, int phoneNumber, Discount discountType)
 			throws ApplicationException {
 		Customer customer = new Customer(vat, designation, phoneNumber, discountType);
 		Account account = new Account(customer, null, null);

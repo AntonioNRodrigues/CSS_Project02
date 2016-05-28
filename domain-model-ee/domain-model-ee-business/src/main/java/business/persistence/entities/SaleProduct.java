@@ -45,7 +45,7 @@ public class SaleProduct {
 	/**
 	 * Creates a product that is part of a sale. The qty is the quantity of items in the sale. 
 	 * 
-	 * @param product The product to be associated with the sale.
+	 * @param produto The product to be associated with the sale.
 	 * @param qty The number of products sold.
 	 */
 	public SaleProduct (Product produto, double qty) {

@@ -1,5 +1,5 @@
 
-package business;
+package business.handler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,14 +17,14 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "AddCustomerHandlerService", targetNamespace = "http://business/", wsdlLocation = "http://localhost:8080/domain-model-ee-business/AddCustomerHandler?wsdl")
+@WebServiceClient(name = "AddCustomerHandlerService", targetNamespace = "http://handler.business/", wsdlLocation = "http://localhost:8080/domain-model-ee-business/AddCustomerHandler?wsdl")
 public class AddCustomerHandlerService
     extends Service
 {
 
     private final static URL ADDCUSTOMERHANDLERSERVICE_WSDL_LOCATION;
     private final static WebServiceException ADDCUSTOMERHANDLERSERVICE_EXCEPTION;
-    private final static QName ADDCUSTOMERHANDLERSERVICE_QNAME = new QName("http://business/", "AddCustomerHandlerService");
+    private final static QName ADDCUSTOMERHANDLERSERVICE_QNAME = new QName("http://handler.business/", "AddCustomerHandlerService");
 
     static {
         URL url = null;
@@ -69,7 +69,7 @@ public class AddCustomerHandlerService
      */
     @WebEndpoint(name = "AddCustomerHandlerPort")
     public AddCustomerHandler getAddCustomerHandlerPort() {
-        return super.getPort(new QName("http://business/", "AddCustomerHandlerPort"), AddCustomerHandler.class);
+        return super.getPort(new QName("http://handler.business/", "AddCustomerHandlerPort"), AddCustomerHandler.class);
     }
 
     /**
@@ -81,7 +81,7 @@ public class AddCustomerHandlerService
      */
     @WebEndpoint(name = "AddCustomerHandlerPort")
     public AddCustomerHandler getAddCustomerHandlerPort(WebServiceFeature... features) {
-        return super.getPort(new QName("http://business/", "AddCustomerHandlerPort"), AddCustomerHandler.class, features);
+        return super.getPort(new QName("http://handler.business/", "AddCustomerHandlerPort"), AddCustomerHandler.class, features);
     }
 
     private static URL __getWsdlLocation() {

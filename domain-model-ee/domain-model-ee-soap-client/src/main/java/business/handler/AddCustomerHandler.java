@@ -1,5 +1,5 @@
 
-package business;
+package business.handler;
 
 import java.util.List;
 import javax.jws.WebMethod;
@@ -17,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "AddCustomerHandler", targetNamespace = "http://business/")
+@WebService(name = "AddCustomerHandler", targetNamespace = "http://handler.business/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -27,13 +27,13 @@ public interface AddCustomerHandler {
     /**
      * 
      * @return
-     *     returns java.util.List<business.Discount>
+     *     returns java.util.List<business.handler.Discount>
      * @throws ApplicationException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getDiscounts", targetNamespace = "http://business/", className = "business.GetDiscounts")
-    @ResponseWrapper(localName = "getDiscountsResponse", targetNamespace = "http://business/", className = "business.GetDiscountsResponse")
+    @RequestWrapper(localName = "getDiscounts", targetNamespace = "http://handler.business/", className = "business.handler.GetDiscounts")
+    @ResponseWrapper(localName = "getDiscountsResponse", targetNamespace = "http://handler.business/", className = "business.handler.GetDiscountsResponse")
     public List<Discount> getDiscounts()
         throws ApplicationException_Exception
     ;
@@ -47,8 +47,8 @@ public interface AddCustomerHandler {
      * @throws ApplicationException_Exception
      */
     @WebMethod
-    @RequestWrapper(localName = "addCustomer", targetNamespace = "http://business/", className = "business.AddCustomer")
-    @ResponseWrapper(localName = "addCustomerResponse", targetNamespace = "http://business/", className = "business.AddCustomerResponse")
+    @RequestWrapper(localName = "addCustomer", targetNamespace = "http://handler.business/", className = "business.handler.AddCustomer")
+    @ResponseWrapper(localName = "addCustomerResponse", targetNamespace = "http://handler.business/", className = "business.handler.AddCustomerResponse")
     public void addCustomer(
         @WebParam(name = "arg0", targetNamespace = "")
         int arg0,
