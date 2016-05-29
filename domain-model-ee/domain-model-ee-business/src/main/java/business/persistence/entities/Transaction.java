@@ -1,22 +1,16 @@
 package business.persistence.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="TRANS_TYPE")
-public abstract class Transaction {
+@XmlSeeAlso({CreditTransaction.class, DebitTransaction.class})
+public abstract class Transaction implements Serializable {
 
 	@Version
 	private int version;
@@ -88,8 +82,15 @@ public abstract class Transaction {
 	public Account getAccount(){
 		return this.account;
 	}
-	
-	
+
+	public Sale getSale() {
+		return sale;
+	}
+
+	public void setSale(Sale sale) {
+		this.sale = sale;
+	}
+
 	/**
 	 * Knows how to print
 	 */

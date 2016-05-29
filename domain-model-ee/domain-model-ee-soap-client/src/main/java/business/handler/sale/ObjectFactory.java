@@ -24,8 +24,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _PaySale_QNAME = new QName("http://sale.handler.business/", "paySale");
-    private final static QName _PaySaleResponse_QNAME = new QName("http://sale.handler.business/", "paySaleResponse");
+    private final static QName _GetSale_QNAME = new QName("http://sale.handler.business/", "getSale");
+    private final static QName _GetSaleResponse_QNAME = new QName("http://sale.handler.business/", "getSaleResponse");
     private final static QName _ApplicationException_QNAME = new QName("http://sale.handler.business/", "ApplicationException");
 
     /**
@@ -33,14 +33,6 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link PaySaleResponse }
-     * 
-     */
-    public PaySaleResponse createPaySaleResponse() {
-        return new PaySaleResponse();
     }
 
     /**
@@ -52,29 +44,53 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaySale }
+     * Create an instance of {@link GetSale }
      * 
      */
-    public PaySale createPaySale() {
-        return new PaySale();
+    public GetSale createGetSale() {
+        return new GetSale();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PaySale }{@code >}}
+     * Create an instance of {@link GetSaleResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "paySale")
-    public JAXBElement<PaySale> createPaySale(PaySale value) {
-        return new JAXBElement<PaySale>(_PaySale_QNAME, PaySale.class, null, value);
+    public GetSaleResponse createGetSaleResponse() {
+        return new GetSaleResponse();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PaySaleResponse }{@code >}}
+     * Create an instance of {@link Sale }
      * 
      */
-    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "paySaleResponse")
-    public JAXBElement<PaySaleResponse> createPaySaleResponse(PaySaleResponse value) {
-        return new JAXBElement<PaySaleResponse>(_PaySaleResponse_QNAME, PaySaleResponse.class, null, value);
+    public Sale createSale() {
+        return new Sale();
+    }
+
+    /**
+     * Create an instance of {@link Account }
+     * 
+     */
+    public Account createAccount() {
+        return new Account();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetSale }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "getSale")
+    public JAXBElement<GetSale> createGetSale(GetSale value) {
+        return new JAXBElement<GetSale>(_GetSale_QNAME, GetSale.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetSaleResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://sale.handler.business/", name = "getSaleResponse")
+    public JAXBElement<GetSaleResponse> createGetSaleResponse(GetSaleResponse value) {
+        return new JAXBElement<GetSaleResponse>(_GetSaleResponse_QNAME, GetSaleResponse.class, null, value);
     }
 
     /**

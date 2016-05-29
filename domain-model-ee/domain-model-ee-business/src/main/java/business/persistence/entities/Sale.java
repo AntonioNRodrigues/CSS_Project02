@@ -8,17 +8,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import business.SaleStatus;
 import facade.exceptions.ApplicationException;
@@ -70,11 +60,13 @@ public class Sale implements ISale, Serializable {
 	/**
 	 * The products of the sale
 	 */
-	@OneToMany(cascade = ALL) @JoinColumn
+	@OneToMany(cascade = ALL, fetch=FetchType.EAGER) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
-	@OneToMany(mappedBy="sale")
+	@OneToMany(mappedBy="sale", fetch=FetchType.EAGER)
 	private List<Transaction> transactions;
+
+
 	
 	// 1. constructor
 
@@ -188,6 +180,7 @@ public class Sale implements ISale, Serializable {
 		return id;
 	}
 	
+
 	public void setTransactions(List<Transaction> transactions){
 		this.transactions = transactions;
 	}
