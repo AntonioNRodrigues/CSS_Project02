@@ -7,12 +7,13 @@ import javax.ejb.Stateless;
 import javax.jws.WebService;
 
 import business.SaleStatus;
+import business.TransactionType;
 import business.catalog.SaleCatalog;
 import business.catalog.TransactionCatalog;
 import business.persistence.entities.Account;
 import business.persistence.entities.Customer;
-import business.persistence.entities.DebitTransaction;
 import business.persistence.entities.Sale;
+import business.persistence.entities.Transaction;
 import facade.exceptions.ApplicationException;
 import facade.handlers.ICloseSaleHandlerRemote;
 
@@ -40,9 +41,9 @@ public class CloseSaleHandler implements ICloseSaleHandlerRemote{
 			Account account = customer.getAccount();
 			
 			// generate debit transaction
-			DebitTransaction transaction = 
-					new DebitTransaction(
-							sale, account, 
+			Transaction transaction = 
+					new Transaction(
+							sale, TransactionType.DEBIT, account, 
 							saleTotal - saleDiscount, 
 							new Date());
 			transactionCatalog.addTransaction(transaction);
