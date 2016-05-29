@@ -28,9 +28,13 @@ public class ViewSaleAction extends Action {
 			int idSale = Integer.parseInt(request.getParameter("sale"));
 
 			Sale s = getSaleHandler.getSale(idSale);
-			
-			request.setAttribute("model", new ViewSaleModel(s.getId(), s.getDiscountValue(), s.getTotalValue(), s.getSaleProdutcs()));
-			
+			System.out.println(s.getSaleProducts());
+			ViewSaleModel m = new ViewSaleModel(s.getId(), s.getDiscountValue(), s.getTotalValue(), 
+					s.getSaleProducts());
+			request.setAttribute("model",m);
+				
+		System.out.println("-------------------------"+m.getSaleProducts());
+		
 			request.getRequestDispatcher("/getSale/getSale.jsp").forward(request, response);
 
 		} catch (Exception e) {

@@ -12,13 +12,11 @@ import facade.handlers.IViewSaleProductsHandlerRemote;
 
 @Stateless
 @WebService
-public class ViewSaleProductsHandler implements IViewSaleProductsHandlerRemote{
+public class ViewSaleProductsHandler implements IViewSaleProductsHandlerRemote {
 
 	@Override
 	public List<SaleProduct> viewSaleProducts(int saleID) throws ApplicationException {
-		return new GetSaleHandler().getSale(saleID).getSaleProdutcs();
+		return new GetSaleHandler().getSale(saleID).getSaleProducts();
 	}
 
-	
-	
 }

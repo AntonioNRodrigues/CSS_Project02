@@ -42,7 +42,7 @@
 				
 				<td>
 					<c:if test="${sale.open}">
-						<a href="addProducts?sale=${sale.id}">Add Products</a>
+						<a href="../vendas/addProducts?sale=${sale.id}">Add Products</a>
 					</c:if>
 						<a href="../vendas/visualizarVenda?sale=${sale.id}">View Sale Details</a>
 					

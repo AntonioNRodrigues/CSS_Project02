@@ -20,13 +20,13 @@
 			<tr>
 				<td>Cliente: </td>
 				<td>Total: ${model.total}</td>
-				<td>Desconto: ${model.discountValue} }</td>
+				<td>Desconto: ${model.discountValue}</td>
 				<td>Lista de Produtos</td>
-				<c:forEach var="produt" items="${model.saleProducts}">
+				<c:forEach var="product" items="${model.saleProducts}">
 					<tr>
-						<td>Produt: ${produt.description}</td>
-						<td>Quantidade: ${produt.qty}</td>
-						<td>FaceValue: ${produt.faceValue}</td>
+						<td>Produt: ${product.description}</td>
+						<td>Quantidade: ${product.qty}</td>
+						<td>FaceValue: ${product.faceValue}</td>
 						<td></td>
 					</tr>
 

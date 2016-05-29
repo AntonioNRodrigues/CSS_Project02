@@ -1,26 +1,28 @@
 package business.persistence.entities;
 
+import static javax.persistence.EnumType.STRING;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
-import static javax.persistence.EnumType.STRING;
 
 import business.TransactionType;
 
 @Entity
-public class Transaction {
+public class Transaction implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Version
 	private int version;

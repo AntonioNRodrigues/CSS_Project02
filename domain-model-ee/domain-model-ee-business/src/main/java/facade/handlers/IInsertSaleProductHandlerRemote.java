@@ -9,4 +9,6 @@ public interface IInsertSaleProductHandlerRemote {
 
 	public void insertSaleProduct(int saleId, int prodCode) throws ApplicationException;
 	
+	
+	
 }

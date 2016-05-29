@@ -17,6 +17,7 @@ public class ViewSaleModel extends Model {
 		this.discountValue = discountValue;
 		this.id = id;
 		this.total = total;
+		setSaleProducts(lista);
 	}
 
 	public int getId() {

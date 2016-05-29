@@ -25,6 +25,10 @@ public class Product implements Serializable{
 
 	// Named query name constants
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String FIND_BY_PRODUCT_CODE = "Product.findByProdCod";
 	public static final String PRODUCT_CODE = "prodCod";
 	
