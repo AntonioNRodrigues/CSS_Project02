@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>New Sale</title>
+<title>Sale Details</title>
 </head>
 <body>
 
