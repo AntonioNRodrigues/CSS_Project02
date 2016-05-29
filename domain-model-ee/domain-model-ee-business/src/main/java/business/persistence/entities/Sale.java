@@ -4,12 +4,15 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -70,11 +73,14 @@ public class Sale implements ISale, Serializable {
 	/**
 	 * The products of the sale
 	 */
-	@OneToMany(cascade = ALL) @JoinColumn
+	@OneToMany(cascade = ALL, fetch=FetchType.EAGER) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
-	@OneToMany(mappedBy="sale")
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="sale_id")
 	private List<Transaction> transactions;
+
+
 	
 	// 1. constructor
 
@@ -188,6 +194,7 @@ public class Sale implements ISale, Serializable {
 		return id;
 	}
 	
+
 	public void setTransactions(List<Transaction> transactions){
 		this.transactions = transactions;
 	}
@@ -217,4 +224,10 @@ public class Sale implements ISale, Serializable {
 	public List<SaleProduct> getSaleProdutcs(){
 		return saleProducts;
 	}
+	
+	public void addTransaction(Transaction transaction){
+		if(this.transactions == null)
+			this.transactions = new ArrayList<Transaction>();
+		this.transactions.add(transaction);
+	} 
 }

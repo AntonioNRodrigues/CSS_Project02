@@ -1,9 +1,11 @@
 package business.persistence.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -11,12 +13,14 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
+import static javax.persistence.EnumType.STRING;
+
+import business.TransactionType;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name="TRANS_TYPE")
-public abstract class Transaction {
+public class Transaction {
 
 	@Version
 	private int version;
@@ -28,12 +32,12 @@ public abstract class Transaction {
 	
 	@Temporal(TemporalType.DATE)
 	private Date createdAt;
-	
-	@ManyToOne
-	private Sale sale;
-	
+		
 	@ManyToOne
 	private Account account;
+	
+	@Enumerated(STRING)
+	private TransactionType type;
 	
 	public Transaction(){}
 	
@@ -43,11 +47,11 @@ public abstract class Transaction {
 		this.createdAt = createdAt;
 	}
 	
-	public Transaction(Sale sale, Account account, double amount, Date createdAt){
+	public Transaction(TransactionType type, Account account, double amount, Date createdAt){
 		this.amount = amount;
 		this.createdAt = createdAt;
-		this.sale = sale;
 		this.account = account;
+		this.type = type;
 	}
 
 	public int getVersion() {
@@ -88,16 +92,18 @@ public abstract class Transaction {
 	public Account getAccount(){
 		return this.account;
 	}
-	
-	
+
 	/**
 	 * Knows how to print
 	 */
-	public abstract String print();
-	
-	@Override
-	public String toString(){
-		return this.print();
+	public String print() { return null; };
+
+	public TransactionType getType() {
+		return type;
+	}
+
+	public void setType(TransactionType type) {
+		this.type = type;
 	}
 	
 }

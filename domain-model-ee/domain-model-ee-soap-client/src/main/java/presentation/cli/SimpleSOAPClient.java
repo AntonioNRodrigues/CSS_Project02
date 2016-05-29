@@ -20,8 +20,9 @@ public class SimpleSOAPClient {
 	 * A simple interaction with the application services
 	 * 
 	 * @param args Command line parameters
+	 * @throws ApplicationException_Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ApplicationException_Exception {
 		
 		// Make services
 	    AddCustomerHandlerService addCustomerHandlerService = new AddCustomerHandlerService();
@@ -29,6 +30,7 @@ public class SimpleSOAPClient {
 		InsertSaleProductHandlerService insertSaleProductHandlerService = new InsertSaleProductHandlerService();
 		CloseSaleHandlerService closeSaleHandlerService = new CloseSaleHandlerService();
 		PaySaleHandlerService paySaleHandlerService = new PaySaleHandlerService();
+		GetSaleHandlerService getSaleHandlerService = new GetSaleHandlerService();
 
 	    // Now use the service to get a stub which implements the SDI.
 	    AddCustomerHandler addCustomerHandler = addCustomerHandlerService.getAddCustomerHandlerPort();
@@ -36,11 +38,12 @@ public class SimpleSOAPClient {
 	    InsertSaleProductHandler insertSaleProductHandler = insertSaleProductHandlerService.getInsertSaleProductHandlerPort();
 	    CloseSaleHandler closeSaleHandler = closeSaleHandlerService.getCloseSaleHandlerPort();
 	    PaySaleHandler paySaleHandler = paySaleHandlerService.getPaySaleHandlerPort();
+	    GetSaleHandler getSaleHandler = getSaleHandlerService.getGetSaleHandlerPort();
 
 	    // Make the actual call
 	    try {
 			int vat = 233299053;
-//			addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
+			addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
 
 			int saleId = addSaleHandler.addSale(vat);
 			System.out.println("SaleId: " + saleId);
@@ -55,6 +58,13 @@ public class SimpleSOAPClient {
 
 			paySaleHandler.paySale(saleId);
 			System.out.println("Sale payed successfully!");
+
+			Sale sale = getSaleHandler.getSale(saleId);
+			for (Transaction transaction : sale.getTransactions()) {
+				System.out.println(transaction);
+			}
+
+			System.out.println("Reached the end!");
 
 
 		} catch (business.handler.sale.ApplicationException_Exception e) {

@@ -6,10 +6,10 @@ import javax.ejb.Stateless;
 import business.catalog.SaleCatalog;
 import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
-import facade.handlers.IViewSaleHandlerRemote;
+import facade.handlers.IGetSaleHandlerRemote;
 
 @Stateless
-public class ViewSaleHandler implements IViewSaleHandlerRemote{
+public class ViewSaleHandler implements IGetSaleHandlerRemote{
 	@EJB
 	private SaleCatalog salecat;
 	

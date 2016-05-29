@@ -8,6 +8,7 @@
 <jsp:useBean id="model" class="presentation.web.model.NewCustomerModel" scope="request"/>
 <html>
 <head>
+<link rel="stylesheet" href="/bootstrap.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="/resources/app.css"> 
 <title>SaleSys: adicionar cliente</title>

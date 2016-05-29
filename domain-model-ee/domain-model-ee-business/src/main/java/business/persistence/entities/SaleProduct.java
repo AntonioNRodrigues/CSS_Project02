@@ -39,7 +39,7 @@ public class SaleProduct {
 	/**
 	 * Constructor needed by JPA.
 	 */
-	SaleProduct() { 
+	public SaleProduct() {
 	}
 	
 	/**

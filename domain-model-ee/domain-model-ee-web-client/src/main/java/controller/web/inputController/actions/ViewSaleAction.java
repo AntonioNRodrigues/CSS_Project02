@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import business.persistence.entities.Sale;
+import facade.handlers.IGetSaleHandlerRemote;
 import facade.handlers.IInsertSaleProductHandlerRemote;
-import facade.handlers.IViewSaleHandlerRemote;
 import presentation.web.model.ViewSaleModel;
 
 @Stateless
 public class ViewSaleAction extends Action {
 	@EJB
-	private IViewSaleHandlerRemote getSaleHandler;
+	private IGetSaleHandlerRemote getSaleHandler;
 	
 	@EJB private IInsertSaleProductHandlerRemote getProductFromSale;
 
@@ -27,7 +27,6 @@ public class ViewSaleAction extends Action {
 		try {
 			int idSale = Integer.parseInt(request.getParameter("sale"));
 
-			System.out.println("SALESLALESSSSSSSSSSSSSS"+idSale);
 			Sale s = getSaleHandler.getSale(idSale);
 			
 			request.setAttribute("model", new ViewSaleModel(s.getId(), s.getDiscountValue(), s.getTotalValue(), s.getSaleProdutcs()));
