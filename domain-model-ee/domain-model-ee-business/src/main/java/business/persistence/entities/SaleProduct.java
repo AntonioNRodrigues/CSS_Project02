@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import facade.interfaces.ISaleProduct;
+
 /**
  * A sale product.
  *	
@@ -13,7 +15,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity 
-public class SaleProduct {
+public class SaleProduct implements ISaleProduct{
 	
 	// Sale product attributes 
 
@@ -88,15 +90,17 @@ public class SaleProduct {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		String seperator = " | ";
-		sb.append(this.product.getProdCod());
+		/*sb.append(this.product.getProdCod());
 		sb.append(seperator);
 		sb.append(this.product.getDescription());
 		sb.append(seperator);
 		sb.append(this.product.getFaceValue());
 		sb.append(seperator);
-		sb.append(this.qty);
+		*/
+		sb.append(getQty());
 		sb.append(seperator);
-		sb.append(this.getSubTotal());
+		//sb.append(this.getSubTotal());
 		return sb.toString();
 	}
+
 }

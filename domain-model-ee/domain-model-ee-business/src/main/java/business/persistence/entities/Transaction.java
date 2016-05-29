@@ -97,7 +97,7 @@ public class Transaction {
 	 * Knows how to print
 	 */
 	public String print() { return null; };
-
+	
 	public TransactionType getType() {
 		return type;
 	}
