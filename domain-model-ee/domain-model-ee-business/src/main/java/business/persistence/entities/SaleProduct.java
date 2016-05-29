@@ -83,4 +83,20 @@ public class SaleProduct {
 	public double getEligibleSubtotal() {
 		return product.isEligibleForDiscount() ? getSubTotal() : 0;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		String seperator = " | ";
+		sb.append(this.product.getProdCod());
+		sb.append(seperator);
+		sb.append(this.product.getDescription());
+		sb.append(seperator);
+		sb.append(this.product.getFaceValue());
+		sb.append(seperator);
+		sb.append(this.qty);
+		sb.append(seperator);
+		sb.append(this.getSubTotal());
+		return sb.toString();
+	}
 }

@@ -28,9 +28,13 @@ public class AddSaleHandler implements IAddSaleHandlerRemote{
 			// obtain customer by vat
 			Customer customer = customerCatalog.getCustomer(customerVAT);
 			
+			System.out.println("Customer obtido: " + customer);
+			
 			// create new sale
 			Sale sale = new Sale(new Date(), customer);
+			System.out.println("Sale criada: " + sale);
 			saleCatalog.addSale(sale);
+			System.out.println("Sale adicionada");
 			return sale.getId();
 			
 		} catch (Exception e) {
