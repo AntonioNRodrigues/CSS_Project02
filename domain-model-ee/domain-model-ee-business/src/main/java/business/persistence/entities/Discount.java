@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import facade.interfaces.IDiscount;
 
@@ -22,6 +23,7 @@ import facade.interfaces.IDiscount;
 	@NamedQuery(name=Discount.FIND_ALL, query="SELECT d FROM Discount d")
 })
 @Inheritance(strategy = SINGLE_TABLE)
+@XmlSeeAlso({EligibleProductsDiscount.class, NoDiscount.class, ThresholdPercentageDiscount.class})
 public abstract class Discount implements IDiscount {
 	
 	/**

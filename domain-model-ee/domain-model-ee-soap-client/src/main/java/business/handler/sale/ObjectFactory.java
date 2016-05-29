@@ -60,6 +60,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SaleProduct }
+     * 
+     */
+    public SaleProduct createSaleProduct() {
+        return new SaleProduct();
+    }
+
+    /**
      * Create an instance of {@link Sale }
      * 
      */
@@ -68,11 +76,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SaleProduct }
+     * Create an instance of {@link ThresholdPercentageDiscount }
      * 
      */
-    public SaleProduct createSaleProduct() {
-        return new SaleProduct();
+    public ThresholdPercentageDiscount createThresholdPercentageDiscount() {
+        return new ThresholdPercentageDiscount();
+    }
+
+    /**
+     * Create an instance of {@link EligibleProductsDiscount }
+     * 
+     */
+    public EligibleProductsDiscount createEligibleProductsDiscount() {
+        return new EligibleProductsDiscount();
     }
 
     /**
@@ -97,6 +113,14 @@ public class ObjectFactory {
      */
     public Customer createCustomer() {
         return new Customer();
+    }
+
+    /**
+     * Create an instance of {@link NoDiscount }
+     * 
+     */
+    public NoDiscount createNoDiscount() {
+        return new NoDiscount();
     }
 
     /**
