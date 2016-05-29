@@ -34,16 +34,17 @@ public class PaySaleHandler implements IPaySaleHandlerRemote{
 			if(!sale.isClosed())
 				throw new ApplicationException("A Sale já foi paga...");
 			
-			sale.setStatus(SaleStatus.PAYED);
-			saleCatalog.update(sale);
-			
 			// anota a sale com paga
 			double transactionAmount = sale.getTotalValue() - sale.getDiscountValue();
 			Transaction transaction = 
 					new Transaction(
-							sale, TransactionType.CREDIT, sale.getCustomer().getAccount(), 
+							TransactionType.CREDIT, sale.getCustomer().getAccount(), 
 							transactionAmount, new Date());
 			transactionCatalog.addTransaction(transaction);
+			
+			sale.setStatus(SaleStatus.PAYED);
+			sale.addTransaction(transaction);
+			saleCatalog.update(sale);
 			
 		} catch (Exception e) {
 			

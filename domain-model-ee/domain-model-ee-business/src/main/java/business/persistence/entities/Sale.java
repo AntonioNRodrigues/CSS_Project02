@@ -4,11 +4,24 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import business.SaleStatus;
 import facade.exceptions.ApplicationException;
@@ -63,7 +76,8 @@ public class Sale implements ISale, Serializable {
 	@OneToMany(cascade = ALL, fetch=FetchType.EAGER) @JoinColumn
 	private List<SaleProduct> saleProducts;
 		
-	@OneToMany(mappedBy="sale", fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="sale_id")
 	private List<Transaction> transactions;
 
 
@@ -203,4 +217,10 @@ public class Sale implements ISale, Serializable {
 		return total;
 		
 	}
+	
+	public void addTransaction(Transaction transaction){
+		if(this.transactions == null)
+			this.transactions = new ArrayList<Transaction>();
+		this.transactions.add(transaction);
+	} 
 }

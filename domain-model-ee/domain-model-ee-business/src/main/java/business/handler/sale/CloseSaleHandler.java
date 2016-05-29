@@ -43,7 +43,7 @@ public class CloseSaleHandler implements ICloseSaleHandlerRemote{
 			// generate debit transaction
 			Transaction transaction = 
 					new Transaction(
-							sale, TransactionType.DEBIT, account, 
+							TransactionType.DEBIT, account, 
 							saleTotal - saleDiscount, 
 							new Date());
 			transactionCatalog.addTransaction(transaction);
@@ -54,6 +54,7 @@ public class CloseSaleHandler implements ICloseSaleHandlerRemote{
 			sale.setStatus(SaleStatus.CLOSED);
 			sale.setTotalValue(saleTotal);
 			sale.setDiscountValue(saleDiscount);
+			sale.addTransaction(transaction);
 			
 			// update sale
 			saleCatalog.update(sale);

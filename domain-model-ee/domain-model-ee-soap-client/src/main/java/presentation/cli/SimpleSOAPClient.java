@@ -2,6 +2,7 @@ package presentation.cli;
 
 import business.handler.AddCustomerHandler;
 import business.handler.AddCustomerHandlerService;
+import business.handler.ApplicationException_Exception;
 import business.handler.sale.*;
 import business.handler.sale.product.InsertSaleProductHandler;
 import business.handler.sale.product.InsertSaleProductHandlerService;
@@ -19,8 +20,9 @@ public class SimpleSOAPClient {
 	 * A simple interaction with the application services
 	 * 
 	 * @param args Command line parameters
+	 * @throws ApplicationException_Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ApplicationException_Exception {
 		
 		// Make services
 	    AddCustomerHandlerService addCustomerHandlerService = new AddCustomerHandlerService();
@@ -41,7 +43,7 @@ public class SimpleSOAPClient {
 	    // Make the actual call
 	    try {
 			int vat = 233299053;
-//			addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
+			addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
 
 			int saleId = addSaleHandler.addSale(vat);
 			System.out.println("SaleId: " + saleId);

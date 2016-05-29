@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import static javax.persistence.EnumType.STRING;
 
@@ -31,10 +32,7 @@ public class Transaction {
 	
 	@Temporal(TemporalType.DATE)
 	private Date createdAt;
-	
-	@ManyToOne
-	private Sale sale;
-	
+		
 	@ManyToOne
 	private Account account;
 	
@@ -49,10 +47,9 @@ public class Transaction {
 		this.createdAt = createdAt;
 	}
 	
-	public Transaction(Sale sale, TransactionType type, Account account, double amount, Date createdAt){
+	public Transaction(TransactionType type, Account account, double amount, Date createdAt){
 		this.amount = amount;
 		this.createdAt = createdAt;
-		this.sale = sale;
 		this.account = account;
 		this.type = type;
 	}
@@ -100,14 +97,6 @@ public class Transaction {
 	 * Knows how to print
 	 */
 	public String print() { return null; };
-
-	public Sale getSale() {
-		return sale;
-	}
-
-	public void setSale(Sale sale) {
-		this.sale = sale;
-	}
 
 	public TransactionType getType() {
 		return type;

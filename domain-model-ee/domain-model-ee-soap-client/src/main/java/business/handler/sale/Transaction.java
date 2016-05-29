@@ -22,6 +22,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="amount" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="createdAt" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="sale" type="{http://sale.handler.business/}sale" minOccurs="0"/>
+ *         &lt;element name="type" type="{http://sale.handler.business/}transactionType" minOccurs="0"/>
  *         &lt;element name="version" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -37,15 +39,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "amount",
     "createdAt",
     "id",
+    "sale",
+    "type",
     "version"
 })
-public abstract class Transaction {
+public class Transaction {
 
     protected Account account;
     protected double amount;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar createdAt;
     protected int id;
+    protected Sale sale;
+    @XmlSchemaType(name = "string")
+    protected TransactionType type;
     protected int version;
 
     /**
@@ -126,6 +133,54 @@ public abstract class Transaction {
      */
     public void setId(int value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the sale property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Sale }
+     *     
+     */
+    public Sale getSale() {
+        return sale;
+    }
+
+    /**
+     * Sets the value of the sale property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Sale }
+     *     
+     */
+    public void setSale(Sale value) {
+        this.sale = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TransactionType }
+     *     
+     */
+    public TransactionType getType() {
+        return type;
+    }
+
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TransactionType }
+     *     
+     */
+    public void setType(TransactionType value) {
+        this.type = value;
     }
 
     /**
