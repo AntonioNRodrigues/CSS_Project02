@@ -7,10 +7,11 @@ import javax.ejb.Stateless;
 import javax.jws.WebService;
 
 import business.SaleStatus;
+import business.TransactionType;
 import business.catalog.SaleCatalog;
 import business.catalog.TransactionCatalog;
-import business.persistence.entities.CreditTransaction;
 import business.persistence.entities.Sale;
+import business.persistence.entities.Transaction;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IPaySaleHandlerRemote;
 
@@ -38,9 +39,9 @@ public class PaySaleHandler implements IPaySaleHandlerRemote{
 			
 			// anota a sale com paga
 			double transactionAmount = sale.getTotalValue() - sale.getDiscountValue();
-			CreditTransaction transaction = 
-					new CreditTransaction(
-							sale, sale.getCustomer().getAccount(), 
+			Transaction transaction = 
+					new Transaction(
+							sale, TransactionType.CREDIT, sale.getCustomer().getAccount(), 
 							transactionAmount, new Date());
 			transactionCatalog.addTransaction(transaction);
 			
