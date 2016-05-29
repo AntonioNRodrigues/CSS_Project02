@@ -99,7 +99,7 @@ public class Transaction implements Serializable{
 	 * Knows how to print
 	 */
 	public String print() { return null; };
-
+	
 	public TransactionType getType() {
 		return type;
 	}

@@ -7,23 +7,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import facade.interfaces.ISaleProduct;
+
 /**
  * A sale product.
- * 
- * @author fmartins
- * @version 1.1 (10/03/2015)
- *
  */
 @Entity
-public class SaleProduct implements Serializable {
+public class SaleProduct implements ISaleProduct, Serializable {
 
-	// Sale product attributes
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Sale product primary key. Needed by JPA. Notice that it is not part of
 	 * the original domain model.
@@ -99,15 +91,15 @@ public class SaleProduct implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		String seperator = " | ";
-		sb.append(this.product.getProdCod());
+		/*
+		 * sb.append(this.product.getProdCod()); sb.append(seperator);
+		 * sb.append(this.product.getDescription()); sb.append(seperator);
+		 * sb.append(this.product.getFaceValue()); sb.append(seperator);
+		 */
+		sb.append(getQty());
 		sb.append(seperator);
-		sb.append(this.product.getDescription());
-		sb.append(seperator);
-		sb.append(this.product.getFaceValue());
-		sb.append(seperator);
-		sb.append(this.qty);
-		sb.append(seperator);
-		sb.append(this.getSubTotal());
+		// sb.append(this.getSubTotal());
 		return sb.toString();
 	}
+
 }

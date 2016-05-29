@@ -13,4 +13,6 @@ public interface ISale {
 	public Customer getCustomer();
 	
 	public double discount () throws ApplicationException;
+	
+	public String toString();
 }
