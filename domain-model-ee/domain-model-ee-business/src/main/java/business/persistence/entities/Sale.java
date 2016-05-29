@@ -210,4 +210,11 @@ public class Sale implements ISale, Serializable {
 		return total;
 		
 	}
+	/**
+	 * 
+	 * @return
+	 */
+	public List<SaleProduct> getSaleProdutcs(){
+		return saleProducts;
+	}
 }
