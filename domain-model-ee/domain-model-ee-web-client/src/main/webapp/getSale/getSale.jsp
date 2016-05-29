@@ -15,26 +15,29 @@
 	<div>
 
 		<h2>Sale: ${model.id}</h2>
-
+		<h3>Cliente: ${model.customer.designation}</h3>
+		<hr/>
+		
+		<h4>Lista de Productos</h4>
 		<table>
-			<tr>
-				<td>Cliente: </td>
-				<td>Total: ${model.total}</td>
-				<td>Desconto: ${model.discountValue}</td>
-				<td>Lista de Produtos</td>
-				<c:forEach var="product" items="${model.saleProducts}">
+			<c:forEach var="sp" items="${model.saleProducts}">
 					<tr>
-						<td>Produt: ${product.description}</td>
-						<td>Quantidade: ${product.qty}</td>
-						<td>FaceValue: ${product.faceValue}</td>
-						<td></td>
+						<td>Prod Code: ${sp.product.prodCod}</td>
+						<td>Descricao: ${sp.product.description}</td>
+						<td>Preço Unitario: ${sp.product.faceValue}</td>
+						<td>Quantidade: ${sp.qty}</td>
+						<td>subTotal: ${sp.subTotal}</td>
+						
 					</tr>
 
 				</c:forEach>
-
-			</tr>
 		</table>
-
+		
+		<hr/>
+		<p><b>Sub Total:&nbsp;</b>${model.total}</p>
+		<p><b>Desconto:&nbsp;</b>${model.discountValue}</p>
+		<hr/>
+		<p><b>Total:&nbsp;</b>${model.finalValue}</p>
 
 	</div>
 

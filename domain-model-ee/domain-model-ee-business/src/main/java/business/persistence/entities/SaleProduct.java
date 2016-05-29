@@ -86,7 +86,7 @@ public class SaleProduct implements ISaleProduct, Serializable {
 	public double getEligibleSubtotal() {
 		return product.isEligibleForDiscount() ? getSubTotal() : 0;
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
