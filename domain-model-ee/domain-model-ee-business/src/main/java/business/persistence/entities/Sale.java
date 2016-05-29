@@ -153,6 +153,11 @@ public class Sale implements ISale, Serializable {
 	public Customer getCustomer() {
 		return customer;
 	}
+	
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	
 	/**
 	 * @return Whether the sale is open
 	 */
@@ -194,6 +199,14 @@ public class Sale implements ISale, Serializable {
 		return id;
 	}
 	
+
+	public List<SaleProduct> getSaleProducts() {
+		return saleProducts;
+	}
+
+	public void setSaleProducts(List<SaleProduct> saleProducts) {
+		this.saleProducts = saleProducts;
+	}
 
 	public void setTransactions(List<Transaction> transactions){
 		this.transactions = transactions;

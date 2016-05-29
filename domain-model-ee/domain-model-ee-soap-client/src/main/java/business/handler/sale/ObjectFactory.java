@@ -68,11 +68,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Transaction }
+     * Create an instance of {@link SaleProduct }
      * 
      */
-    public Transaction createTransaction() {
-        return new Transaction();
+    public SaleProduct createSaleProduct() {
+        return new SaleProduct();
     }
 
     /**
@@ -81,6 +81,22 @@ public class ObjectFactory {
      */
     public Account createAccount() {
         return new Account();
+    }
+
+    /**
+     * Create an instance of {@link Transaction }
+     * 
+     */
+    public Transaction createTransaction() {
+        return new Transaction();
+    }
+
+    /**
+     * Create an instance of {@link Customer }
+     * 
+     */
+    public Customer createCustomer() {
+        return new Customer();
     }
 
     /**

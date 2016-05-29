@@ -43,7 +43,7 @@ public class SimpleSOAPClient {
 	    // Make the actual call
 	    try {
 			int vat = 233299053;
-			addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
+			// addCustomerHandler.addCustomer(vat, "Simão", 217500255, 1);
 
 			int saleId = addSaleHandler.addSale(vat);
 			System.out.println("SaleId: " + saleId);
@@ -58,11 +58,20 @@ public class SimpleSOAPClient {
 
 			paySaleHandler.paySale(saleId);
 			System.out.println("Sale payed successfully!");
-
+			
+			System.out.println("Sale Transactions: ");
 			Sale sale = getSaleHandler.getSale(saleId);
 			for (Transaction transaction : sale.getTransactions()) {
 				System.out.println(transaction);
 			}
+			
+			System.out.println("Sale Products: ");
+			for (SaleProduct product : sale.getSaleProducts()) {
+				System.out.println(product);
+			}
+			System.out.println("Sale owner is: " + sale.getCustomer().getDesignation());
+			System.out.println("Sale total is: " + sale.getTotalValue());
+			System.out.println("Sale discount is: " + sale.getDiscountValue());
 
 			System.out.println("Reached the end!");
 
