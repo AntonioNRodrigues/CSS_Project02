@@ -1,14 +1,13 @@
 package business.handler.sale;
 
-import business.catalog.SaleCatalog;
-import business.persistence.entities.Sale;
-import business.persistence.entities.Transaction;
-import facade.exceptions.ApplicationException;
-import facade.handlers.IGetSaleHandlerRemote;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
+
+import business.catalog.SaleCatalog;
+import business.persistence.entities.Sale;
+import facade.exceptions.ApplicationException;
+import facade.handlers.IGetSaleHandlerRemote;
 
 @Stateless
 @WebService

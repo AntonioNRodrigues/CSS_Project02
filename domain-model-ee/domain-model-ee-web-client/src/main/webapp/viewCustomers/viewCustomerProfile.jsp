@@ -15,8 +15,8 @@
 		${model.customer.designation}<br>
 		${model.customer.vatNumber}
 		<ul>
-			<li><a href="/actions/clientes/visualizarVendas?vat=${model.customer.vatNumber}">Vendas</a></li>
-			<li><a href="/actions/clientes/transacoes?vat=${model.customer.vatNumber}">Lista de Transações</a></li>
+			<li><a href="../clientes/visualizarVendas?vat=${model.customer.vatNumber}">Vendas</a></li>
+			<li><a href="../clientes/transacoes?vat=${model.customer.vatNumber}">Lista de Transações</a></li>
 		</ul>
 	</li>
 </ul>

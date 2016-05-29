@@ -11,5 +11,5 @@ import facade.exceptions.ApplicationException;
 public interface IViewSaleProductsHandlerRemote {
 
 	public List<SaleProduct> viewSaleProducts(int saleID) throws ApplicationException;
-	
+
 }

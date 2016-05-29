@@ -230,6 +230,13 @@ public class Sale implements ISale, Serializable {
 		return total;
 		
 	}
+	/**
+	 * 
+	 * @return
+	 */
+	public List<SaleProduct> getSaleProdutcs(){
+		return saleProducts;
+	}
 	
 	public void addTransaction(Transaction transaction){
 		if(this.transactions == null)

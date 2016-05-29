@@ -9,11 +9,9 @@ import javax.jws.WebService;
 
 import business.catalog.CustomerCatalog;
 import business.catalog.DiscountCatalog;
-import business.persistence.entities.Customer;
 import business.persistence.entities.Discount;
 import facade.exceptions.ApplicationException;
 import facade.handlers.IAddCustomerHandlerRemote;
-import facade.interfaces.ICustomer;
 
 /**
  * Handles the add customer use case. This represents a very 

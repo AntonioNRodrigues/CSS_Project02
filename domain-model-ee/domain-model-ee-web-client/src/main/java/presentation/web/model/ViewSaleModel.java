@@ -1,13 +1,18 @@
 package presentation.web.model;
 
-import business.persistence.entities.Sale;
+import java.util.List;
+
+import business.persistence.entities.SaleProduct;
+
+//import business.persistence.entities.SaleProduct;
 
 public class ViewSaleModel extends Model {
 	private int id;
 	private double discountValue;
 	private double total;
-
-	public ViewSaleModel(int id, double discountValue, double total) {
+	private List<SaleProduct> saleProducts;
+	
+	public ViewSaleModel(int id, double discountValue, double total, List<SaleProduct> lista)  {
 		super();
 		this.discountValue = discountValue;
 		this.id = id;
@@ -36,6 +41,14 @@ public class ViewSaleModel extends Model {
 
 	public void setTotal(double total) {
 		this.total = total;
+	}
+
+	public List<SaleProduct> getSaleProducts() {
+		return saleProducts;
+	}
+
+	public void setSaleProducts(List<SaleProduct> saleProducts) {
+		this.saleProducts = saleProducts;
 	}
 
 }
