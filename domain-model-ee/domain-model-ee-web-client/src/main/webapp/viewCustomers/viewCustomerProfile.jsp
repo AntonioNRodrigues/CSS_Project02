@@ -16,7 +16,6 @@
 		${model.customer.vatNumber}
 		<ul>
 			<li><a href="../clientes/visualizarVendas?vat=${model.customer.vatNumber}">Vendas</a></li>
-			<li><a href="../clientes/transacoes?vat=${model.customer.vatNumber}">Lista de Transações</a></li>
 		</ul>
 	</li>
 </ul>

@@ -90,10 +90,12 @@ public class SaleProduct implements ISaleProduct, Serializable {
 		return product.isEligibleForDiscount() ? getSubTotal() : 0;
 	}
 
+
 	public void setToString(String str){}
 	public String getToString(){
 		return this.toString();
 	}
+
 	
 	@Override
 	public String toString() {

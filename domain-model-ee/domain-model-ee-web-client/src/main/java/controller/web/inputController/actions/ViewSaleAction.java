@@ -18,8 +18,9 @@ import presentation.web.model.ViewSaleModel;
 public class ViewSaleAction extends Action {
 	@EJB
 	private IGetSaleHandlerRemote getSaleHandler;
-	
-	@EJB private IInsertSaleProductHandlerRemote getProductFromSale;
+
+	@EJB
+	private IInsertSaleProductHandlerRemote getProductFromSale;
 
 	@Override
 	public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,13 +29,11 @@ public class ViewSaleAction extends Action {
 			int idSale = Integer.parseInt(request.getParameter("sale"));
 
 			Sale s = getSaleHandler.getSale(idSale);
-			System.out.println(s.getSaleProducts());
-			ViewSaleModel m = new ViewSaleModel(s.getId(), s.getDiscountValue(), s.getTotalValue(), 
-					s.getSaleProducts());
-			request.setAttribute("model",m);
-				
-		System.out.println("-------------------------"+m.getSaleProducts());
-		
+
+			ViewSaleModel m = new ViewSaleModel(s.getId(), s.getDiscountValue(), s.getTotalValue(), s.getSaleProducts(),
+					s.getCustomer());
+			request.setAttribute("model", m);
+
 			request.getRequestDispatcher("/getSale/getSale.jsp").forward(request, response);
 
 		} catch (Exception e) {
