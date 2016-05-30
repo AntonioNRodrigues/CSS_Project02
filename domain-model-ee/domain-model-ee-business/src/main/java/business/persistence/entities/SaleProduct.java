@@ -72,6 +72,9 @@ public class SaleProduct implements ISaleProduct, Serializable {
 	public double getQty() {
 		return qty;
 	}
+	public void setQty(double qty){
+		this.qty = qty;
+	}
 
 	/**
 	 * @return The sub total of the product sale
@@ -87,18 +90,23 @@ public class SaleProduct implements ISaleProduct, Serializable {
 		return product.isEligibleForDiscount() ? getSubTotal() : 0;
 	}
 
+	public void setToString(String str){}
+	public String getToString(){
+		return this.toString();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		String seperator = " | ";
-		/*
-		 * sb.append(this.product.getProdCod()); sb.append(seperator);
-		 * sb.append(this.product.getDescription()); sb.append(seperator);
-		 * sb.append(this.product.getFaceValue()); sb.append(seperator);
-		 */
+		
+		sb.append(this.product.getProdCod()); sb.append(seperator);
+		sb.append(this.product.getDescription()); sb.append(seperator);
+		sb.append(this.product.getFaceValue()); sb.append(seperator);
+		 
 		sb.append(getQty());
 		sb.append(seperator);
-		// sb.append(this.getSubTotal());
+		sb.append(this.getSubTotal());
 		return sb.toString();
 	}
 

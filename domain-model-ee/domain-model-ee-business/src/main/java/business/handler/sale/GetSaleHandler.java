@@ -22,6 +22,7 @@ public class GetSaleHandler implements IGetSaleHandlerRemote {
     public Sale getSale(int saleId) throws ApplicationException {
         try {
             Sale sale = saleCatalog.getSale(saleId);
+            
 //            sale.setTransactions();
             return sale;
         } catch (Exception e) {

@@ -12,12 +12,28 @@ import business.persistence.entities.Product;
 import business.persistence.entities.Sale;
 import facade.exceptions.ApplicationException;
 
+/**
+ * This class represents an information specialist
+ * Knows all about sales persistence
+ * 
+ * @author JoaoR, Simao Neves and Antonio Rodrigues
+ *
+ */
 @Stateless
 public class SaleCatalog{
 
+	/**
+	 * Entity manager based on DS
+	 */
 	@PersistenceContext
 	private EntityManager em;
 	
+	/**
+	 * Adds a new sale
+	 * 
+	 * @param sale, sale to be added
+	 * @throws ApplicationException
+	 */
 	public void addSale(Sale sale) throws ApplicationException{	
 		try{
 			em.persist(sale);
@@ -27,6 +43,14 @@ public class SaleCatalog{
 		
 	}
 	
+	/**
+	 * Gets a specific sale based on its id
+	 * 
+	 * @param saleId, sale id
+	 * @return the corresponding sale
+	 * 
+	 * @throws ApplicationException
+	 */
 	public Sale getSale(int saleId) throws ApplicationException{
 		
 		try {
@@ -37,6 +61,14 @@ public class SaleCatalog{
 		
 	}
 	
+	/**
+	 * Gets all customer sales based on customer id
+	 * 
+	 * @param id, customer id
+	 * @return a list of sales
+	 * 
+	 * @throws ApplicationException
+	 */
 	public List<Sale> getCustomerSalesByID(int id) throws ApplicationException{
 		
 		try {
@@ -51,8 +83,9 @@ public class SaleCatalog{
 	}
 	
 	/**
+	 * Updates a specific sale
 	 * 
-	 * @param sale
+	 * @param sale, sale to bu updated
 	 * @throws ApplicationException
 	 */
 	public void update(Sale sale) throws ApplicationException{
@@ -65,7 +98,14 @@ public class SaleCatalog{
 		
 	}
 	
-	
+	/**
+	 * Adds a product to a sale
+	 * 
+	 * @param product, product to be added
+	 * @param saleId, sale id to be considered
+	 * 
+	 * @throws ApplicationException
+	 */
 	@Transactional(Transactional.TxType.REQUIRES_NEW)
 	public void addProductToSale(Product product, int saleId) throws ApplicationException{
 		

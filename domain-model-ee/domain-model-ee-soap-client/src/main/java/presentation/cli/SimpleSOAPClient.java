@@ -61,13 +61,10 @@ public class SimpleSOAPClient {
 			
 			System.out.println("Sale Transactions: ");
 			Sale sale = getSaleHandler.getSale(saleId);
-			for (Transaction transaction : sale.getTransactions()) {
-				System.out.println(transaction);
-			}
 			
 			System.out.println("Sale Products: ");
 			for (SaleProduct product : sale.getSaleProducts()) {
-				System.out.println(product);
+				System.out.println("P: "+product.getToString());
 			}
 			System.out.println("Sale owner is: " + sale.getCustomer().getDesignation());
 			System.out.println("Sale total is: " + sale.getTotalValue());
